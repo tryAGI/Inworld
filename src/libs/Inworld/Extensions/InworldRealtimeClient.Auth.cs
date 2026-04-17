@@ -3,22 +3,43 @@
 namespace Inworld.Realtime;
 
 /// <summary>
-/// Shared helper for rewriting the WebSocket Authorization header from
-/// Bearer → Basic for Inworld API keys. JWTs (which start with "eyJ") are
-/// left untouched so client-side/Blazor use-cases just work.
+/// Shared helper for supplying the right <c>Authorization</c> header on an
+/// Inworld WebSocket connect. Inworld accepts two scheme flavours:
+/// <list type="bullet">
+///   <item>JWTs — used unchanged as <c>Authorization: Bearer &lt;JWT&gt;</c>.
+///         Detected by the <c>eyJ</c> Base64url prefix.</item>
+///   <item>Portal API keys — pre-Base64-encoded; used as
+///         <c>Authorization: Basic &lt;key&gt;</c>.</item>
+/// </list>
+/// The generated WebSocket clients store auth in
+/// <c>_storedAuthorization*</c> fields and apply them from
+/// <c>ApplyConnectionOptions</c> on <c>ConnectAsync</c>, so rewriting the
+/// header from a partial constructor hook no longer sticks. Instead we
+/// build the right <c>additionalHeaders</c> dictionary and pass it to the
+/// connect overload — it is applied after the stored auth and wins.
 /// </summary>
-internal static class InworldRealtimeAuthHook
+public static class InworldRealtimeAuth
 {
-    internal static void RewriteBearerToBasicHeader(System.Net.WebSockets.ClientWebSocket client, string apiKey)
+    /// <summary>
+    /// Build an <c>additionalHeaders</c> dictionary for <c>ConnectAsync</c>
+    /// that forces the right scheme for the supplied <paramref name="apiKey"/>.
+    /// Returns <c>null</c> when <paramref name="apiKey"/> is a JWT (Bearer is
+    /// already correct) so callers can skip the allocation.
+    /// </summary>
+    public static System.Collections.Generic.IDictionary<string, string>? BuildConnectHeaders(string apiKey)
     {
+        System.ArgumentException.ThrowIfNullOrEmpty(apiKey);
+
         if (apiKey.StartsWith("eyJ", System.StringComparison.Ordinal))
         {
-            // Already a JWT — keep the Bearer scheme set by AuthorizeUsingBearer.
-            return;
+            // JWT — the stored "Bearer <jwt>" header is correct.
+            return null;
         }
 
-        // Base64 API key from the Portal — rewrite scheme to Basic.
-        client.Options.SetRequestHeader("Authorization", $"Basic {apiKey}");
+        return new System.Collections.Generic.Dictionary<string, string>(System.StringComparer.OrdinalIgnoreCase)
+        {
+            ["Authorization"] = $"Basic {apiKey}",
+        };
     }
 }
 
@@ -28,9 +49,14 @@ public partial class InworldSpeechToTextStreamRealtimeClient
     private System.Net.WebSockets.ClientWebSocket? _ws;
 
     /// <summary>
+    /// The API key / JWT passed to the bearer constructor, exposed so
+    /// callers can build <c>additionalHeaders</c> for <c>ConnectAsync</c>.
+    /// </summary>
+    public string? StoredApiKey => _apiKey;
+
+    /// <summary>
     /// Raw underlying WebSocket — intended for extension code that needs to
-    /// parse JSON messages directly instead of via the generated
-    /// discriminated-union helper.
+    /// parse JSON messages directly.
     /// </summary>
     internal System.Net.WebSockets.ClientWebSocket? RawWebSocket => _ws;
 
@@ -42,14 +68,6 @@ public partial class InworldSpeechToTextStreamRealtimeClient
     partial void Authorizing(System.Net.WebSockets.ClientWebSocket client, ref string apiKey)
     {
         _apiKey = apiKey;
-    }
-
-    partial void Authorized(System.Net.WebSockets.ClientWebSocket client)
-    {
-        if (_apiKey is { Length: > 0 } key)
-        {
-            InworldRealtimeAuthHook.RewriteBearerToBasicHeader(client, key);
-        }
     }
 }
 
@@ -59,9 +77,14 @@ public partial class InworldTextToSpeechStreamRealtimeClient
     private System.Net.WebSockets.ClientWebSocket? _ws;
 
     /// <summary>
+    /// The API key / JWT passed to the bearer constructor, exposed so
+    /// callers can build <c>additionalHeaders</c> for <c>ConnectAsync</c>.
+    /// </summary>
+    public string? StoredApiKey => _apiKey;
+
+    /// <summary>
     /// Raw underlying WebSocket — intended for extension code that needs to
-    /// parse JSON messages directly instead of via the generated
-    /// discriminated-union helper.
+    /// parse JSON messages directly.
     /// </summary>
     internal System.Net.WebSockets.ClientWebSocket? RawWebSocket => _ws;
 
@@ -73,13 +96,5 @@ public partial class InworldTextToSpeechStreamRealtimeClient
     partial void Authorizing(System.Net.WebSockets.ClientWebSocket client, ref string apiKey)
     {
         _apiKey = apiKey;
-    }
-
-    partial void Authorized(System.Net.WebSockets.ClientWebSocket client)
-    {
-        if (_apiKey is { Length: > 0 } key)
-        {
-            InworldRealtimeAuthHook.RewriteBearerToBasicHeader(client, key);
-        }
     }
 }

@@ -40,6 +40,10 @@ namespace Inworld.Realtime
         }
 
 
+        private string? _storedAuthorizationHeaderName;
+        private string? _storedAuthorizationHeaderScheme;
+        private string? _storedAuthorizationApiKey;
+
         /// <summary>
         /// Authorize using Bearer authentication.
         /// </summary>
@@ -49,7 +53,9 @@ namespace Inworld.Realtime
         {
             apiKey = apiKey ?? throw new global::System.ArgumentNullException(nameof(apiKey));
 
-            _clientWebSocket.Options.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+            _storedAuthorizationApiKey = apiKey;
+            _storedAuthorizationHeaderName = "Authorization";
+            _storedAuthorizationHeaderScheme = "Bearer";
         }
 
         /// <summary>
@@ -71,6 +77,20 @@ namespace Inworld.Realtime
 
 
 
+
+        private void ApplyStoredAuthorization(
+            bool useSubprotocolAuth)
+        {
+
+            if (_storedAuthorizationApiKey is not null &&
+                _storedAuthorizationHeaderName is not null)
+            {
+                var __authorizationValue = _storedAuthorizationHeaderScheme is not null
+                    ? $"{_storedAuthorizationHeaderScheme} {_storedAuthorizationApiKey}"
+                    : _storedAuthorizationApiKey;
+                _clientWebSocket.Options.SetRequestHeader(_storedAuthorizationHeaderName, __authorizationValue);
+            }
+        }
         private void ApplyConnectionOptions(
             global::System.Collections.Generic.IDictionary<string, string>? additionalHeaders,
             global::System.Collections.Generic.IEnumerable<string>? additionalSubProtocols,
@@ -80,6 +100,8 @@ namespace Inworld.Realtime
             {
                 _clientWebSocket.Options.KeepAliveInterval = keepAliveInterval.Value;
             }
+
+            ApplyStoredAuthorization(false);
 
             if (additionalHeaders is not null)
             {

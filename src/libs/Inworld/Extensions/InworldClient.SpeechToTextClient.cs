@@ -173,7 +173,12 @@ public partial class InworldClient : Meai.ISpeechToTextClient
         var realtime = new Realtime.InworldSpeechToTextStreamRealtimeClient(apiKey);
         await using (realtime.ConfigureAwait(false))
         {
-            await realtime.ConnectAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+            // Pass the right scheme (Basic for Portal keys, Bearer for JWTs)
+            // via additionalHeaders — this overrides the stored Bearer header
+            // that the generated client would otherwise apply.
+            await realtime.ConnectAsync(
+                additionalHeaders: Realtime.InworldRealtimeAuth.BuildConnectHeaders(apiKey),
+                cancellationToken: cancellationToken).ConfigureAwait(false);
 
             var sampleRate = options?.AdditionalProperties?.TryGetValue("sampleRateHertz", out var srObj) == true
                 && srObj is int sr ? sr : 16000;
@@ -235,50 +240,36 @@ public partial class InworldClient : Meai.ISpeechToTextClient
                 }
             }, cancellationToken);
 
-            // The generated SpeechToTextStreamServerEvent discriminator only
-            // inspects top-level properties, but every Inworld server message
-            // is `{"result": {...}}` — the real discriminator is the inner key
-            // (`transcription`, `usage`, or `speechStarted`). Parse the raw
-            // WebSocket frames by hand to route events correctly.
-            var ws = realtime.RawWebSocket
-                ?? throw new InvalidOperationException("Realtime WebSocket is not available.");
-
-            var readBuffer = new byte[64 * 1024];
-            while (ws.State == System.Net.WebSockets.WebSocketState.Open &&
-                   !cancellationToken.IsCancellationRequested)
+            // AutoSDK >= 0.30.1-dev.244 scores nested properties in oneOf
+            // discriminators (tryAGI/AutoSDK#281), so the generated
+            // ReceiveUpdatesAsync now dispatches Inworld's `{"result": ...}`
+            // envelopes correctly.
+            await foreach (var @event in realtime.ReceiveUpdatesAsync(cancellationToken).ConfigureAwait(false))
             {
-                var segment = new ArraySegment<byte>(readBuffer);
-                System.Net.WebSockets.WebSocketReceiveResult rcv;
-                try
+                if (@event.IsSttTranscription && @event.SttTranscription?.Result?.Transcription is { } tx)
                 {
-                    rcv = await ws.ReceiveAsync(segment, cancellationToken).ConfigureAwait(false);
-                }
-                catch (System.Net.WebSockets.WebSocketException)
-                {
-                    break;
-                }
-                catch (OperationCanceledException)
-                {
-                    break;
-                }
+                    var kind = tx.IsFinal == true
+                        ? Meai.SpeechToTextResponseUpdateKind.TextUpdated
+                        : Meai.SpeechToTextResponseUpdateKind.TextUpdating;
 
-                if (rcv.MessageType == System.Net.WebSockets.WebSocketMessageType.Close)
-                {
-                    break;
+                    yield return new Meai.SpeechToTextResponseUpdate(tx.Transcript ?? string.Empty)
+                    {
+                        Kind = kind,
+                        ResponseId = responseId,
+                        RawRepresentation = @event.SttTranscription,
+                    };
                 }
-
-                if (rcv.MessageType != System.Net.WebSockets.WebSocketMessageType.Text)
+                else if (@event.IsSttStarted && @event.SttStarted?.Result?.SpeechStarted is { } started)
                 {
-                    continue;
+                    yield return new Meai.SpeechToTextResponseUpdate
+                    {
+                        Kind = Meai.SpeechToTextResponseUpdateKind.TextUpdating,
+                        ResponseId = responseId,
+                        StartTime = started.StartTimeMs is int startMs ? TimeSpan.FromMilliseconds(startMs) : null,
+                        RawRepresentation = @event.SttStarted,
+                    };
                 }
-
-                var json = System.Text.Encoding.UTF8.GetString(readBuffer, 0, rcv.Count);
-                var (update, endOfStream) = ParseServerFrame(json, responseId);
-                if (update is not null)
-                {
-                    yield return update;
-                }
-                if (endOfStream)
+                else if (@event.IsSttUsage)
                 {
                     break;
                 }
