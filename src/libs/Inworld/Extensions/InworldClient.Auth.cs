@@ -3,21 +3,36 @@
 namespace Inworld;
 
 /// <summary>
-/// Inworld uses HTTP Basic auth with a Base64-encoded API key issued by the
-/// Inworld Portal. The generated client is configured with an HTTP Bearer
-/// security scheme, so requests would go out as "Authorization: Bearer &lt;key&gt;",
-/// but Inworld expects "Authorization: Basic &lt;key&gt;". Rewrite the scheme on
-/// every outgoing request via the per-client <c>PrepareRequest</c> partial hook.
+/// Inworld supports two auth flavours that both travel on the standard
+/// <c>Authorization</c> header:
+/// <list type="bullet">
+///   <item>Server-side: <c>Authorization: Basic &lt;base64-api-key&gt;</c> where
+///         the key issued by the Inworld Portal is already Base64-encoded.</item>
+///   <item>Client-side (Blazor, browser, mobile): <c>Authorization: Bearer &lt;JWT&gt;</c>
+///         where the JWT is obtained by exchanging the API key + secret via
+///         <see cref="InworldJwt.GenerateAsync"/>.</item>
+/// </list>
+/// The generated client always emits <c>Bearer &lt;value&gt;</c>, so on each
+/// outgoing request we peek at the token and rewrite the scheme to
+/// <c>Basic</c> unless the token looks like a JWT (starts with <c>eyJ</c>).
 /// </summary>
 internal static class InworldAuthHook
 {
     internal static void RewriteBearerToBasic(System.Net.Http.HttpRequestMessage request)
     {
         var auth = request.Headers.Authorization;
-        if (auth is { Scheme: "Bearer", Parameter: { Length: > 0 } key })
+        if (auth is not { Scheme: "Bearer", Parameter: { Length: > 0 } key })
         {
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", key);
+            return;
         }
+
+        if (key.StartsWith("eyJ", System.StringComparison.Ordinal))
+        {
+            // JWT — leave the Bearer scheme alone.
+            return;
+        }
+
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", key);
     }
 }
 

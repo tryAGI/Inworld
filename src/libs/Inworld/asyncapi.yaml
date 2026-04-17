@@ -1,0 +1,681 @@
+asyncapi: 3.0.0
+info:
+  title: Inworld AI Realtime API
+  version: 1.0.0
+  description: |
+    Bidirectional WebSocket channels for Inworld AI's realtime TTS and STT
+    endpoints.
+
+    Auth: `Authorization: Basic <API_KEY>` (header or `?Authorization=Basic%20<key>`
+    query parameter) where `<API_KEY>` is the already-Base64-encoded key issued
+    by the Inworld Portal. JWT `Authorization: Bearer <JWT>` is also accepted
+    for client-side (browser/mobile) usage.
+
+servers:
+  production:
+    host: api.inworld.ai
+    protocol: wss
+    security:
+      - $ref: '#/components/securitySchemes/BasicAuth'
+
+defaultContentType: application/json
+
+channels:
+
+  # --------------------------------------------------------------------------
+  # Text-to-Speech streaming (bidirectional)
+  # --------------------------------------------------------------------------
+  TextToSpeechStream:
+    address: /tts/v1/voice:streamBidirectional
+    description: |
+      Bidirectional streaming TTS. The client opens a context (or multiple)
+      with a chosen voice/model, sends text fragments, and receives audio
+      chunks as they are generated. Up to 20 concurrent connections, 5
+      contexts per connection, 10-minute inactivity timeout.
+    servers:
+      - $ref: '#/servers/production'
+    messages:
+      TtsCreateContext:
+        $ref: '#/components/messages/TtsCreateContext'
+      TtsSendText:
+        $ref: '#/components/messages/TtsSendText'
+      TtsFlushContext:
+        $ref: '#/components/messages/TtsFlushContext'
+      TtsCloseContext:
+        $ref: '#/components/messages/TtsCloseContext'
+      TtsContextCreated:
+        $ref: '#/components/messages/TtsContextCreated'
+      TtsAudioChunk:
+        $ref: '#/components/messages/TtsAudioChunk'
+      TtsFlushCompleted:
+        $ref: '#/components/messages/TtsFlushCompleted'
+      TtsContextClosed:
+        $ref: '#/components/messages/TtsContextClosed'
+
+  # --------------------------------------------------------------------------
+  # Speech-to-Text streaming (bidirectional)
+  # --------------------------------------------------------------------------
+  SpeechToTextStream:
+    address: /stt/v1/transcribe:streamBidirectional
+    description: |
+      Bidirectional streaming STT. The client sends a `transcribe_config`
+      message, then a series of `audio_chunk` messages. The server emits
+      interim and final transcription results plus optional VAD events.
+    servers:
+      - $ref: '#/servers/production'
+    messages:
+      SttConfigure:
+        $ref: '#/components/messages/SttConfigure'
+      SttAudioChunk:
+        $ref: '#/components/messages/SttAudioChunk'
+      SttEndTurn:
+        $ref: '#/components/messages/SttEndTurn'
+      SttCloseStream:
+        $ref: '#/components/messages/SttCloseStream'
+      SttTranscription:
+        $ref: '#/components/messages/SttTranscription'
+      SttUsage:
+        $ref: '#/components/messages/SttUsage'
+      SttSpeechStarted:
+        $ref: '#/components/messages/SttSpeechStarted'
+
+operations:
+
+  # -- TTS ------------------------------------------------------------------
+  sendTtsCreateContext:
+    action: send
+    channel:
+      $ref: '#/channels/TextToSpeechStream'
+    messages:
+      - $ref: '#/channels/TextToSpeechStream/messages/TtsCreateContext'
+  sendTtsText:
+    action: send
+    channel:
+      $ref: '#/channels/TextToSpeechStream'
+    messages:
+      - $ref: '#/channels/TextToSpeechStream/messages/TtsSendText'
+  sendTtsFlushContext:
+    action: send
+    channel:
+      $ref: '#/channels/TextToSpeechStream'
+    messages:
+      - $ref: '#/channels/TextToSpeechStream/messages/TtsFlushContext'
+  sendTtsCloseContext:
+    action: send
+    channel:
+      $ref: '#/channels/TextToSpeechStream'
+    messages:
+      - $ref: '#/channels/TextToSpeechStream/messages/TtsCloseContext'
+  receiveTtsContextCreated:
+    action: receive
+    channel:
+      $ref: '#/channels/TextToSpeechStream'
+    messages:
+      - $ref: '#/channels/TextToSpeechStream/messages/TtsContextCreated'
+  receiveTtsAudioChunk:
+    action: receive
+    channel:
+      $ref: '#/channels/TextToSpeechStream'
+    messages:
+      - $ref: '#/channels/TextToSpeechStream/messages/TtsAudioChunk'
+  receiveTtsFlushCompleted:
+    action: receive
+    channel:
+      $ref: '#/channels/TextToSpeechStream'
+    messages:
+      - $ref: '#/channels/TextToSpeechStream/messages/TtsFlushCompleted'
+  receiveTtsContextClosed:
+    action: receive
+    channel:
+      $ref: '#/channels/TextToSpeechStream'
+    messages:
+      - $ref: '#/channels/TextToSpeechStream/messages/TtsContextClosed'
+
+  # -- STT ------------------------------------------------------------------
+  sendSttConfigure:
+    action: send
+    channel:
+      $ref: '#/channels/SpeechToTextStream'
+    messages:
+      - $ref: '#/channels/SpeechToTextStream/messages/SttConfigure'
+  sendSttAudioChunk:
+    action: send
+    channel:
+      $ref: '#/channels/SpeechToTextStream'
+    messages:
+      - $ref: '#/channels/SpeechToTextStream/messages/SttAudioChunk'
+  sendSttEndTurn:
+    action: send
+    channel:
+      $ref: '#/channels/SpeechToTextStream'
+    messages:
+      - $ref: '#/channels/SpeechToTextStream/messages/SttEndTurn'
+  sendSttCloseStream:
+    action: send
+    channel:
+      $ref: '#/channels/SpeechToTextStream'
+    messages:
+      - $ref: '#/channels/SpeechToTextStream/messages/SttCloseStream'
+  receiveSttTranscription:
+    action: receive
+    channel:
+      $ref: '#/channels/SpeechToTextStream'
+    messages:
+      - $ref: '#/channels/SpeechToTextStream/messages/SttTranscription'
+  receiveSttUsage:
+    action: receive
+    channel:
+      $ref: '#/channels/SpeechToTextStream'
+    messages:
+      - $ref: '#/channels/SpeechToTextStream/messages/SttUsage'
+  receiveSttSpeechStarted:
+    action: receive
+    channel:
+      $ref: '#/channels/SpeechToTextStream'
+    messages:
+      - $ref: '#/channels/SpeechToTextStream/messages/SttSpeechStarted'
+
+components:
+
+  securitySchemes:
+    BasicAuth:
+      type: httpApiKey
+      in: query
+      name: Authorization
+      description: |
+        Authorization query parameter in the form `Basic <API_KEY>` (URL-encoded).
+        JWT Bearer tokens are also accepted (`Bearer <JWT>`).
+
+  schemas:
+
+    # -- Shared TTS config --------------------------------------------------
+    StreamAudioEncoding:
+      type: string
+      enum: [LINEAR16, MP3, OGG_OPUS, ALAW, MULAW, PCM, WAV]
+
+    StreamTimestampType:
+      type: string
+      enum: [TIMESTAMP_TYPE_UNSPECIFIED, WORD, CHARACTER]
+
+    StreamApplyTextNormalization:
+      type: string
+      enum: [APPLY_TEXT_NORMALIZATION_UNSPECIFIED, 'ON', 'OFF']
+
+    StreamTimestampTransportStrategy:
+      type: string
+      enum: [TIMESTAMP_TRANSPORT_STRATEGY_UNSPECIFIED, SYNC, ASYNC]
+
+    StreamAudioConfig:
+      type: object
+      description: Audio output configuration for streaming TTS.
+      properties:
+        audioEncoding:
+          $ref: '#/components/schemas/StreamAudioEncoding'
+        sampleRateHertz:
+          type: integer
+          format: int32
+        bitRate:
+          type: integer
+          format: int32
+        speakingRate:
+          type: number
+          format: double
+
+    StreamStatus:
+      type: object
+      description: gRPC-style status envelope included in every server event.
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+
+    TtsCreateContextParams:
+      type: object
+      required: [voiceId, modelId]
+      properties:
+        voiceId:
+          type: string
+        modelId:
+          type: string
+        audioConfig:
+          $ref: '#/components/schemas/StreamAudioConfig'
+        temperature:
+          type: number
+          format: double
+        timestampType:
+          $ref: '#/components/schemas/StreamTimestampType'
+        maxBufferDelayMs:
+          type: integer
+          format: int32
+        bufferCharThreshold:
+          type: integer
+          format: int32
+        applyTextNormalization:
+          $ref: '#/components/schemas/StreamApplyTextNormalization'
+        autoMode:
+          type: boolean
+        timestampTransportStrategy:
+          $ref: '#/components/schemas/StreamTimestampTransportStrategy'
+
+    TtsSendTextParams:
+      type: object
+      required: [text]
+      properties:
+        text:
+          type: string
+          description: Text to synthesize. Maximum 1000 characters per chunk.
+          maxLength: 1000
+        flush_context:
+          type: object
+          description: Optional empty object; if set, triggers flush after text is enqueued.
+          additionalProperties: true
+
+    TtsWordAlignment:
+      type: object
+      properties:
+        words:
+          type: array
+          items:
+            type: string
+        wordStartTimeSeconds:
+          type: array
+          items:
+            type: number
+            format: double
+        wordEndTimeSeconds:
+          type: array
+          items:
+            type: number
+            format: double
+
+    TtsCharacterAlignment:
+      type: object
+      properties:
+        characters:
+          type: array
+          items:
+            type: string
+        characterStartTimeSeconds:
+          type: array
+          items:
+            type: number
+            format: double
+        characterEndTimeSeconds:
+          type: array
+          items:
+            type: number
+            format: double
+
+    TtsTimestampInfo:
+      type: object
+      properties:
+        wordAlignment:
+          $ref: '#/components/schemas/TtsWordAlignment'
+        characterAlignment:
+          $ref: '#/components/schemas/TtsCharacterAlignment'
+
+    TtsStreamUsage:
+      type: object
+      properties:
+        processedCharactersCount:
+          type: integer
+          format: int32
+        modelId:
+          type: string
+
+    TtsAudioChunkData:
+      type: object
+      properties:
+        audioContent:
+          type: string
+          format: byte
+          description: Base64-encoded audio bytes.
+        usage:
+          $ref: '#/components/schemas/TtsStreamUsage'
+        timestampInfo:
+          $ref: '#/components/schemas/TtsTimestampInfo'
+
+    TtsResultEnvelope:
+      type: object
+      description: |
+        Server-side result envelope. Exactly one of `contextCreated`,
+        `audioChunk`, `flushCompleted`, or `contextClosed` is populated.
+      properties:
+        contextId:
+          type: string
+        status:
+          $ref: '#/components/schemas/StreamStatus'
+        contextCreated:
+          $ref: '#/components/schemas/TtsCreateContextParams'
+        audioChunk:
+          $ref: '#/components/schemas/TtsAudioChunkData'
+        flushCompleted:
+          type: object
+          additionalProperties: true
+        contextClosed:
+          type: object
+          additionalProperties: true
+
+    # -- STT ---------------------------------------------------------------
+    SttStreamAudioEncoding:
+      type: string
+      enum: [AUDIO_ENCODING_UNSPECIFIED, AUTO_DETECT, LINEAR16, MP3, OGG_OPUS, FLAC]
+
+    SttVoiceProfileConfig:
+      type: object
+      required: [enableVoiceProfile]
+      properties:
+        enableVoiceProfile:
+          type: boolean
+        topN:
+          type: integer
+          format: int32
+
+    SttGroqConfig:
+      type: object
+      properties:
+        temperature:
+          type: number
+          format: float
+
+    SttAssemblyAiConfig:
+      type: object
+      properties:
+        minEndOfTurnSilenceWhenConfident:
+          type: integer
+          format: int32
+        maxTurnSilence:
+          type: integer
+          format: int32
+        vadThreshold:
+          type: number
+          format: float
+        prompt:
+          type: string
+
+    SttInworldSttV1Config:
+      type: object
+      properties:
+        minEndOfTurnSilenceWhenConfident:
+          type: integer
+          format: int32
+        vadThreshold:
+          type: number
+          format: float
+
+    SttTranscribeConfigParams:
+      type: object
+      required: [modelId]
+      properties:
+        modelId:
+          type: string
+        audioEncoding:
+          $ref: '#/components/schemas/SttStreamAudioEncoding'
+        language:
+          type: string
+        sampleRateHertz:
+          type: integer
+          format: int32
+        numberOfChannels:
+          type: integer
+          format: int32
+        inactivityTimeoutSeconds:
+          type: integer
+          format: int32
+        endOfTurnConfidenceThreshold:
+          type: number
+          format: float
+        prompts:
+          type: array
+          items:
+            type: string
+        includeWordTimestamps:
+          type: boolean
+        groqConfig:
+          $ref: '#/components/schemas/SttGroqConfig'
+        assemblyaiConfig:
+          $ref: '#/components/schemas/SttAssemblyAiConfig'
+        inworldSttV1Config:
+          $ref: '#/components/schemas/SttInworldSttV1Config'
+        voiceProfileConfig:
+          $ref: '#/components/schemas/SttVoiceProfileConfig'
+
+    SttAudioChunkData:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+          format: byte
+          description: Base64-encoded audio bytes whose encoding matches transcribe_config.audioEncoding.
+
+    SttWordTimestamp:
+      type: object
+      properties:
+        word:
+          type: string
+        confidence:
+          type: number
+          format: float
+        startTimeMs:
+          type: integer
+          format: int32
+        endTimeMs:
+          type: integer
+          format: int32
+
+    SttTranscriptionData:
+      type: object
+      properties:
+        transcript:
+          type: string
+        isFinal:
+          type: boolean
+        wordTimestamps:
+          type: array
+          items:
+            $ref: '#/components/schemas/SttWordTimestamp'
+
+    SttUsageData:
+      type: object
+      properties:
+        transcribedAudioMs:
+          type: integer
+          format: int32
+        modelId:
+          type: string
+
+    SttSpeechStartedData:
+      type: object
+      properties:
+        startTimeMs:
+          type: integer
+          format: int32
+        confidence:
+          type: number
+          format: float
+
+  messages:
+
+    # -- TTS client messages -------------------------------------------------
+    TtsCreateContext:
+      name: TtsCreateContext
+      description: Open a new TTS context with the chosen voice, model, and audio config.
+      payload:
+        type: object
+        required: [create]
+        properties:
+          create:
+            $ref: '#/components/schemas/TtsCreateContextParams'
+          contextId:
+            type: string
+            description: Optional stable context id; server generates one when omitted.
+
+    TtsSendText:
+      name: TtsSendText
+      description: Append text to an open TTS context.
+      payload:
+        type: object
+        required: [send_text]
+        properties:
+          send_text:
+            $ref: '#/components/schemas/TtsSendTextParams'
+          contextId:
+            type: string
+
+    TtsFlushContext:
+      name: TtsFlushContext
+      description: Flush the buffer and emit the final audio for the current context.
+      payload:
+        type: object
+        required: [flush_context]
+        properties:
+          flush_context:
+            type: object
+            additionalProperties: true
+          contextId:
+            type: string
+
+    TtsCloseContext:
+      name: TtsCloseContext
+      description: Close the TTS context and release server resources.
+      payload:
+        type: object
+        required: [close_context]
+        properties:
+          close_context:
+            type: object
+            additionalProperties: true
+          contextId:
+            type: string
+
+    # -- TTS server messages -------------------------------------------------
+    TtsContextCreated:
+      name: TtsContextCreated
+      description: Acknowledgement that a context was created.
+      payload:
+        type: object
+        required: [result]
+        properties:
+          result:
+            $ref: '#/components/schemas/TtsResultEnvelope'
+
+    TtsAudioChunk:
+      name: TtsAudioChunk
+      description: One audio chunk plus optional timestamp info.
+      payload:
+        type: object
+        required: [result]
+        properties:
+          result:
+            $ref: '#/components/schemas/TtsResultEnvelope'
+
+    TtsFlushCompleted:
+      name: TtsFlushCompleted
+      description: Signals that all buffered audio for the flush has been emitted.
+      payload:
+        type: object
+        required: [result]
+        properties:
+          result:
+            $ref: '#/components/schemas/TtsResultEnvelope'
+
+    TtsContextClosed:
+      name: TtsContextClosed
+      description: Signals that a context was closed.
+      payload:
+        type: object
+        required: [result]
+        properties:
+          result:
+            $ref: '#/components/schemas/TtsResultEnvelope'
+
+    # -- STT client messages -------------------------------------------------
+    SttConfigure:
+      name: SttConfigure
+      description: Must be the first message. Configures the transcription session.
+      payload:
+        type: object
+        required: [transcribe_config]
+        properties:
+          transcribe_config:
+            $ref: '#/components/schemas/SttTranscribeConfigParams'
+
+    SttAudioChunk:
+      name: SttAudioChunk
+      description: Append audio bytes to the transcription stream.
+      payload:
+        type: object
+        required: [audio_chunk]
+        properties:
+          audio_chunk:
+            $ref: '#/components/schemas/SttAudioChunkData'
+
+    SttEndTurn:
+      name: SttEndTurn
+      description: Signal the end of the current speaker turn (provider-dependent).
+      payload:
+        type: object
+        required: [end_turn]
+        properties:
+          end_turn:
+            type: object
+            additionalProperties: true
+
+    SttCloseStream:
+      name: SttCloseStream
+      description: Finalize and close the transcription stream.
+      payload:
+        type: object
+        required: [close_stream]
+        properties:
+          close_stream:
+            type: object
+            additionalProperties: true
+
+    # -- STT server messages -------------------------------------------------
+    SttTranscription:
+      name: SttTranscription
+      description: Interim or final transcription result.
+      payload:
+        type: object
+        required: [result]
+        properties:
+          result:
+            type: object
+            properties:
+              transcription:
+                $ref: '#/components/schemas/SttTranscriptionData'
+
+    SttUsage:
+      name: SttUsage
+      description: Usage metrics emitted at the end of a stream.
+      payload:
+        type: object
+        required: [result]
+        properties:
+          result:
+            type: object
+            properties:
+              usage:
+                $ref: '#/components/schemas/SttUsageData'
+
+    SttSpeechStarted:
+      name: SttSpeechStarted
+      description: Voice-activity-detection event signaling that speech has started.
+      payload:
+        type: object
+        required: [result]
+        properties:
+          result:
+            type: object
+            properties:
+              speechStarted:
+                $ref: '#/components/schemas/SttSpeechStartedData'

@@ -2,12 +2,15 @@
 
 ## Overview
 
-Auto-generated C# SDK for [Inworld AI](https://inworld.ai/) — a realtime voice and AI platform. Covers TTS synthesis, STT transcription, voice management (list, get, clone, design, publish, update, delete), and model discovery.
+Auto-generated C# SDK for [Inworld AI](https://inworld.ai/) — a realtime voice and AI platform. Covers:
 
-**Excluded from this SDK:**
-- WebSocket/Realtime streaming endpoints (`/tts/v1/voice:streamBidirectional`, `/stt/v1/transcribe:streamBidirectional`, Realtime API)
-- OpenAI-compatible Chat Completions (`/v1/chat/completions`) — use `tryAGI.OpenAI` with Inworld as a CustomProvider
-- LLM Router long-running management endpoints
+- **REST**: TTS synthesis, STT transcription, voice management (list/get/clone/design/publish/update/delete), LLM model discovery.
+- **Realtime (WebSocket)**: bidirectional TTS streaming (`/tts/v1/voice:streamBidirectional`) and STT streaming (`/stt/v1/transcribe:streamBidirectional`).
+- **MEAI**: `Microsoft.Extensions.AI.ISpeechToTextClient` implementation wired to REST (non-streaming) and WebSocket (streaming) + AIFunction tools.
+- **JWT auth helper**: `InworldJwt.GenerateAsync(key, secret)` mints short-lived tokens via Inworld's IW1-HMAC-SHA256 token-exchange endpoint for client-side (Blazor, browser, mobile) use.
+- **tryAGI.OpenAI**: Inworld's OpenAI-compatible chat completions (`/v1/chat/completions`) are exposed as `CustomProviders.Inworld(...)`.
+
+**Excluded** (for now): Inworld Realtime (OpenAI-Realtime-compatible `/api/v1/realtime/session`), Router long-running management endpoints, REST streaming TTS (`/tts/v1/voice:stream`). The WebSocket TTS channel supersedes the REST streaming path.
 
 ## Build & Test
 
@@ -18,50 +21,64 @@ dotnet test src/tests/IntegrationTests/
 
 ## Auth
 
-Inworld uses `Authorization: Basic <API_KEY>` where `<API_KEY>` is the already-Base64-encoded key from the Inworld Portal. Pass the key verbatim — do not re-encode.
+Two flavours, both on the `Authorization` header:
 
-```csharp
-var client = new InworldClient(apiKey); // INWORLD_API_KEY env var
-```
+- **Server-side (Basic, long-lived):** the Portal-issued key is already Base64-encoded.
 
-**Important:** The generated code emits `Authorization: Bearer <key>`, but Inworld expects `Authorization: Basic <key>`. The `Authorized` partial hook in `InworldClient.Auth.cs` rewrites the scheme name:
+  ```csharp
+  var client = new InworldClient(apiKey); // INWORLD_API_KEY env var
+  ```
 
-```csharp
-// In Extensions/InworldClient.Auth.cs
-partial void Authorized(HttpClient client)
-{
-    for (int i = 0; i < Authorizations.Count; i++)
-    {
-        var auth = Authorizations[i];
-        if (auth is { Type: "Http", Name: "Bearer" })
-            Authorizations[i] = new EndPointAuthorization
-            { Type = auth.Type, Location = auth.Location, Name = "Basic", Value = auth.Value };
-    }
-}
-```
+- **Client-side (Bearer JWT, short-lived):** mint a JWT on a trusted backend and hand it to the client.
 
-## Spec Source
+  ```csharp
+  // Backend (server with key+secret)
+  var token = await InworldJwt.GenerateAsync(
+      apiKey: jwtKey,
+      apiSecret: jwtSecret,
+      resources: new[] { "workspaces/my-workspace" });
 
-Inworld has **no public OpenAPI spec**. `openapi.yaml` is **handcrafted** from the published API reference:
-- `https://docs.inworld.ai/llms.txt`
-- `https://docs.inworld.ai/api-reference/ttsAPI/*`
-- `https://docs.inworld.ai/api-reference/sttAPI/*`
-- `https://docs.inworld.ai/api-reference/voiceAPI/*`
-- `https://docs.inworld.ai/api-reference/modelsAPI/*`
+  // Client (Blazor WebAssembly etc.)
+  var client = new InworldClient(token.Token);
+  ```
 
-When the upstream docs change, update `src/libs/Inworld/openapi.yaml` by hand and re-run `./generate.sh`.
+The generated code emits `Authorization: Bearer <value>`. The `PrepareRequest` hook on each sub-client inspects the token:
+
+- Starts with `eyJ`? It's a JWT — leave the Bearer scheme.
+- Otherwise? Rewrite to `Authorization: Basic <value>`.
+
+See `Extensions/InworldClient.Auth.cs` and `Extensions/InworldRealtimeClient.Auth.cs`.
+
+## Spec Sources
+
+Inworld has **no public OpenAPI or AsyncAPI specs**. Both are **handcrafted** from the published docs and maintained in this repo:
+
+- `src/libs/Inworld/openapi.yaml` — 10 REST endpoints (TTS, STT, Voices, Models)
+- `src/libs/Inworld/asyncapi.yaml` — two WebSocket channels (TTS bidirectional, STT bidirectional)
+
+When Inworld updates the docs, update these files by hand and re-run `./generate.sh`.
+
+## Multi-Spec Architecture
+
+| Spec | Namespace | Client(s) | Purpose |
+|------|-----------|-----------|---------|
+| OpenAPI (`openapi.yaml`) | `Inworld` | `InworldClient` + tag sub-clients (`TextToSpeech`, `SpeechToText`, `Voices`, `Models`) | REST API |
+| AsyncAPI (`asyncapi.yaml`) | `Inworld.Realtime` | `InworldTextToSpeechStreamRealtimeClient`, `InworldSpeechToTextStreamRealtimeClient` | WebSocket API |
 
 ## Key Files
 
-- `src/libs/Inworld/openapi.yaml` — **Handcrafted** OpenAPI 3.0 spec
-- `src/libs/Inworld/generate.sh` — Regeneration script (consumes local `openapi.yaml`)
+- `src/libs/Inworld/openapi.yaml` — Handcrafted OpenAPI spec
+- `src/libs/Inworld/asyncapi.yaml` — Handcrafted AsyncAPI spec
+- `src/libs/Inworld/generate.sh` — Regen script (runs `autosdk` on both specs)
 - `src/libs/Inworld/Generated/` — **Never edit** — auto-generated code
-- `src/libs/Inworld/Extensions/InworldClient.Auth.cs` — Auth scheme fix: Bearer → Basic
+- `src/libs/Inworld/Extensions/InworldClient.Auth.cs` — REST auth rewrite Bearer → Basic (JWT auto-detected by `eyJ` prefix)
+- `src/libs/Inworld/Extensions/InworldRealtimeClient.Auth.cs` — WebSocket auth rewrite Bearer → Basic
+- `src/libs/Inworld/Extensions/InworldJwt.cs` — IW1-HMAC-SHA256 signing + token exchange
+- `src/libs/Inworld/Extensions/InworldClient.SpeechToTextClient.cs` — MEAI `ISpeechToTextClient` (REST + WebSocket)
 - `src/libs/Inworld/Extensions/InworldClient.Tools.cs` — MEAI `AIFunction` tool extensions
-- `src/tests/IntegrationTests/Tests.cs` — Test helper
 - `src/tests/IntegrationTests/Examples/` — Example tests (also generate docs)
 
-## API Surface
+## REST API Surface
 
 | Tag | Method | Path | Description |
 |-----|--------|------|-------------|
@@ -76,14 +93,33 @@ When the upstream docs change, update `src/libs/Inworld/openapi.yaml` by hand an
 | SpeechToText | POST | `/stt/v1/transcribe` | Transcribe audio |
 | Models | GET | `/llm/v1alpha/models` | List LLM models |
 
-Access via tag-grouped sub-clients: `client.TextToSpeech.*`, `client.Voices.*`, `client.SpeechToText.*`, `client.Models.*`.
+## WebSocket (Realtime) API Surface
+
+### TextToSpeech (`/tts/v1/voice:streamBidirectional`)
+- Client → server: `TtsCreateContext`, `TtsSendText`, `TtsFlushContext`, `TtsCloseContext`
+- Server → client: `TtsContextCreated`, `TtsAudioChunk`, `TtsFlushCompleted`, `TtsContextClosed`
+- Limits: 20 concurrent connections, 5 contexts/connection, 10-min inactivity timeout, 1,000-char text chunks
+
+### SpeechToText (`/stt/v1/transcribe:streamBidirectional`)
+- Client → server: `SttConfigure` (must be first), `SttAudioChunk`, `SttEndTurn`, `SttCloseStream`
+- Server → client: `SttTranscription`, `SttUsage`, `SttSpeechStarted`
 
 ## MEAI Integration
 
-- **AIFunction tools:** `AsSynthesizeSpeechTool`, `AsListVoicesTool`, `AsListModelsTool`, `AsDesignVoiceTool` — available on `InworldClient`
-- **`ISpeechToTextClient`:** Not implemented on the REST surface (the transcribe endpoint takes Base64 inline audio and maps awkwardly to MEAI's `Stream`-based contract). STT streaming is WebSocket-only and excluded from this SDK.
-- **`IChatClient`:** Not implemented — Inworld's `/v1/chat/completions` is OpenAI-compatible; prefer `tryAGI.OpenAI` with Inworld as a CustomProvider.
+| Interface | Implementation | Notes |
+|-----------|----------------|-------|
+| `ISpeechToTextClient` | `InworldClient` | REST transcribe for `GetTextAsync`; WebSocket stream for `GetStreamingTextAsync` |
+| `IChatClient` | *(not applicable)* | Use `CustomProviders.Inworld(key)` from `tryAGI.OpenAI` instead |
+| `IEmbeddingGenerator` | *(not applicable)* | Inworld does not expose embeddings |
+| AIFunction tools | `AsSynthesizeSpeechTool`, `AsListVoicesTool`, `AsListModelsTool`, `AsDesignVoiceTool` | Attach to any `IChatClient` |
 
 ## NuGet
 
 - **PackageId:** `tryAGI.Inworld`
+
+## Known Gotchas
+
+- **Security resolver matches Http auth by Name.** Do NOT rewrite the stored `EndPointAuthorization.Name` — the resolver drops the auth if the name no longer matches the operation's requirement. Rewrite on the outgoing `HttpRequestMessage` instead (see `InworldClient.Auth.cs`).
+- **IW1-HMAC-SHA256 signing**: the signature uses `api-engine.inworld.ai` as the host even though the request goes to `api.inworld.ai`. The "method" in the signature is the gRPC service name (`ai.inworld.engine.WorldEngine/GenerateToken`), not the HTTP path.
+- **AsyncAPI discriminator**: Inworld's realtime messages use the top-level JSON key (`create`, `send_text`, ...) as the discriminator, not a `type` field. The spec models each message shape separately; autosdk generates one `Send*Async` method per message type.
+- **REST `SpeechToText` vs MEAI `ISpeechToTextClient`**: the generated tag-grouped sub-client is `SpeechToTextClient` (accessible via `client.SpeechToText.*`). The MEAI interface is implemented on the main `InworldClient` class using a `Meai = Microsoft.Extensions.AI` namespace alias to avoid the ambiguity with generated `Inworld.ISpeechToTextClient`.
