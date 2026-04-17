@@ -40,6 +40,11 @@ public partial class InworldClient
 
         RealtimeTokenProvider = async ct =>
             (await jwtCache.GetAsync(ct).ConfigureAwait(false)).Token;
+
+        // Register the cache so the REST PrepareRequest / ProcessResponse
+        // hooks can refresh the token transparently and invalidate it on
+        // 401/403.
+        InworldJwtCacheRegistry.Register(Authorizations, jwtCache);
     }
 
     private static string RequireToken(InworldJwtCache jwtCache)
@@ -51,5 +56,33 @@ public partial class InworldClient
         // the main `InworldClient(string apiKey)` constructor and set
         // `RealtimeTokenProvider` themselves.
         return jwtCache.GetAsync().GetAwaiter().GetResult().Token;
+    }
+}
+
+/// <summary>
+/// Binds an <see cref="InworldJwtCache"/> to a shared <c>Authorizations</c>
+/// list so sub-clients (which only see the list, not the main
+/// <see cref="InworldClient"/>) can refresh / invalidate tokens through the
+/// same cache. Stored via <see cref="System.Runtime.CompilerServices.ConditionalWeakTable{TKey,TValue}"/>
+/// so the cache is released as soon as the main client is collected.
+/// </summary>
+internal static class InworldJwtCacheRegistry
+{
+    private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<
+        System.Collections.Generic.List<EndPointAuthorization>,
+        InworldJwtCache> s_map = new();
+
+    internal static void Register(
+        System.Collections.Generic.List<EndPointAuthorization> authorizations,
+        InworldJwtCache cache)
+    {
+        s_map.Remove(authorizations);
+        s_map.Add(authorizations, cache);
+    }
+
+    internal static InworldJwtCache? Get(
+        System.Collections.Generic.List<EndPointAuthorization> authorizations)
+    {
+        return s_map.TryGetValue(authorizations, out var cache) ? cache : null;
     }
 }

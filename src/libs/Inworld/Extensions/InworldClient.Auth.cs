@@ -15,9 +15,50 @@ namespace Inworld;
 /// The generated client always emits <c>Bearer &lt;value&gt;</c>, so on each
 /// outgoing request we peek at the token and rewrite the scheme to
 /// <c>Basic</c> unless the token looks like a JWT (starts with <c>eyJ</c>).
+/// <para>
+/// When an <see cref="InworldJwtCache"/> was registered for this client (see
+/// <see cref="InworldJwtCacheRegistry"/>), we also refresh the Authorization
+/// token from the cache on each outgoing request and invalidate the cache
+/// on a 401/403 response so the next request mints a fresh JWT.
+/// </para>
 /// </summary>
 internal static class InworldAuthHook
 {
+    internal static void BeforeRequest(
+        System.Collections.Generic.List<EndPointAuthorization> authorizations,
+        System.Net.Http.HttpRequestMessage request)
+    {
+        RefreshFromCache(authorizations, request);
+        RewriteBearerToBasic(request);
+    }
+
+    internal static void AfterResponse(
+        System.Collections.Generic.List<EndPointAuthorization> authorizations,
+        System.Net.Http.HttpResponseMessage response)
+    {
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized ||
+            response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+        {
+            InworldJwtCacheRegistry.Get(authorizations)?.Invalidate();
+        }
+    }
+
+    private static void RefreshFromCache(
+        System.Collections.Generic.List<EndPointAuthorization> authorizations,
+        System.Net.Http.HttpRequestMessage request)
+    {
+        var cache = InworldJwtCacheRegistry.Get(authorizations);
+        if (cache is null)
+        {
+            return;
+        }
+
+        // Synchronous — the cache services hits without I/O. A miss only
+        // happens near token expiry and blocks for the mint duration.
+        var token = cache.GetAsync().GetAwaiter().GetResult().Token;
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+    }
+
     internal static void RewriteBearerToBasic(System.Net.Http.HttpRequestMessage request)
     {
         var auth = request.Headers.Authorization;
@@ -40,33 +81,53 @@ public partial class InworldClient
 {
     partial void PrepareRequest(
         System.Net.Http.HttpClient client,
-        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.RewriteBearerToBasic(request);
+        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.BeforeRequest(Authorizations, request);
+
+    partial void ProcessResponse(
+        System.Net.Http.HttpClient client,
+        System.Net.Http.HttpResponseMessage response) => InworldAuthHook.AfterResponse(Authorizations, response);
 }
 
 public partial class TextToSpeechClient
 {
     partial void PrepareRequest(
         System.Net.Http.HttpClient client,
-        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.RewriteBearerToBasic(request);
+        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.BeforeRequest(Authorizations, request);
+
+    partial void ProcessResponse(
+        System.Net.Http.HttpClient client,
+        System.Net.Http.HttpResponseMessage response) => InworldAuthHook.AfterResponse(Authorizations, response);
 }
 
 public partial class SpeechToTextClient
 {
     partial void PrepareRequest(
         System.Net.Http.HttpClient client,
-        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.RewriteBearerToBasic(request);
+        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.BeforeRequest(Authorizations, request);
+
+    partial void ProcessResponse(
+        System.Net.Http.HttpClient client,
+        System.Net.Http.HttpResponseMessage response) => InworldAuthHook.AfterResponse(Authorizations, response);
 }
 
 public partial class VoicesClient
 {
     partial void PrepareRequest(
         System.Net.Http.HttpClient client,
-        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.RewriteBearerToBasic(request);
+        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.BeforeRequest(Authorizations, request);
+
+    partial void ProcessResponse(
+        System.Net.Http.HttpClient client,
+        System.Net.Http.HttpResponseMessage response) => InworldAuthHook.AfterResponse(Authorizations, response);
 }
 
 public partial class ModelsClient
 {
     partial void PrepareRequest(
         System.Net.Http.HttpClient client,
-        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.RewriteBearerToBasic(request);
+        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.BeforeRequest(Authorizations, request);
+
+    partial void ProcessResponse(
+        System.Net.Http.HttpClient client,
+        System.Net.Http.HttpResponseMessage response) => InworldAuthHook.AfterResponse(Authorizations, response);
 }

@@ -45,9 +45,13 @@ public partial class Tests
         Meai.ISpeechToTextClient speech = client;
 
         using var audioStream = new MemoryStream(audioBytes);
+        //// Use Inworld's streaming STT model. The SDK auto-rewrites the
+        //// legacy id `inworld/stt-v1` to the currently-deployed
+        //// `inworld/inworld-stt-1` — see
+        //// https://github.com/inworld-ai/inworld-api-examples/issues/71.
         var options = new Meai.SpeechToTextOptions
         {
-            ModelId = "assemblyai/universal-streaming-multilingual",
+            ModelId = "inworld/inworld-stt-1",
             SpeechLanguage = "en-US",
         };
 
@@ -74,6 +78,53 @@ public partial class Tests
         }
 
         transcript.Should().NotBeNullOrWhiteSpace(because: "the STT stream should emit at least interim transcripts for the synthesized phrase");
+    }
+
+    [TestMethod]
+    [Timeout(60_000)]
+    public async Task Example_StreamingSpeechToText_RewritesLegacyModelId()
+    {
+        using var client = GetAuthenticatedClient();
+
+        //// Synthesize a phrase so we have audio to send.
+        var tts = await client.TextToSpeech.SynthesizeSpeechAsync(
+            text: "Model id rewrite works.",
+            voiceId: "Dennis",
+            modelId: "inworld-tts-1.5-max",
+            audioConfig: new AudioConfig
+            {
+                AudioEncoding = AudioEncoding.Linear16,
+                SampleRateHertz = 16000,
+            });
+        var audio = StripWavHeader(tts.AudioContent!);
+
+        using var audioStream = new MemoryStream(audio);
+
+        //// Pass the legacy (documented-but-not-deployed) model id — the SDK
+        //// silently rewrites it to `inworld/inworld-stt-1`. Without the
+        //// rewrite the WebSocket would error with "No STT client found for
+        //// model: inworld/stt-v1".
+        Meai.ISpeechToTextClient speech = client;
+
+        var transcript = new System.Text.StringBuilder();
+        await foreach (var update in speech.GetStreamingTextAsync(
+            audioStream,
+            new Meai.SpeechToTextOptions { ModelId = "inworld/stt-v1", SpeechLanguage = "en-US" },
+            CancellationToken.None))
+        {
+            if (update.Kind == Meai.SpeechToTextResponseUpdateKind.TextUpdated)
+            {
+                transcript.Append(update.Text);
+            }
+
+            if (update.Kind == Meai.SpeechToTextResponseUpdateKind.SessionClose)
+            {
+                break;
+            }
+        }
+
+        transcript.ToString().Should().NotBeNullOrWhiteSpace(
+            because: "the SDK should auto-rewrite the legacy model id so the stream still returns transcripts");
     }
 
     private static byte[] StripWavHeader(byte[] audio)

@@ -19,8 +19,44 @@ public partial class InworldClient : Meai.ISpeechToTextClient
 {
     private Meai.SpeechToTextClientMetadata? _speechMetadata;
 
-    private const string DefaultRestModelId = "inworld/stt-v1";
-    private const string DefaultStreamingModelId = "assemblyai/universal-streaming-multilingual";
+    private const string DefaultRestModelId = "inworld/inworld-stt-1";
+    private const string DefaultStreamingModelId = "inworld/inworld-stt-1";
+
+    /// <summary>
+    /// The legacy/documented model id that Inworld's streaming STT does not
+    /// actually serve (see
+    /// https://github.com/inworld-ai/inworld-api-examples/issues/71). We
+    /// silently rewrite it to the correct id to avoid the opaque
+    /// <c>"No STT client found for model: inworld/stt-v1"</c> error and log a
+    /// one-shot warning to <see cref="System.Diagnostics.Trace"/>.
+    /// </summary>
+    private const string LegacyInworldSttModelId = "inworld/stt-v1";
+    private const string CurrentInworldSttModelId = "inworld/inworld-stt-1";
+
+    private static bool s_warnedLegacyStt;
+
+    private static string NormalizeSttModelId(string? requested, string fallback)
+    {
+        if (string.IsNullOrEmpty(requested))
+        {
+            return fallback;
+        }
+
+        if (string.Equals(requested, LegacyInworldSttModelId, StringComparison.Ordinal))
+        {
+            if (!s_warnedLegacyStt)
+            {
+                s_warnedLegacyStt = true;
+                System.Diagnostics.Trace.TraceWarning(
+                    "[Inworld] STT model id '{0}' is rewritten to '{1}' — the documented id is not deployed on the streaming endpoint. See https://github.com/inworld-ai/inworld-api-examples/issues/71.",
+                    LegacyInworldSttModelId,
+                    CurrentInworldSttModelId);
+            }
+            return CurrentInworldSttModelId;
+        }
+
+        return requested;
+    }
 
     /// <inheritdoc />
     object? Meai.ISpeechToTextClient.GetService(Type serviceType, object? serviceKey)
@@ -56,7 +92,7 @@ public partial class InworldClient : Meai.ISpeechToTextClient
         {
             TranscribeConfig = new TranscribeConfig
             {
-                ModelId = options?.ModelId is { Length: > 0 } m ? m : DefaultRestModelId,
+                ModelId = NormalizeSttModelId(options?.ModelId, DefaultRestModelId),
                 Language = options?.SpeechLanguage,
                 AudioEncoding = SttAudioEncoding.AutoDetect,
                 IncludeWordTimestamps = true,
@@ -134,7 +170,7 @@ public partial class InworldClient : Meai.ISpeechToTextClient
                 {
                     TranscribeConfig = new Realtime.SttTranscribeConfigParams
                     {
-                        ModelId = options?.ModelId is { Length: > 0 } m ? m : DefaultStreamingModelId,
+                        ModelId = NormalizeSttModelId(options?.ModelId, DefaultStreamingModelId),
                         Language = options?.SpeechLanguage,
                         AudioEncoding = "LINEAR16",
                         SampleRateHertz = sampleRate,
@@ -224,47 +260,13 @@ public partial class InworldClient : Meai.ISpeechToTextClient
                 }
 
                 var json = System.Text.Encoding.UTF8.GetString(readBuffer, 0, rcv.Count);
-                using var doc = System.Text.Json.JsonDocument.Parse(json);
-                if (!doc.RootElement.TryGetProperty("result", out var result))
+                var (update, endOfStream) = ParseServerFrame(json, responseId);
+                if (update is not null)
                 {
-                    continue;
+                    yield return update;
                 }
-
-                if (result.TryGetProperty("transcription", out var tr))
+                if (endOfStream)
                 {
-                    string text = tr.TryGetProperty("transcript", out var txProp) && txProp.ValueKind == System.Text.Json.JsonValueKind.String
-                        ? txProp.GetString() ?? string.Empty
-                        : string.Empty;
-                    bool isFinal = tr.TryGetProperty("isFinal", out var finProp) && finProp.ValueKind == System.Text.Json.JsonValueKind.True;
-
-                    var kind = isFinal
-                        ? Meai.SpeechToTextResponseUpdateKind.TextUpdated
-                        : Meai.SpeechToTextResponseUpdateKind.TextUpdating;
-
-                    yield return new Meai.SpeechToTextResponseUpdate(text)
-                    {
-                        Kind = kind,
-                        ResponseId = responseId,
-                        RawRepresentation = json,
-                    };
-                }
-                else if (result.TryGetProperty("speechStarted", out var started))
-                {
-                    int? startMs = started.TryGetProperty("startTimeMs", out var smsProp) &&
-                                   smsProp.ValueKind == System.Text.Json.JsonValueKind.Number
-                        ? smsProp.GetInt32() : null;
-
-                    yield return new Meai.SpeechToTextResponseUpdate
-                    {
-                        Kind = Meai.SpeechToTextResponseUpdateKind.TextUpdating,
-                        ResponseId = responseId,
-                        StartTime = startMs is int v ? TimeSpan.FromMilliseconds(v) : null,
-                        RawRepresentation = json,
-                    };
-                }
-                else if (result.TryGetProperty("usage", out _))
-                {
-                    // End of stream — no more transcription updates.
                     break;
                 }
             }
@@ -283,5 +285,72 @@ public partial class InworldClient : Meai.ISpeechToTextClient
             {
             }
         }
+    }
+
+    /// <summary>
+    /// Parse a single Inworld STT server frame into a MEAI update.
+    /// <para>
+    /// Every frame is shaped <c>{"result": {...}}</c>; the real discriminator
+    /// is the inner key (<c>transcription</c> / <c>usage</c> /
+    /// <c>speechStarted</c>). Returns <c>(null, false)</c> for frames that
+    /// don't map to a meaningful MEAI update (e.g. empty / malformed), and
+    /// <c>endOfStream=true</c> for the usage frame that signals the end of
+    /// the transcription stream.
+    /// </para>
+    /// </summary>
+    [CLSCompliant(false)]
+    public static (Meai.SpeechToTextResponseUpdate? update, bool endOfStream) ParseServerFrame(
+        string json,
+        string? responseId)
+    {
+        ArgumentNullException.ThrowIfNull(json);
+
+        using var doc = System.Text.Json.JsonDocument.Parse(json);
+        if (!doc.RootElement.TryGetProperty("result", out var result))
+        {
+            return (null, false);
+        }
+
+        if (result.TryGetProperty("transcription", out var tr))
+        {
+            string text = tr.TryGetProperty("transcript", out var txProp) && txProp.ValueKind == System.Text.Json.JsonValueKind.String
+                ? txProp.GetString() ?? string.Empty
+                : string.Empty;
+            bool isFinal = tr.TryGetProperty("isFinal", out var finProp) && finProp.ValueKind == System.Text.Json.JsonValueKind.True;
+
+            var kind = isFinal
+                ? Meai.SpeechToTextResponseUpdateKind.TextUpdated
+                : Meai.SpeechToTextResponseUpdateKind.TextUpdating;
+
+            return (new Meai.SpeechToTextResponseUpdate(text)
+            {
+                Kind = kind,
+                ResponseId = responseId,
+                RawRepresentation = json,
+            }, false);
+        }
+
+        if (result.TryGetProperty("speechStarted", out var started))
+        {
+            int? startMs = started.TryGetProperty("startTimeMs", out var smsProp) &&
+                           smsProp.ValueKind == System.Text.Json.JsonValueKind.Number
+                ? smsProp.GetInt32() : null;
+
+            return (new Meai.SpeechToTextResponseUpdate
+            {
+                Kind = Meai.SpeechToTextResponseUpdateKind.TextUpdating,
+                ResponseId = responseId,
+                StartTime = startMs is int v ? TimeSpan.FromMilliseconds(v) : null,
+                RawRepresentation = json,
+            }, false);
+        }
+
+        if (result.TryGetProperty("usage", out _))
+        {
+            // End of stream — no more transcription updates.
+            return (null, true);
+        }
+
+        return (null, false);
     }
 }
