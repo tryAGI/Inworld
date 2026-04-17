@@ -25,6 +25,19 @@ internal static class InworldRealtimeAuthHook
 public partial class InworldSpeechToTextStreamRealtimeClient
 {
     private string? _apiKey;
+    private System.Net.WebSockets.ClientWebSocket? _ws;
+
+    /// <summary>
+    /// Raw underlying WebSocket — intended for extension code that needs to
+    /// parse JSON messages directly instead of via the generated
+    /// discriminated-union helper.
+    /// </summary>
+    internal System.Net.WebSockets.ClientWebSocket? RawWebSocket => _ws;
+
+    partial void Initialized(System.Net.WebSockets.ClientWebSocket client)
+    {
+        _ws = client;
+    }
 
     partial void Authorizing(System.Net.WebSockets.ClientWebSocket client, ref string apiKey)
     {
@@ -43,6 +56,19 @@ public partial class InworldSpeechToTextStreamRealtimeClient
 public partial class InworldTextToSpeechStreamRealtimeClient
 {
     private string? _apiKey;
+    private System.Net.WebSockets.ClientWebSocket? _ws;
+
+    /// <summary>
+    /// Raw underlying WebSocket — intended for extension code that needs to
+    /// parse JSON messages directly instead of via the generated
+    /// discriminated-union helper.
+    /// </summary>
+    internal System.Net.WebSockets.ClientWebSocket? RawWebSocket => _ws;
+
+    partial void Initialized(System.Net.WebSockets.ClientWebSocket client)
+    {
+        _ws = client;
+    }
 
     partial void Authorizing(System.Net.WebSockets.ClientWebSocket client, ref string apiKey)
     {

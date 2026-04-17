@@ -19,8 +19,8 @@ public partial class InworldClient : Meai.ISpeechToTextClient
 {
     private Meai.SpeechToTextClientMetadata? _speechMetadata;
 
-    private const string DefaultRestModelId = "inworld/inworld-stt-v1";
-    private const string DefaultStreamingModelId = "inworld/inworld-stt-v1";
+    private const string DefaultRestModelId = "inworld/stt-v1";
+    private const string DefaultStreamingModelId = "assemblyai/universal-streaming-multilingual";
 
     /// <inheritdoc />
     object? Meai.ISpeechToTextClient.GetService(Type serviceType, object? serviceKey)
@@ -164,11 +164,12 @@ public partial class InworldClient : Meai.ISpeechToTextClient
                             cancellationToken: cancellationToken).ConfigureAwait(false);
                     }
 
-                    await realtime.SendSttCloseStreamAsync(
-                        new Realtime.SttCloseStream
-                        {
-                            CloseStream = new Realtime.SttCloseStreamCloseStream(),
-                        },
+                    // The generated SttCloseStreamCloseStream type has a
+                    // `JsonExtensionData Dictionary<string, object>`, which the
+                    // source-gen serializer can't roundtrip. Send the literal
+                    // control message instead — it has no payload fields.
+                    await realtime.SendAsync(
+                        "{\"close_stream\":{}}",
                         cancellationToken: cancellationToken).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException)
@@ -176,37 +177,85 @@ public partial class InworldClient : Meai.ISpeechToTextClient
                 }
             }, cancellationToken);
 
-            await foreach (var @event in realtime.ReceiveUpdatesAsync(cancellationToken).ConfigureAwait(false))
+            // The generated SpeechToTextStreamServerEvent discriminator only
+            // inspects top-level properties, but every Inworld server message
+            // is `{"result": {...}}` — the real discriminator is the inner key
+            // (`transcription`, `usage`, or `speechStarted`). Parse the raw
+            // WebSocket frames by hand to route events correctly.
+            var ws = realtime.RawWebSocket
+                ?? throw new InvalidOperationException("Realtime WebSocket is not available.");
+
+            var readBuffer = new byte[64 * 1024];
+            while (ws.State == System.Net.WebSockets.WebSocketState.Open &&
+                   !cancellationToken.IsCancellationRequested)
             {
-                if (@event.IsSttTranscription && @event.SttTranscription?.Result?.Transcription is { } tx)
+                var segment = new ArraySegment<byte>(readBuffer);
+                System.Net.WebSockets.WebSocketReceiveResult rcv;
+                try
                 {
-                    var kind = tx.IsFinal == true
+                    rcv = await ws.ReceiveAsync(segment, cancellationToken).ConfigureAwait(false);
+                }
+                catch (System.Net.WebSockets.WebSocketException)
+                {
+                    break;
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
+
+                if (rcv.MessageType == System.Net.WebSockets.WebSocketMessageType.Close)
+                {
+                    break;
+                }
+
+                if (rcv.MessageType != System.Net.WebSockets.WebSocketMessageType.Text)
+                {
+                    continue;
+                }
+
+                var json = System.Text.Encoding.UTF8.GetString(readBuffer, 0, rcv.Count);
+                using var doc = System.Text.Json.JsonDocument.Parse(json);
+                if (!doc.RootElement.TryGetProperty("result", out var result))
+                {
+                    continue;
+                }
+
+                if (result.TryGetProperty("transcription", out var tr))
+                {
+                    string text = tr.TryGetProperty("transcript", out var txProp) && txProp.ValueKind == System.Text.Json.JsonValueKind.String
+                        ? txProp.GetString() ?? string.Empty
+                        : string.Empty;
+                    bool isFinal = tr.TryGetProperty("isFinal", out var finProp) && finProp.ValueKind == System.Text.Json.JsonValueKind.True;
+
+                    var kind = isFinal
                         ? Meai.SpeechToTextResponseUpdateKind.TextUpdated
                         : Meai.SpeechToTextResponseUpdateKind.TextUpdating;
 
-                    yield return new Meai.SpeechToTextResponseUpdate(tx.Transcript ?? string.Empty)
+                    yield return new Meai.SpeechToTextResponseUpdate(text)
                     {
                         Kind = kind,
                         ResponseId = responseId,
-                        RawRepresentation = @event.SttTranscription,
+                        RawRepresentation = json,
                     };
                 }
-                else if (@event.IsSttStarted && @event.SttStarted?.Result?.SpeechStarted is { } started)
+                else if (result.TryGetProperty("speechStarted", out var started))
                 {
-                    // No MEAI kind directly models a VAD "speech-started" signal;
-                    // surface it as an empty TextUpdating with StartTime populated
-                    // and the raw event attached for callers that care.
+                    int? startMs = started.TryGetProperty("startTimeMs", out var smsProp) &&
+                                   smsProp.ValueKind == System.Text.Json.JsonValueKind.Number
+                        ? smsProp.GetInt32() : null;
+
                     yield return new Meai.SpeechToTextResponseUpdate
                     {
                         Kind = Meai.SpeechToTextResponseUpdateKind.TextUpdating,
                         ResponseId = responseId,
-                        StartTime = started.StartTimeMs is int startMs ? TimeSpan.FromMilliseconds(startMs) : null,
-                        RawRepresentation = @event.SttStarted,
+                        StartTime = startMs is int v ? TimeSpan.FromMilliseconds(v) : null,
+                        RawRepresentation = json,
                     };
                 }
-                else if (@event.IsSttUsage)
+                else if (result.TryGetProperty("usage", out _))
                 {
-                    // End of stream — close session.
+                    // End of stream — no more transcription updates.
                     break;
                 }
             }

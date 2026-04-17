@@ -234,7 +234,7 @@ components:
           type: array
           items:
             type: object
-            additionalProperties: true
+
 
     TtsCreateContextParams:
       type: object
@@ -275,7 +275,7 @@ components:
         flush_context:
           type: object
           description: Optional empty object; if set, triggers flush after text is enqueued.
-          additionalProperties: true
+
 
     TtsWordAlignment:
       type: object
@@ -358,10 +358,10 @@ components:
           $ref: '#/components/schemas/TtsAudioChunkData'
         flushCompleted:
           type: object
-          additionalProperties: true
+
         contextClosed:
           type: object
-          additionalProperties: true
+
 
     # -- STT ---------------------------------------------------------------
     SttStreamAudioEncoding:
@@ -539,7 +539,7 @@ components:
         properties:
           flush_context:
             type: object
-            additionalProperties: true
+
           contextId:
             type: string
 
@@ -552,7 +552,7 @@ components:
         properties:
           close_context:
             type: object
-            additionalProperties: true
+
           contextId:
             type: string
 
@@ -627,7 +627,7 @@ components:
         properties:
           end_turn:
             type: object
-            additionalProperties: true
+
 
     SttCloseStream:
       name: SttCloseStream
@@ -638,7 +638,7 @@ components:
         properties:
           close_stream:
             type: object
-            additionalProperties: true
+
 
     # -- STT server messages -------------------------------------------------
     SttTranscription:
