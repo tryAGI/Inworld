@@ -2,27 +2,56 @@
 
 namespace Inworld;
 
-public partial class InworldClient
+/// <summary>
+/// Inworld uses HTTP Basic auth with a Base64-encoded API key issued by the
+/// Inworld Portal. The generated client is configured with an HTTP Bearer
+/// security scheme, so requests would go out as "Authorization: Bearer &lt;key&gt;",
+/// but Inworld expects "Authorization: Basic &lt;key&gt;". Rewrite the scheme on
+/// every outgoing request via the per-client <c>PrepareRequest</c> partial hook.
+/// </summary>
+internal static class InworldAuthHook
 {
-    // Inworld uses HTTP Basic auth with a Base64-encoded API key issued by the
-    // Portal. The generated code emits "Authorization: Bearer <key>", but
-    // Inworld expects "Authorization: Basic <key>". Rewrite the scheme name
-    // from "Bearer" to "Basic" at request time.
-    partial void Authorized(System.Net.Http.HttpClient client)
+    internal static void RewriteBearerToBasic(System.Net.Http.HttpRequestMessage request)
     {
-        for (int i = 0; i < Authorizations.Count; i++)
+        var auth = request.Headers.Authorization;
+        if (auth is { Scheme: "Bearer", Parameter: { Length: > 0 } key })
         {
-            var auth = Authorizations[i];
-            if (auth is { Type: "Http", Name: "Bearer" })
-            {
-                Authorizations[i] = new EndPointAuthorization
-                {
-                    Type = auth.Type,
-                    Location = auth.Location,
-                    Name = "Basic",
-                    Value = auth.Value,
-                };
-            }
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", key);
         }
     }
+}
+
+public partial class InworldClient
+{
+    partial void PrepareRequest(
+        System.Net.Http.HttpClient client,
+        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.RewriteBearerToBasic(request);
+}
+
+public partial class TextToSpeechClient
+{
+    partial void PrepareRequest(
+        System.Net.Http.HttpClient client,
+        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.RewriteBearerToBasic(request);
+}
+
+public partial class SpeechToTextClient
+{
+    partial void PrepareRequest(
+        System.Net.Http.HttpClient client,
+        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.RewriteBearerToBasic(request);
+}
+
+public partial class VoicesClient
+{
+    partial void PrepareRequest(
+        System.Net.Http.HttpClient client,
+        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.RewriteBearerToBasic(request);
+}
+
+public partial class ModelsClient
+{
+    partial void PrepareRequest(
+        System.Net.Http.HttpClient client,
+        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.RewriteBearerToBasic(request);
 }
