@@ -1,0 +1,914 @@
+openapi: 3.0.3
+info:
+  title: Inworld AI API
+  description: |
+    Inworld AI is a realtime voice and AI platform providing low-latency
+    text-to-speech, speech-to-text, voice cloning, voice design, and LLM routing
+    for interactive applications.
+
+    This SDK covers the REST surface: TTS synthesis, STT transcription, Voice
+    management (list, get, clone, design, publish, update, delete), and model
+    discovery.
+
+    **Excluded from this SDK:**
+      - WebSocket/Realtime streaming (`/tts/v1/voice:streamBidirectional`,
+        `/stt/v1/transcribe:streamBidirectional`, Realtime API)
+      - OpenAI-compatible Chat Completions (`/v1/chat/completions` — use
+        `tryAGI.OpenAI` with Inworld as a CustomProvider)
+      - Router long-running management endpoints
+
+    **Authentication:** `Authorization: Basic <API_KEY>` where `<API_KEY>` is
+    the already-Base64-encoded API key from the Inworld Portal.
+  version: "1.0.0"
+  contact:
+    name: Inworld AI
+    url: https://inworld.ai
+  license:
+    name: Proprietary
+    url: https://inworld.ai/legal
+
+servers:
+  - url: https://api.inworld.ai
+    description: Inworld Production API
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: TextToSpeech
+    description: Synthesize speech from text.
+  - name: Voices
+    description: Manage voices — list, get, clone, design, publish, update, delete.
+  - name: SpeechToText
+    description: Transcribe speech to text.
+  - name: Models
+    description: Discover available LLM models.
+
+paths:
+
+  # -----------------------------------------------------------------------
+  # Text-to-Speech
+  # -----------------------------------------------------------------------
+  /tts/v1/voice:
+    post:
+      operationId: synthesizeSpeech
+      tags: [TextToSpeech]
+      summary: Synthesize speech
+      description: |
+        Synthesize speech from text using the specified voice and model.
+        Returns the full audio payload once generation completes. Maximum
+        input is 2,000 characters; maximum output is 16 MB.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SynthesizeSpeechRequest'
+      responses:
+        '200':
+          description: Audio generated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SynthesizeSpeechResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  # -----------------------------------------------------------------------
+  # Voices
+  # -----------------------------------------------------------------------
+  /voices/v1/voices:
+    get:
+      operationId: listVoices
+      tags: [Voices]
+      summary: List voices
+      description: List voices available to the authenticated workspace, optionally filtered by language.
+      parameters:
+        - name: languages
+          in: query
+          required: false
+          description: Filter by language codes. Repeat to pass multiple codes.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/LangCode'
+          style: form
+          explode: true
+      responses:
+        '200':
+          description: Voices listed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListVoicesResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /voices/v1/voices/{voiceId}:
+    parameters:
+      - $ref: '#/components/parameters/VoiceIdParam'
+    get:
+      operationId: getVoice
+      tags: [Voices]
+      summary: Get voice
+      responses:
+        '200':
+          description: Voice retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Voice'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    patch:
+      operationId: updateVoice
+      tags: [Voices]
+      summary: Update voice
+      description: Update editable voice metadata (display name, description, tags).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateVoiceRequest'
+      responses:
+        '200':
+          description: Voice updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Voice'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    delete:
+      operationId: deleteVoice
+      tags: [Voices]
+      summary: Delete voice
+      responses:
+        '200':
+          description: Voice deleted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /voices/v1/voices:clone:
+    post:
+      operationId: cloneVoice
+      tags: [Voices]
+      summary: Clone voice
+      description: |
+        Create an Instant Voice Clone (IVC) from one or more short audio
+        samples. The returned voice can be used in TTS synthesis.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloneVoiceRequest'
+      responses:
+        '200':
+          description: Voice cloned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloneVoiceResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /voices/v1/voices:design:
+    post:
+      operationId: designVoice
+      tags: [Voices]
+      summary: Design voice
+      description: |
+        Generate candidate voice previews from a text description. Previews
+        can be promoted to a persistent voice via Publish Voice.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DesignVoiceRequest'
+      responses:
+        '200':
+          description: Voice previews generated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DesignVoiceResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /voices/v1/voices/{voiceId}:publish:
+    parameters:
+      - $ref: '#/components/parameters/VoiceIdParam'
+    post:
+      operationId: publishVoice
+      tags: [Voices]
+      summary: Publish voice
+      description: Promote a drafted Design Voice preview into a persistent voice.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishVoiceRequest'
+      responses:
+        '200':
+          description: Voice published successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Voice'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  # -----------------------------------------------------------------------
+  # Speech-to-Text
+  # -----------------------------------------------------------------------
+  /stt/v1/transcribe:
+    post:
+      operationId: transcribeAudio
+      tags: [SpeechToText]
+      summary: Transcribe audio
+      description: Transcribe a complete audio file using the configured STT model.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranscribeRequest'
+      responses:
+        '200':
+          description: Audio transcribed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranscribeResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  # -----------------------------------------------------------------------
+  # Models
+  # -----------------------------------------------------------------------
+  /llm/v1alpha/models:
+    get:
+      operationId: listModels
+      tags: [Models]
+      summary: List available LLM models
+      description: |
+        List all LLM models supported by the Inworld LLM Router, including
+        provider, pricing, modalities, capabilities, and context length.
+      responses:
+        '200':
+          description: Models listed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListModelsResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+components:
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: |
+        `Authorization: Basic <API_KEY>` (the SDK client rewrites the scheme
+        from `Bearer` to `Basic` at request time). The API key issued by
+        the Inworld Portal is already Base64-encoded — pass it verbatim.
+
+  parameters:
+    VoiceIdParam:
+      name: voiceId
+      in: path
+      required: true
+      description: Voice identifier in the form `{workspace}__{voice}`.
+      schema:
+        type: string
+
+  responses:
+    ErrorResponse:
+      description: Error response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RpcStatus'
+
+  schemas:
+
+    # -- Shared ----------------------------------------------------------------
+    RpcStatus:
+      type: object
+      description: Standard gRPC-style error envelope.
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: gRPC status code.
+        message:
+          type: string
+          description: Human-readable error message.
+        details:
+          type: array
+          description: Optional list of structured error details.
+          items:
+            type: object
+            additionalProperties: true
+
+    LangCode:
+      type: string
+      description: BCP-47-like language code used by Inworld voice APIs.
+      enum:
+        - EN_US
+        - ZH_CN
+        - KO_KR
+        - JA_JP
+        - RU_RU
+        - AUTO
+        - IT_IT
+        - ES_ES
+        - PT_BR
+        - DE_DE
+        - FR_FR
+        - AR_SA
+        - PL_PL
+        - NL_NL
+        - HI_IN
+        - HE_IL
+
+    VoiceSource:
+      type: string
+      description: Origin of the voice.
+      enum:
+        - SYSTEM
+        - IVC
+        - PVC
+
+    Voice:
+      type: object
+      description: A voice available for TTS synthesis.
+      properties:
+        voiceId:
+          type: string
+          description: Voice identifier in the form `{workspace}__{voice}`.
+          readOnly: true
+        name:
+          type: string
+          description: Resource name `workspaces/{workspace}/voices/{voice}`.
+        displayName:
+          type: string
+          description: Human-readable voice name.
+        description:
+          type: string
+          description: Optional description.
+        langCode:
+          $ref: '#/components/schemas/LangCode'
+        tags:
+          type: array
+          description: Free-form tags.
+          items:
+            type: string
+        source:
+          $ref: '#/components/schemas/VoiceSource'
+
+    # -- TTS -------------------------------------------------------------------
+    AudioEncoding:
+      type: string
+      description: Audio container/encoding used for TTS output.
+      enum:
+        - LINEAR16
+        - MP3
+        - OGG_OPUS
+        - ALAW
+        - MULAW
+        - FLAC
+        - PCM
+        - WAV
+
+    TimestampType:
+      type: string
+      description: Timestamp granularity returned alongside TTS audio.
+      enum:
+        - TIMESTAMP_TYPE_UNSPECIFIED
+        - WORD
+        - CHARACTER
+
+    ApplyTextNormalization:
+      type: string
+      description: Whether text normalization is applied before synthesis.
+      enum:
+        - APPLY_TEXT_NORMALIZATION_UNSPECIFIED
+        - 'ON'
+        - 'OFF'
+
+    AudioConfig:
+      type: object
+      description: Audio output configuration for TTS synthesis.
+      properties:
+        audioEncoding:
+          allOf:
+            - $ref: '#/components/schemas/AudioEncoding'
+          description: Audio container/encoding. Defaults to MP3.
+        sampleRateHertz:
+          type: integer
+          format: int32
+          description: Sample rate in Hz. Range [8000, 48000]. Defaults to 48000.
+        bitRate:
+          type: integer
+          format: int32
+          description: Bit rate for compressed encodings. Defaults to 128000.
+        speakingRate:
+          type: number
+          format: double
+          description: Speaking rate. Range [0.5, 1.5]. Defaults to 1.0.
+
+    SynthesizeSpeechRequest:
+      type: object
+      required: [text, voiceId, modelId]
+      properties:
+        text:
+          type: string
+          description: The text to synthesize. Maximum 2,000 characters.
+          maxLength: 2000
+        voiceId:
+          type: string
+          description: Voice identifier.
+        modelId:
+          type: string
+          description: Model identifier, e.g. `inworld-tts-1.5` or `inworld-tts-1.5-max`.
+        audioConfig:
+          $ref: '#/components/schemas/AudioConfig'
+        temperature:
+          type: number
+          format: double
+          description: Sampling temperature in the range (0, 2]. Defaults to 1.0.
+        timestampType:
+          $ref: '#/components/schemas/TimestampType'
+        applyTextNormalization:
+          $ref: '#/components/schemas/ApplyTextNormalization'
+
+    Phone:
+      type: object
+      description: A single phone within a word-level alignment.
+      properties:
+        phoneSymbol:
+          type: string
+          description: IPA phone symbol.
+        startTimeSeconds:
+          type: number
+          format: double
+        durationSeconds:
+          type: number
+          format: double
+        visemeSymbol:
+          type: string
+          description: Associated viseme.
+
+    PhoneticDetail:
+      type: object
+      description: Phonetic detail for a word. Available only with TTS 1.5 models and WORD timestamps.
+      properties:
+        wordIndex:
+          type: integer
+          format: int32
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/Phone'
+        isPartial:
+          type: boolean
+
+    WordAlignment:
+      type: object
+      description: Word-level timestamp alignment.
+      properties:
+        words:
+          type: array
+          items:
+            type: string
+        wordStartTimeSeconds:
+          type: array
+          items:
+            type: number
+            format: double
+        wordEndTimeSeconds:
+          type: array
+          items:
+            type: number
+            format: double
+        phoneticDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneticDetail'
+
+    CharacterAlignment:
+      type: object
+      description: Character-level timestamp alignment.
+      properties:
+        characters:
+          type: array
+          items:
+            type: string
+        characterStartTimeSeconds:
+          type: array
+          items:
+            type: number
+            format: double
+        characterEndTimeSeconds:
+          type: array
+          items:
+            type: number
+            format: double
+
+    TimestampInfo:
+      type: object
+      description: Timestamp information for synthesized audio.
+      properties:
+        wordAlignment:
+          $ref: '#/components/schemas/WordAlignment'
+        characterAlignment:
+          $ref: '#/components/schemas/CharacterAlignment'
+
+    Usage:
+      type: object
+      description: Token/character usage metadata.
+      properties:
+        processedCharactersCount:
+          type: integer
+          format: int32
+          description: Characters processed by the model.
+        modelId:
+          type: string
+          description: Model used.
+
+    SynthesizeSpeechResponse:
+      type: object
+      properties:
+        audioContent:
+          type: string
+          format: byte
+          description: Base64-encoded audio bytes. Includes container headers.
+        usage:
+          $ref: '#/components/schemas/Usage'
+        timestampInfo:
+          $ref: '#/components/schemas/TimestampInfo'
+
+    # -- Voices ----------------------------------------------------------------
+    ListVoicesResponse:
+      type: object
+      properties:
+        voices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Voice'
+
+    UpdateVoiceRequest:
+      type: object
+      properties:
+        displayName:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+
+    VoiceSample:
+      type: object
+      description: A single audio sample used to clone a voice.
+      required: [audioData]
+      properties:
+        audioData:
+          type: string
+          format: byte
+          description: Base64-encoded audio bytes.
+        transcription:
+          type: string
+          description: Optional transcription of the audio sample.
+
+    AudioProcessingConfig:
+      type: object
+      description: Preprocessing applied to clone-voice samples.
+      properties:
+        removeBackgroundNoise:
+          type: boolean
+          description: Whether to strip background noise from the samples.
+
+    CloneVoiceRequest:
+      type: object
+      required: [displayName, langCode, voiceSamples]
+      properties:
+        displayName:
+          type: string
+        langCode:
+          $ref: '#/components/schemas/LangCode'
+        voiceSamples:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/VoiceSample'
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        audioProcessingConfig:
+          $ref: '#/components/schemas/AudioProcessingConfig'
+
+    ValidationMessage:
+      type: object
+      properties:
+        text:
+          type: string
+
+    ValidatedAudioSample:
+      type: object
+      properties:
+        langCode:
+          $ref: '#/components/schemas/LangCode'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationMessage'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationMessage'
+        transcription:
+          type: string
+        audioData:
+          type: string
+          format: byte
+
+    CloneVoiceResponse:
+      type: object
+      properties:
+        voice:
+          $ref: '#/components/schemas/Voice'
+        audioSamplesValidated:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidatedAudioSample'
+
+    VoiceDesignConfig:
+      type: object
+      description: Tuning parameters for voice design.
+      properties:
+        numberOfSamples:
+          type: integer
+          format: int32
+          description: Number of preview voices to generate. Range [1, 3]. Defaults to 1.
+
+    DesignVoiceRequest:
+      type: object
+      required: [langCode, designPrompt, previewText]
+      properties:
+        langCode:
+          $ref: '#/components/schemas/LangCode'
+        designPrompt:
+          type: string
+          description: English description of the desired voice. 30–250 characters.
+          minLength: 30
+          maxLength: 250
+        previewText:
+          type: string
+          description: Text to speak in the generated preview. Should produce 1–15 seconds of audio.
+        voiceDesignConfig:
+          $ref: '#/components/schemas/VoiceDesignConfig'
+
+    PreviewVoice:
+      type: object
+      properties:
+        voiceId:
+          type: string
+        previewText:
+          type: string
+        previewAudio:
+          type: string
+          format: byte
+
+    DesignVoiceResponse:
+      type: object
+      properties:
+        langCode:
+          type: string
+        previewVoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/PreviewVoice'
+
+    PublishVoiceRequest:
+      type: object
+      properties:
+        displayName:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+
+    # -- STT -------------------------------------------------------------------
+    SttAudioEncoding:
+      type: string
+      description: Audio encoding used for STT input.
+      enum:
+        - LINEAR16
+        - MP3
+        - OGG_OPUS
+        - FLAC
+        - AUTO_DETECT
+
+    VoiceProfileConfig:
+      type: object
+      description: Optional voice profiling (speaker characteristics detection).
+      properties:
+        enableVoiceProfile:
+          type: boolean
+        topN:
+          type: integer
+          format: int32
+          description: Number of top candidate labels to return per attribute.
+
+    TranscribeConfig:
+      type: object
+      description: Configuration for STT transcription.
+      properties:
+        modelId:
+          type: string
+          description: |
+            Provider-qualified model ID, e.g. `inworld/inworld-stt-v1`,
+            `groq/whisper-large-v3`, or `assemblyai/universal-2`.
+        audioEncoding:
+          $ref: '#/components/schemas/SttAudioEncoding'
+        language:
+          type: string
+          description: BCP-47 language tag (e.g. `en-US`). Omit for auto-detect.
+        sampleRateHertz:
+          type: integer
+          format: int32
+          description: Sample rate in Hz. Defaults to 16000.
+        numberOfChannels:
+          type: integer
+          format: int32
+          description: Number of audio channels. Defaults to 1.
+        includeWordTimestamps:
+          type: boolean
+          description: Include per-word start/end timestamps in the result.
+        voiceProfileConfig:
+          $ref: '#/components/schemas/VoiceProfileConfig'
+
+    AudioData:
+      type: object
+      description: Inline audio payload.
+      properties:
+        content:
+          type: string
+          format: byte
+          description: Base64-encoded audio bytes.
+
+    TranscribeRequest:
+      type: object
+      required: [transcribeConfig, audioData]
+      properties:
+        transcribeConfig:
+          $ref: '#/components/schemas/TranscribeConfig'
+        audioData:
+          $ref: '#/components/schemas/AudioData'
+
+    WordTimestamp:
+      type: object
+      properties:
+        word:
+          type: string
+        startTimeMs:
+          type: integer
+          format: int32
+        endTimeMs:
+          type: integer
+          format: int32
+
+    Transcription:
+      type: object
+      properties:
+        transcript:
+          type: string
+        isFinal:
+          type: boolean
+        wordTimestamps:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordTimestamp'
+
+    TranscribeUsage:
+      type: object
+      properties:
+        transcribedAudioMs:
+          type: integer
+          format: int32
+        modelId:
+          type: string
+
+    TranscribeResponse:
+      type: object
+      properties:
+        transcription:
+          $ref: '#/components/schemas/Transcription'
+        usage:
+          $ref: '#/components/schemas/TranscribeUsage'
+
+    # -- Models ----------------------------------------------------------------
+    Modality:
+      type: string
+      description: Supported input/output modality for a model.
+      enum:
+        - text
+        - image
+        - audio
+        - video
+
+    ModelPricing:
+      type: object
+      properties:
+        prompt:
+          type: number
+          format: double
+          description: Cost per million prompt tokens (or equivalent).
+        completion:
+          type: number
+          format: double
+          description: Cost per million completion tokens (or equivalent).
+
+    ModelCapabilities:
+      type: object
+      properties:
+        functionCalling:
+          type: boolean
+        webSearch:
+          type: boolean
+        reasoning:
+          type: boolean
+        promptCaching:
+          type: boolean
+        responseSchema:
+          type: boolean
+        vision:
+          type: boolean
+
+    ModelSpec:
+      type: object
+      properties:
+        inputModalities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Modality'
+        outputModalities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Modality'
+        contextLength:
+          type: integer
+          format: int32
+        maxCompletionTokens:
+          type: integer
+          format: int32
+        supportedParameters:
+          type: array
+          items:
+            type: string
+        capabilities:
+          $ref: '#/components/schemas/ModelCapabilities'
+
+    Model:
+      type: object
+      properties:
+        model:
+          type: string
+          description: Fully-qualified model id (e.g. `inworld/inworld-tts-1.5-max`).
+        provider:
+          type: string
+        modelCreator:
+          type: string
+        pricing:
+          $ref: '#/components/schemas/ModelPricing'
+        spec:
+          $ref: '#/components/schemas/ModelSpec'
+        isSupported:
+          type: boolean
+
+    ListModelsResponse:
+      type: object
+      properties:
+        models:
+          type: array
+          items:
+            $ref: '#/components/schemas/Model'
