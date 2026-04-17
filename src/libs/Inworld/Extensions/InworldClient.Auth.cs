@@ -12,51 +12,56 @@ namespace Inworld;
 ///         where the JWT is obtained by exchanging the API key + secret via
 ///         <see cref="InworldJwt.GenerateAsync"/>.</item>
 /// </list>
-/// The generated client always emits <c>Bearer &lt;value&gt;</c>, so on each
-/// outgoing request we peek at the token and rewrite the scheme to
-/// <c>Basic</c> unless the token looks like a JWT (starts with <c>eyJ</c>).
-/// <para>
-/// When an <see cref="InworldJwtCache"/> was registered for this client (see
-/// <see cref="InworldJwtCacheRegistry"/>), we also refresh the Authorization
-/// token from the cache on each outgoing request and invalidate the cache
-/// on a 401/403 response so the next request mints a fresh JWT.
-/// </para>
+/// Rather than hook every sub-client's synchronous <c>PrepareRequest</c> partial
+/// and pay a sync-over-async cost when the JWT cache needs refreshing, we
+/// register a single <see cref="IAutoSDKHook"/> on the shared
+/// <see cref="AutoSDKClientOptions"/> that runs asynchronously before every
+/// outgoing REST request — and invalidates the cache on 401/403 so the next
+/// call mints a fresh token automatically.
 /// </summary>
-internal static class InworldAuthHook
+[CLSCompliant(false)]
+public sealed class InworldAuthHook : AutoSDKHook
 {
-    internal static void BeforeRequest(
-        System.Collections.Generic.List<EndPointAuthorization> authorizations,
-        System.Net.Http.HttpRequestMessage request)
+    private readonly System.Collections.Generic.List<EndPointAuthorization> _authorizations;
+
+    internal InworldAuthHook(System.Collections.Generic.List<EndPointAuthorization> authorizations)
     {
-        RefreshFromCache(authorizations, request);
+        _authorizations = authorizations;
+    }
+
+    /// <inheritdoc />
+    public override async System.Threading.Tasks.Task OnBeforeRequestAsync(AutoSDKHookContext context)
+    {
+        System.ArgumentNullException.ThrowIfNull(context);
+
+        var request = context.Request;
+
+        // If a JwtCache is registered for this client, refresh the token
+        // asynchronously. Cache hits return immediately; misses await the
+        // mint without blocking any calling thread.
+        var cache = InworldJwtCacheRegistry.Get(_authorizations);
+        if (cache is not null)
+        {
+            var token = (await cache.GetAsync(context.CancellationToken).ConfigureAwait(false)).Token;
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+        }
+
         RewriteBearerToBasic(request);
     }
 
-    internal static void AfterResponse(
-        System.Collections.Generic.List<EndPointAuthorization> authorizations,
-        System.Net.Http.HttpResponseMessage response)
+    /// <inheritdoc />
+    public override System.Threading.Tasks.Task OnAfterErrorAsync(AutoSDKHookContext context)
     {
-        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized ||
-            response.StatusCode == System.Net.HttpStatusCode.Forbidden)
-        {
-            InworldJwtCacheRegistry.Get(authorizations)?.Invalidate();
-        }
-    }
+        System.ArgumentNullException.ThrowIfNull(context);
 
-    private static void RefreshFromCache(
-        System.Collections.Generic.List<EndPointAuthorization> authorizations,
-        System.Net.Http.HttpRequestMessage request)
-    {
-        var cache = InworldJwtCacheRegistry.Get(authorizations);
-        if (cache is null)
+        if (context.Response is { } response &&
+            (response.StatusCode == System.Net.HttpStatusCode.Unauthorized ||
+             response.StatusCode == System.Net.HttpStatusCode.Forbidden))
         {
-            return;
+            InworldJwtCacheRegistry.Get(_authorizations)?.Invalidate();
         }
 
-        // Synchronous — the cache services hits without I/O. A miss only
-        // happens near token expiry and blocks for the mint duration.
-        var token = cache.GetAsync().GetAwaiter().GetResult().Token;
-        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
     internal static void RewriteBearerToBasic(System.Net.Http.HttpRequestMessage request)
@@ -79,55 +84,14 @@ internal static class InworldAuthHook
 
 public partial class InworldClient
 {
-    partial void PrepareRequest(
-        System.Net.Http.HttpClient client,
-        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.BeforeRequest(Authorizations, request);
-
-    partial void ProcessResponse(
-        System.Net.Http.HttpClient client,
-        System.Net.Http.HttpResponseMessage response) => InworldAuthHook.AfterResponse(Authorizations, response);
-}
-
-public partial class TextToSpeechClient
-{
-    partial void PrepareRequest(
-        System.Net.Http.HttpClient client,
-        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.BeforeRequest(Authorizations, request);
-
-    partial void ProcessResponse(
-        System.Net.Http.HttpClient client,
-        System.Net.Http.HttpResponseMessage response) => InworldAuthHook.AfterResponse(Authorizations, response);
-}
-
-public partial class SpeechToTextClient
-{
-    partial void PrepareRequest(
-        System.Net.Http.HttpClient client,
-        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.BeforeRequest(Authorizations, request);
-
-    partial void ProcessResponse(
-        System.Net.Http.HttpClient client,
-        System.Net.Http.HttpResponseMessage response) => InworldAuthHook.AfterResponse(Authorizations, response);
-}
-
-public partial class VoicesClient
-{
-    partial void PrepareRequest(
-        System.Net.Http.HttpClient client,
-        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.BeforeRequest(Authorizations, request);
-
-    partial void ProcessResponse(
-        System.Net.Http.HttpClient client,
-        System.Net.Http.HttpResponseMessage response) => InworldAuthHook.AfterResponse(Authorizations, response);
-}
-
-public partial class ModelsClient
-{
-    partial void PrepareRequest(
-        System.Net.Http.HttpClient client,
-        System.Net.Http.HttpRequestMessage request) => InworldAuthHook.BeforeRequest(Authorizations, request);
-
-    partial void ProcessResponse(
-        System.Net.Http.HttpClient client,
-        System.Net.Http.HttpResponseMessage response) => InworldAuthHook.AfterResponse(Authorizations, response);
+    partial void Initialized(System.Net.Http.HttpClient client)
+    {
+        // Register the async auth hook exactly once per client. Sub-clients
+        // share this same Options instance, so the hook covers all REST
+        // sub-clients (TextToSpeech, SpeechToText, Voices, Models).
+        if (Options.Hooks.Count == 0 || !Options.Hooks.Exists(h => h is InworldAuthHook))
+        {
+            Options.AddHook(new InworldAuthHook(Authorizations));
+        }
+    }
 }

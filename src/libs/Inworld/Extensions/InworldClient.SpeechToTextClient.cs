@@ -27,13 +27,26 @@ public partial class InworldClient : Meai.ISpeechToTextClient
     /// actually serve (see
     /// https://github.com/inworld-ai/inworld-api-examples/issues/71). We
     /// silently rewrite it to the correct id to avoid the opaque
-    /// <c>"No STT client found for model: inworld/stt-v1"</c> error and log a
-    /// one-shot warning to <see cref="System.Diagnostics.Trace"/>.
+    /// <c>"No STT client found for model: inworld/stt-v1"</c> error.
     /// </summary>
-    private const string LegacyInworldSttModelId = "inworld/stt-v1";
-    private const string CurrentInworldSttModelId = "inworld/inworld-stt-1";
+    public const string LegacyInworldSttModelId = "inworld/stt-v1";
 
-    private static bool s_warnedLegacyStt;
+    /// <summary>
+    /// The currently-deployed Inworld-branded streaming STT model id.
+    /// </summary>
+    public const string CurrentInworldSttModelId = "inworld/inworld-stt-1";
+
+    /// <summary>
+    /// When <c>true</c> (default), the first call that passes
+    /// <see cref="LegacyInworldSttModelId"/> logs a one-shot
+    /// <see cref="System.Diagnostics.Trace.TraceWarning(string, object[])"/>
+    /// pointing at the upstream issue. Set to <c>false</c> in CI test suites
+    /// that intentionally exercise the rewrite so the warning does not spam
+    /// the build log.
+    /// </summary>
+    public static bool EnableLegacyModelIdWarning { get; set; } = true;
+
+    private static int s_warnedLegacyStt;
 
     private static string NormalizeSttModelId(string? requested, string fallback)
     {
@@ -44,11 +57,11 @@ public partial class InworldClient : Meai.ISpeechToTextClient
 
         if (string.Equals(requested, LegacyInworldSttModelId, StringComparison.Ordinal))
         {
-            if (!s_warnedLegacyStt)
+            if (EnableLegacyModelIdWarning &&
+                System.Threading.Interlocked.Exchange(ref s_warnedLegacyStt, 1) == 0)
             {
-                s_warnedLegacyStt = true;
                 System.Diagnostics.Trace.TraceWarning(
-                    "[Inworld] STT model id '{0}' is rewritten to '{1}' — the documented id is not deployed on the streaming endpoint. See https://github.com/inworld-ai/inworld-api-examples/issues/71.",
+                    "[Inworld] STT model id '{0}' is rewritten to '{1}' — the documented id is not deployed on the streaming endpoint. See https://github.com/inworld-ai/inworld-api-examples/issues/71. Set InworldClient.EnableLegacyModelIdWarning = false to suppress.",
                     LegacyInworldSttModelId,
                     CurrentInworldSttModelId);
             }

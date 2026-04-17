@@ -84,6 +84,10 @@ public partial class Tests
     [Timeout(60_000)]
     public async Task Example_StreamingSpeechToText_RewritesLegacyModelId()
     {
+        //// This test intentionally exercises the rewrite, so disable the
+        //// one-shot Trace warning to keep CI logs clean.
+        InworldClient.EnableLegacyModelIdWarning = false;
+
         using var client = GetAuthenticatedClient();
 
         //// Synthesize a phrase so we have audio to send.
