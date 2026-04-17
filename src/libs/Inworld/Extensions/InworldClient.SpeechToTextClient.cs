@@ -93,23 +93,32 @@ public partial class InworldClient : Meai.ISpeechToTextClient
     {
         ArgumentNullException.ThrowIfNull(audioSpeechStream);
 
-        // Extract the API key from the REST authorizations list so the WS
-        // client can authenticate with the same credentials.
+        // Prefer a dynamic token provider (JwtCache or similar) when set so
+        // long-running WebSocket sessions start with a freshly-minted JWT.
+        // Fall back to whatever token was passed at construction time.
         string? apiKey = null;
-        for (int i = 0; i < Authorizations.Count; i++)
+        if (RealtimeTokenProvider is { } provider)
         {
-            var auth = Authorizations[i];
-            if (auth is { Type: "Http", Value: { Length: > 0 } value })
+            apiKey = await provider(cancellationToken).ConfigureAwait(false);
+        }
+
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            for (int i = 0; i < Authorizations.Count; i++)
             {
-                apiKey = value;
-                break;
+                var auth = Authorizations[i];
+                if (auth is { Type: "Http", Value: { Length: > 0 } value })
+                {
+                    apiKey = value;
+                    break;
+                }
             }
         }
 
-        if (apiKey is null)
+        if (string.IsNullOrEmpty(apiKey))
         {
             throw new InvalidOperationException(
-                "No API key found in InworldClient.Authorizations. Construct the client with an API key or JWT.");
+                "No API key found. Construct the client with an API key, a JWT, or an InworldJwtCache, or set RealtimeTokenProvider.");
         }
 
         var realtime = new Realtime.InworldSpeechToTextStreamRealtimeClient(apiKey);
