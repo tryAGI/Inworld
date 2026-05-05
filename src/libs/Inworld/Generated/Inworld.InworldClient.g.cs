@@ -56,7 +56,7 @@ namespace Inworld
         /// <summary>
         /// Discover available LLM models.
         /// </summary>
-        public ModelsClient Models => new ModelsClient(HttpClient, authorizations: Authorizations, options: Options)
+        public ModelsClient Models => new ModelsClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
             ReadResponseAsString = ReadResponseAsString,
             JsonSerializerContext = JsonSerializerContext,
@@ -65,7 +65,7 @@ namespace Inworld
         /// <summary>
         /// Transcribe speech to text.
         /// </summary>
-        public SpeechToTextClient SpeechToText => new SpeechToTextClient(HttpClient, authorizations: Authorizations, options: Options)
+        public SpeechToTextClient SpeechToText => new SpeechToTextClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
             ReadResponseAsString = ReadResponseAsString,
             JsonSerializerContext = JsonSerializerContext,
@@ -74,7 +74,7 @@ namespace Inworld
         /// <summary>
         /// Synthesize speech from text.
         /// </summary>
-        public TextToSpeechClient TextToSpeech => new TextToSpeechClient(HttpClient, authorizations: Authorizations, options: Options)
+        public TextToSpeechClient TextToSpeech => new TextToSpeechClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
             ReadResponseAsString = ReadResponseAsString,
             JsonSerializerContext = JsonSerializerContext,
@@ -83,7 +83,7 @@ namespace Inworld
         /// <summary>
         /// Manage voices — list, get, clone, design, publish, update, delete.
         /// </summary>
-        public VoicesClient Voices => new VoicesClient(HttpClient, authorizations: Authorizations, options: Options)
+        public VoicesClient Voices => new VoicesClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
             ReadResponseAsString = ReadResponseAsString,
             JsonSerializerContext = JsonSerializerContext,
@@ -122,10 +122,10 @@ namespace Inworld
         /// <param name="options">Client-wide request defaults such as headers, query parameters, retries, and timeout.</param>
         /// <param name="disposeHttpClient">Dispose the HttpClient when the instance is disposed. True by default.</param>
         public InworldClient(
-            global::System.Net.Http.HttpClient? httpClient = null,
-            global::System.Uri? baseUri = null,
-            global::System.Collections.Generic.List<global::Inworld.EndPointAuthorization>? authorizations = null,
-            global::Inworld.AutoSDKClientOptions? options = null,
+            global::System.Net.Http.HttpClient? httpClient,
+            global::System.Uri? baseUri,
+            global::System.Collections.Generic.List<global::Inworld.EndPointAuthorization>? authorizations,
+            global::Inworld.AutoSDKClientOptions? options,
             bool disposeHttpClient = true)
         {
 

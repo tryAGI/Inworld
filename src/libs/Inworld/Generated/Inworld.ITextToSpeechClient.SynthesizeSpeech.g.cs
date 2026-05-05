@@ -25,6 +25,21 @@ namespace Inworld
         /// Returns the full audio payload once generation completes. Maximum<br/>
         /// input is 2,000 characters; maximum output is 16 MB.
         /// </summary>
+        /// <param name="request"></param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
+        /// <param name="cancellationToken">The token to cancel the operation with</param>
+        /// <exception cref="global::Inworld.ApiException"></exception>
+        global::System.Threading.Tasks.Task<global::Inworld.AutoSDKHttpResponse<global::Inworld.SynthesizeSpeechResponse>> SynthesizeSpeechAsResponseAsync(
+
+            global::Inworld.SynthesizeSpeechRequest request,
+            global::Inworld.AutoSDKRequestOptions? requestOptions = default,
+            global::System.Threading.CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Synthesize speech<br/>
+        /// Synthesize speech from text using the specified voice and model.<br/>
+        /// Returns the full audio payload once generation completes. Maximum<br/>
+        /// input is 2,000 characters; maximum output is 16 MB.
+        /// </summary>
         /// <param name="text">
         /// The text to synthesize. Maximum 2,000 characters.
         /// </param>
