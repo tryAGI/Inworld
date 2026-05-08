@@ -29,6 +29,19 @@ namespace Inworld.Realtime
         /// <summary>
         /// 
         /// </summary>
+        public bool TryPickTtsContextCreated(
+#if NET6_0_OR_GREATER
+            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+#endif
+            out global::Inworld.Realtime.TtsContextCreated? value)
+        {
+            value = TtsContextCreated;
+            return IsTtsContextCreated;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.TtsAudioChunk? TtsAudioChunk { get; init; }
 #else
@@ -42,6 +55,19 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(TtsAudioChunk))]
 #endif
         public bool IsTtsAudioChunk => TtsAudioChunk != null;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool TryPickTtsAudioChunk(
+#if NET6_0_OR_GREATER
+            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+#endif
+            out global::Inworld.Realtime.TtsAudioChunk? value)
+        {
+            value = TtsAudioChunk;
+            return IsTtsAudioChunk;
+        }
 
         /// <summary>
         /// 
@@ -63,6 +89,19 @@ namespace Inworld.Realtime
         /// <summary>
         /// 
         /// </summary>
+        public bool TryPickTtsFlushCompleted(
+#if NET6_0_OR_GREATER
+            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+#endif
+            out global::Inworld.Realtime.TtsFlushCompleted? value)
+        {
+            value = TtsFlushCompleted;
+            return IsTtsFlushCompleted;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.TtsContextClosed? TtsContextClosed { get; init; }
 #else
@@ -76,6 +115,19 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(TtsContextClosed))]
 #endif
         public bool IsTtsContextClosed => TtsContextClosed != null;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool TryPickTtsContextClosed(
+#if NET6_0_OR_GREATER
+            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+#endif
+            out global::Inworld.Realtime.TtsContextClosed? value)
+        {
+            value = TtsContextClosed;
+            return IsTtsContextClosed;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -196,10 +248,10 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         public TResult? Match<TResult>(
-            global::System.Func<global::Inworld.Realtime.TtsContextCreated?, TResult>? ttsContextCreated = null,
-            global::System.Func<global::Inworld.Realtime.TtsAudioChunk?, TResult>? ttsAudioChunk = null,
-            global::System.Func<global::Inworld.Realtime.TtsFlushCompleted?, TResult>? ttsFlushCompleted = null,
-            global::System.Func<global::Inworld.Realtime.TtsContextClosed?, TResult>? ttsContextClosed = null,
+            global::System.Func<global::Inworld.Realtime.TtsContextCreated, TResult>? ttsContextCreated = null,
+            global::System.Func<global::Inworld.Realtime.TtsAudioChunk, TResult>? ttsAudioChunk = null,
+            global::System.Func<global::Inworld.Realtime.TtsFlushCompleted, TResult>? ttsFlushCompleted = null,
+            global::System.Func<global::Inworld.Realtime.TtsContextClosed, TResult>? ttsContextClosed = null,
             bool validate = true)
         {
             if (validate)
@@ -231,10 +283,46 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         public void Match(
-            global::System.Action<global::Inworld.Realtime.TtsContextCreated?>? ttsContextCreated = null,
-            global::System.Action<global::Inworld.Realtime.TtsAudioChunk?>? ttsAudioChunk = null,
-            global::System.Action<global::Inworld.Realtime.TtsFlushCompleted?>? ttsFlushCompleted = null,
-            global::System.Action<global::Inworld.Realtime.TtsContextClosed?>? ttsContextClosed = null,
+            global::System.Action<global::Inworld.Realtime.TtsContextCreated>? ttsContextCreated = null,
+
+            global::System.Action<global::Inworld.Realtime.TtsAudioChunk>? ttsAudioChunk = null,
+
+            global::System.Action<global::Inworld.Realtime.TtsFlushCompleted>? ttsFlushCompleted = null,
+
+            global::System.Action<global::Inworld.Realtime.TtsContextClosed>? ttsContextClosed = null,
+            bool validate = true)
+        {
+            if (validate)
+            {
+                Validate();
+            }
+
+            if (IsTtsContextCreated)
+            {
+                ttsContextCreated?.Invoke(TtsContextCreated!);
+            }
+            else if (IsTtsAudioChunk)
+            {
+                ttsAudioChunk?.Invoke(TtsAudioChunk!);
+            }
+            else if (IsTtsFlushCompleted)
+            {
+                ttsFlushCompleted?.Invoke(TtsFlushCompleted!);
+            }
+            else if (IsTtsContextClosed)
+            {
+                ttsContextClosed?.Invoke(TtsContextClosed!);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Switch(
+            global::System.Action<global::Inworld.Realtime.TtsContextCreated>? ttsContextCreated = null,
+            global::System.Action<global::Inworld.Realtime.TtsAudioChunk>? ttsAudioChunk = null,
+            global::System.Action<global::Inworld.Realtime.TtsFlushCompleted>? ttsFlushCompleted = null,
+            global::System.Action<global::Inworld.Realtime.TtsContextClosed>? ttsContextClosed = null,
             bool validate = true)
         {
             if (validate)
