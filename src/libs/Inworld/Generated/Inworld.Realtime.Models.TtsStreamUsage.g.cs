@@ -48,5 +48,6 @@ namespace Inworld.Realtime
         public TtsStreamUsage()
         {
         }
+
     }
 }

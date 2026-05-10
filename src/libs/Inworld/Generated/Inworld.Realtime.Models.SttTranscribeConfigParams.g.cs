@@ -147,5 +147,6 @@ namespace Inworld.Realtime
         public SttTranscribeConfigParams()
         {
         }
+
     }
 }

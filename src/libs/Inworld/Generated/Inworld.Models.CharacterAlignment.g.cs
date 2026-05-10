@@ -57,5 +57,6 @@ namespace Inworld
         public CharacterAlignment()
         {
         }
+
     }
 }
