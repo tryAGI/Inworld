@@ -42,6 +42,13 @@ namespace Inworld.Realtime
         /// <summary>
         /// 
         /// </summary>
+        public global::Inworld.Realtime.TtsContextCreated PickTtsContextCreated() => IsTtsContextCreated
+            ? TtsContextCreated!
+            : throw new global::System.InvalidOperationException($"Expected union variant 'TtsContextCreated' but the value was {ToString()}.");
+
+        /// <summary>
+        /// 
+        /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.TtsAudioChunk? TtsAudioChunk { get; init; }
 #else
@@ -68,6 +75,13 @@ namespace Inworld.Realtime
             value = TtsAudioChunk;
             return IsTtsAudioChunk;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public global::Inworld.Realtime.TtsAudioChunk PickTtsAudioChunk() => IsTtsAudioChunk
+            ? TtsAudioChunk!
+            : throw new global::System.InvalidOperationException($"Expected union variant 'TtsAudioChunk' but the value was {ToString()}.");
 
         /// <summary>
         /// 
@@ -102,6 +116,13 @@ namespace Inworld.Realtime
         /// <summary>
         /// 
         /// </summary>
+        public global::Inworld.Realtime.TtsFlushCompleted PickTtsFlushCompleted() => IsTtsFlushCompleted
+            ? TtsFlushCompleted!
+            : throw new global::System.InvalidOperationException($"Expected union variant 'TtsFlushCompleted' but the value was {ToString()}.");
+
+        /// <summary>
+        /// 
+        /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.TtsContextClosed? TtsContextClosed { get; init; }
 #else
@@ -128,6 +149,13 @@ namespace Inworld.Realtime
             value = TtsContextClosed;
             return IsTtsContextClosed;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public global::Inworld.Realtime.TtsContextClosed PickTtsContextClosed() => IsTtsContextClosed
+            ? TtsContextClosed!
+            : throw new global::System.InvalidOperationException($"Expected union variant 'TtsContextClosed' but the value was {ToString()}.");
         /// <summary>
         /// 
         /// </summary>
@@ -145,6 +173,11 @@ namespace Inworld.Realtime
         {
             TtsContextCreated = value;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static TextToSpeechStreamServerEvent FromTtsContextCreated(global::Inworld.Realtime.TtsContextCreated? value) => new TextToSpeechStreamServerEvent(value);
 
         /// <summary>
         /// 
@@ -167,6 +200,11 @@ namespace Inworld.Realtime
         /// <summary>
         /// 
         /// </summary>
+        public static TextToSpeechStreamServerEvent FromTtsAudioChunk(global::Inworld.Realtime.TtsAudioChunk? value) => new TextToSpeechStreamServerEvent(value);
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static implicit operator TextToSpeechStreamServerEvent(global::Inworld.Realtime.TtsFlushCompleted value) => new TextToSpeechStreamServerEvent((global::Inworld.Realtime.TtsFlushCompleted?)value);
 
         /// <summary>
@@ -185,6 +223,11 @@ namespace Inworld.Realtime
         /// <summary>
         /// 
         /// </summary>
+        public static TextToSpeechStreamServerEvent FromTtsFlushCompleted(global::Inworld.Realtime.TtsFlushCompleted? value) => new TextToSpeechStreamServerEvent(value);
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static implicit operator TextToSpeechStreamServerEvent(global::Inworld.Realtime.TtsContextClosed value) => new TextToSpeechStreamServerEvent((global::Inworld.Realtime.TtsContextClosed?)value);
 
         /// <summary>
@@ -199,6 +242,11 @@ namespace Inworld.Realtime
         {
             TtsContextClosed = value;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static TextToSpeechStreamServerEvent FromTtsContextClosed(global::Inworld.Realtime.TtsContextClosed? value) => new TextToSpeechStreamServerEvent(value);
 
         /// <summary>
         /// 
