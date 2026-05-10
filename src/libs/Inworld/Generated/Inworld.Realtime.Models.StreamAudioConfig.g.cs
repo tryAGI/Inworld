@@ -66,5 +66,6 @@ namespace Inworld.Realtime
         public StreamAudioConfig()
         {
         }
+
     }
 }

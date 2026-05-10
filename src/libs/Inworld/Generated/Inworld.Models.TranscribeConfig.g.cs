@@ -110,5 +110,6 @@ namespace Inworld
         public TranscribeConfig()
         {
         }
+
     }
 }

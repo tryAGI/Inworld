@@ -86,5 +86,6 @@ namespace Inworld.Realtime
         public TtsResultEnvelope()
         {
         }
+
     }
 }
