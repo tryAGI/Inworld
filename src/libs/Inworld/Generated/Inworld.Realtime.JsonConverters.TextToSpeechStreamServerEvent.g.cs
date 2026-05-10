@@ -145,6 +145,7 @@ namespace Inworld.Realtime.JsonConverters
             {
                 try
                 {
+
                     var typeInfo = typeInfoResolver.GetTypeInfo(typeof(global::Inworld.Realtime.TtsContextCreated), options) as global::System.Text.Json.Serialization.Metadata.JsonTypeInfo<global::Inworld.Realtime.TtsContextCreated> ??
                                    throw new global::System.InvalidOperationException($"Cannot get type info for {typeof(global::Inworld.Realtime.TtsContextCreated).Name}");
                     ttsContextCreated = global::System.Text.Json.JsonSerializer.Deserialize(__rawJson, typeInfo);
@@ -155,9 +156,13 @@ namespace Inworld.Realtime.JsonConverters
                 catch (global::System.InvalidOperationException)
                 {
                 }
+            }
 
+            if (ttsContextCreated == null && ttsAudioChunk == null && ttsFlushCompleted == null && ttsContextClosed == null)
+            {
                 try
                 {
+
                     var typeInfo = typeInfoResolver.GetTypeInfo(typeof(global::Inworld.Realtime.TtsAudioChunk), options) as global::System.Text.Json.Serialization.Metadata.JsonTypeInfo<global::Inworld.Realtime.TtsAudioChunk> ??
                                    throw new global::System.InvalidOperationException($"Cannot get type info for {typeof(global::Inworld.Realtime.TtsAudioChunk).Name}");
                     ttsAudioChunk = global::System.Text.Json.JsonSerializer.Deserialize(__rawJson, typeInfo);
@@ -168,9 +173,13 @@ namespace Inworld.Realtime.JsonConverters
                 catch (global::System.InvalidOperationException)
                 {
                 }
+            }
 
+            if (ttsContextCreated == null && ttsAudioChunk == null && ttsFlushCompleted == null && ttsContextClosed == null)
+            {
                 try
                 {
+
                     var typeInfo = typeInfoResolver.GetTypeInfo(typeof(global::Inworld.Realtime.TtsFlushCompleted), options) as global::System.Text.Json.Serialization.Metadata.JsonTypeInfo<global::Inworld.Realtime.TtsFlushCompleted> ??
                                    throw new global::System.InvalidOperationException($"Cannot get type info for {typeof(global::Inworld.Realtime.TtsFlushCompleted).Name}");
                     ttsFlushCompleted = global::System.Text.Json.JsonSerializer.Deserialize(__rawJson, typeInfo);
@@ -181,9 +190,13 @@ namespace Inworld.Realtime.JsonConverters
                 catch (global::System.InvalidOperationException)
                 {
                 }
+            }
 
+            if (ttsContextCreated == null && ttsAudioChunk == null && ttsFlushCompleted == null && ttsContextClosed == null)
+            {
                 try
                 {
+
                     var typeInfo = typeInfoResolver.GetTypeInfo(typeof(global::Inworld.Realtime.TtsContextClosed), options) as global::System.Text.Json.Serialization.Metadata.JsonTypeInfo<global::Inworld.Realtime.TtsContextClosed> ??
                                    throw new global::System.InvalidOperationException($"Cannot get type info for {typeof(global::Inworld.Realtime.TtsContextClosed).Name}");
                     ttsContextClosed = global::System.Text.Json.JsonSerializer.Deserialize(__rawJson, typeInfo);
