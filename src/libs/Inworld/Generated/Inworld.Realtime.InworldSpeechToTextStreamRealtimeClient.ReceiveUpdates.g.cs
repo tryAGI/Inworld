@@ -186,7 +186,7 @@ namespace Inworld.Realtime
                         rawText,
                         json));
             }
-            if (@event.SttSpeechStarted is { } __SttSpeechStartedReceived)
+            if (@event.SttStarted is { } __SttSpeechStartedReceived)
             {
                 SttSpeechStartedReceived?.Invoke(
                     this,
