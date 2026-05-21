@@ -23,6 +23,20 @@ namespace Inworld
         /// Create an Instant Voice Clone (IVC) from one or more short audio<br/>
         /// samples. The returned voice can be used in TTS synthesis.
         /// </summary>
+        /// <param name="request"></param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
+        /// <param name="cancellationToken">The token to cancel the operation with</param>
+        /// <exception cref="global::Inworld.ApiException"></exception>
+        global::System.Threading.Tasks.Task<global::Inworld.AutoSDKHttpResponse<global::Inworld.CloneVoiceResponse>> CloneVoiceAsResponseAsync(
+
+            global::Inworld.CloneVoiceRequest request,
+            global::Inworld.AutoSDKRequestOptions? requestOptions = default,
+            global::System.Threading.CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Clone voice<br/>
+        /// Create an Instant Voice Clone (IVC) from one or more short audio<br/>
+        /// samples. The returned voice can be used in TTS synthesis.
+        /// </summary>
         /// <param name="displayName"></param>
         /// <param name="langCode">
         /// BCP-47-like language code used by Inworld voice APIs.

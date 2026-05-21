@@ -57,5 +57,6 @@ namespace Inworld.Realtime
         public StreamStatus()
         {
         }
+
     }
 }

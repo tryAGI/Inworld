@@ -59,5 +59,6 @@ namespace Inworld.Realtime
         public TtsAudioChunkData()
         {
         }
+
     }
 }

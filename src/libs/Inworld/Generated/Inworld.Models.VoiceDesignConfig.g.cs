@@ -41,5 +41,6 @@ namespace Inworld
         public VoiceDesignConfig()
         {
         }
+
     }
 }

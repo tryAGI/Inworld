@@ -41,8 +41,14 @@ namespace Inworld.Realtime
                     }
                     catch (global::System.Net.WebSockets.WebSocketException exception)
                     {
+                        RaiseException(exception);
                         var rethrow = false;
                         OnReceiveException(exception, ref rethrow);
+                        if (await TryReconnectAsync(exception, cancellationToken).ConfigureAwait(false))
+                        {
+                            continue;
+                        }
+
                         if (rethrow)
                         {
                             throw;
@@ -52,6 +58,11 @@ namespace Inworld.Realtime
                     }
                     catch (global::System.OperationCanceledException exception)
                     {
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            RaiseException(exception);
+                        }
+
                         var rethrow = false;
                         OnReceiveException(exception, ref rethrow);
                         if (rethrow)
@@ -64,6 +75,7 @@ namespace Inworld.Realtime
 
                     if (result.MessageType == global::System.Net.WebSockets.WebSocketMessageType.Close)
                     {
+                        RaiseClosed(result.CloseStatus, result.CloseStatusDescription);
                         await _clientWebSocket.CloseAsync(
                             closeStatus: global::System.Net.WebSockets.WebSocketCloseStatus.NormalClosure,
                             statusDescription: "Closing",
@@ -93,9 +105,104 @@ namespace Inworld.Realtime
                 }
 
                 string json = global::System.Text.Encoding.UTF8.GetString(__messageBuffer.ToArray());
-                    var @event = (global::Inworld.Realtime.TextToSpeechStreamServerEvent)global::System.Text.Json.JsonSerializer.Deserialize(json, typeof(global::Inworld.Realtime.TextToSpeechStreamServerEvent), JsonSerializerContext)!;
+                    global::Inworld.Realtime.TextToSpeechStreamServerEvent @event;
+                    try
+                    {
+                        @event = (global::Inworld.Realtime.TextToSpeechStreamServerEvent)global::System.Text.Json.JsonSerializer.Deserialize(json, typeof(global::Inworld.Realtime.TextToSpeechStreamServerEvent), JsonSerializerContext)!;
+                    }
+                    catch (global::System.Exception exception) when (
+                        exception is global::System.Text.Json.JsonException ||
+                        exception is global::System.NotSupportedException ||
+                        exception is global::System.InvalidOperationException)
+                    {
+                        var rethrow = false;
+                        OnReceiveException(exception, ref rethrow);
+                        DispatchUnknownMessage(json);
+                        if (rethrow)
+                        {
+                            throw;
+                        }
 
+                        continue;
+                    }
+
+                    DispatchReceivedMessage(@event, json);
                     yield return @event;
+            }
+        }
+
+
+        private static global::System.Text.Json.JsonElement? TryParseMessageJson(
+            string rawText)
+        {
+            try
+            {
+                using var document = global::System.Text.Json.JsonDocument.Parse(rawText);
+                return document.RootElement.Clone();
+            }
+            catch (global::System.Text.Json.JsonException)
+            {
+                return null;
+            }
+        }
+
+        private void DispatchUnknownMessage(
+            string rawText)
+        {
+            UnknownMessage?.Invoke(
+                this,
+                new AutoSDKWebSocketUnknownMessageEventArgs(
+                    rawText,
+                    TryParseMessageJson(rawText)));
+        }
+
+        private void DispatchReceivedMessage(
+            global::Inworld.Realtime.TextToSpeechStreamServerEvent @event,
+            string rawText)
+        {
+            var json = TryParseMessageJson(rawText);
+            MessageReceived?.Invoke(
+                this,
+                new AutoSDKWebSocketMessageEventArgs<global::Inworld.Realtime.TextToSpeechStreamServerEvent>(
+                    @event,
+                    rawText,
+                    json));
+
+            if (@event.TtsContextCreated is { } __TtsContextCreatedReceived)
+            {
+                TtsContextCreatedReceived?.Invoke(
+                    this,
+                    new AutoSDKWebSocketMessageEventArgs<global::Inworld.Realtime.TtsContextCreated>(
+                        __TtsContextCreatedReceived,
+                        rawText,
+                        json));
+            }
+            if (@event.TtsAudioChunk is { } __TtsAudioChunkReceived)
+            {
+                TtsAudioChunkReceived?.Invoke(
+                    this,
+                    new AutoSDKWebSocketMessageEventArgs<global::Inworld.Realtime.TtsAudioChunk>(
+                        __TtsAudioChunkReceived,
+                        rawText,
+                        json));
+            }
+            if (@event.TtsFlushCompleted is { } __TtsFlushCompletedReceived)
+            {
+                TtsFlushCompletedReceived?.Invoke(
+                    this,
+                    new AutoSDKWebSocketMessageEventArgs<global::Inworld.Realtime.TtsFlushCompleted>(
+                        __TtsFlushCompletedReceived,
+                        rawText,
+                        json));
+            }
+            if (@event.TtsContextClosed is { } __TtsContextClosedReceived)
+            {
+                TtsContextClosedReceived?.Invoke(
+                    this,
+                    new AutoSDKWebSocketMessageEventArgs<global::Inworld.Realtime.TtsContextClosed>(
+                        __TtsContextClosedReceived,
+                        rawText,
+                        json));
             }
         }
     }

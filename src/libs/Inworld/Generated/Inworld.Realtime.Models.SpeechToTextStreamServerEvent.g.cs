@@ -29,6 +29,26 @@ namespace Inworld.Realtime
         /// <summary>
         /// 
         /// </summary>
+        public bool TryPickSttTranscription(
+#if NET6_0_OR_GREATER
+            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+#endif
+            out global::Inworld.Realtime.SttTranscription? value)
+        {
+            value = SttTranscription;
+            return IsSttTranscription;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public global::Inworld.Realtime.SttTranscription PickSttTranscription() => IsSttTranscription
+            ? SttTranscription!
+            : throw new global::System.InvalidOperationException($"Expected union variant 'SttTranscription' but the value was {ToString()}.");
+
+        /// <summary>
+        /// 
+        /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.SttUsage? SttUsage { get; init; }
 #else
@@ -46,6 +66,26 @@ namespace Inworld.Realtime
         /// <summary>
         /// 
         /// </summary>
+        public bool TryPickSttUsage(
+#if NET6_0_OR_GREATER
+            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+#endif
+            out global::Inworld.Realtime.SttUsage? value)
+        {
+            value = SttUsage;
+            return IsSttUsage;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public global::Inworld.Realtime.SttUsage PickSttUsage() => IsSttUsage
+            ? SttUsage!
+            : throw new global::System.InvalidOperationException($"Expected union variant 'SttUsage' but the value was {ToString()}.");
+
+        /// <summary>
+        /// 
+        /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.SttSpeechStarted? SttStarted { get; init; }
 #else
@@ -59,6 +99,26 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(SttStarted))]
 #endif
         public bool IsSttStarted => SttStarted != null;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool TryPickSttStarted(
+#if NET6_0_OR_GREATER
+            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+#endif
+            out global::Inworld.Realtime.SttSpeechStarted? value)
+        {
+            value = SttStarted;
+            return IsSttStarted;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public global::Inworld.Realtime.SttSpeechStarted PickSttStarted() => IsSttStarted
+            ? SttStarted!
+            : throw new global::System.InvalidOperationException($"Expected union variant 'SttStarted' but the value was {ToString()}.");
         /// <summary>
         /// 
         /// </summary>
@@ -76,6 +136,11 @@ namespace Inworld.Realtime
         {
             SttTranscription = value;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static SpeechToTextStreamServerEvent FromSttTranscription(global::Inworld.Realtime.SttTranscription? value) => new SpeechToTextStreamServerEvent(value);
 
         /// <summary>
         /// 
@@ -98,6 +163,11 @@ namespace Inworld.Realtime
         /// <summary>
         /// 
         /// </summary>
+        public static SpeechToTextStreamServerEvent FromSttUsage(global::Inworld.Realtime.SttUsage? value) => new SpeechToTextStreamServerEvent(value);
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static implicit operator SpeechToTextStreamServerEvent(global::Inworld.Realtime.SttSpeechStarted value) => new SpeechToTextStreamServerEvent((global::Inworld.Realtime.SttSpeechStarted?)value);
 
         /// <summary>
@@ -112,6 +182,11 @@ namespace Inworld.Realtime
         {
             SttStarted = value;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static SpeechToTextStreamServerEvent FromSttStarted(global::Inworld.Realtime.SttSpeechStarted? value) => new SpeechToTextStreamServerEvent(value);
 
         /// <summary>
         /// 
@@ -157,9 +232,9 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         public TResult? Match<TResult>(
-            global::System.Func<global::Inworld.Realtime.SttTranscription?, TResult>? sttTranscription = null,
-            global::System.Func<global::Inworld.Realtime.SttUsage?, TResult>? sttUsage = null,
-            global::System.Func<global::Inworld.Realtime.SttSpeechStarted?, TResult>? sttStarted = null,
+            global::System.Func<global::Inworld.Realtime.SttTranscription, TResult>? sttTranscription = null,
+            global::System.Func<global::Inworld.Realtime.SttUsage, TResult>? sttUsage = null,
+            global::System.Func<global::Inworld.Realtime.SttSpeechStarted, TResult>? sttStarted = null,
             bool validate = true)
         {
             if (validate)
@@ -187,9 +262,39 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         public void Match(
-            global::System.Action<global::Inworld.Realtime.SttTranscription?>? sttTranscription = null,
-            global::System.Action<global::Inworld.Realtime.SttUsage?>? sttUsage = null,
-            global::System.Action<global::Inworld.Realtime.SttSpeechStarted?>? sttStarted = null,
+            global::System.Action<global::Inworld.Realtime.SttTranscription>? sttTranscription = null,
+
+            global::System.Action<global::Inworld.Realtime.SttUsage>? sttUsage = null,
+
+            global::System.Action<global::Inworld.Realtime.SttSpeechStarted>? sttStarted = null,
+            bool validate = true)
+        {
+            if (validate)
+            {
+                Validate();
+            }
+
+            if (IsSttTranscription)
+            {
+                sttTranscription?.Invoke(SttTranscription!);
+            }
+            else if (IsSttUsage)
+            {
+                sttUsage?.Invoke(SttUsage!);
+            }
+            else if (IsSttStarted)
+            {
+                sttStarted?.Invoke(SttStarted!);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Switch(
+            global::System.Action<global::Inworld.Realtime.SttTranscription>? sttTranscription = null,
+            global::System.Action<global::Inworld.Realtime.SttUsage>? sttUsage = null,
+            global::System.Action<global::Inworld.Realtime.SttSpeechStarted>? sttStarted = null,
             bool validate = true)
         {
             if (validate)

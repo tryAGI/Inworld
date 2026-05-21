@@ -39,5 +39,6 @@ namespace Inworld
         public ValidationMessage()
         {
         }
+
     }
 }

@@ -52,5 +52,6 @@ namespace Inworld.Realtime
         public TtsSendTextParams()
         {
         }
+
     }
 }

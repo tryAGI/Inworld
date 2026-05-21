@@ -105,6 +105,7 @@ namespace Inworld.Realtime.JsonConverters
             {
                 try
                 {
+
                     var typeInfo = typeInfoResolver.GetTypeInfo(typeof(global::Inworld.Realtime.SttTranscription), options) as global::System.Text.Json.Serialization.Metadata.JsonTypeInfo<global::Inworld.Realtime.SttTranscription> ??
                                    throw new global::System.InvalidOperationException($"Cannot get type info for {typeof(global::Inworld.Realtime.SttTranscription).Name}");
                     sttTranscription = global::System.Text.Json.JsonSerializer.Deserialize(__rawJson, typeInfo);
@@ -115,9 +116,13 @@ namespace Inworld.Realtime.JsonConverters
                 catch (global::System.InvalidOperationException)
                 {
                 }
+            }
 
+            if (sttTranscription == null && sttUsage == null && sttStarted == null)
+            {
                 try
                 {
+
                     var typeInfo = typeInfoResolver.GetTypeInfo(typeof(global::Inworld.Realtime.SttUsage), options) as global::System.Text.Json.Serialization.Metadata.JsonTypeInfo<global::Inworld.Realtime.SttUsage> ??
                                    throw new global::System.InvalidOperationException($"Cannot get type info for {typeof(global::Inworld.Realtime.SttUsage).Name}");
                     sttUsage = global::System.Text.Json.JsonSerializer.Deserialize(__rawJson, typeInfo);
@@ -128,9 +133,13 @@ namespace Inworld.Realtime.JsonConverters
                 catch (global::System.InvalidOperationException)
                 {
                 }
+            }
 
+            if (sttTranscription == null && sttUsage == null && sttStarted == null)
+            {
                 try
                 {
+
                     var typeInfo = typeInfoResolver.GetTypeInfo(typeof(global::Inworld.Realtime.SttSpeechStarted), options) as global::System.Text.Json.Serialization.Metadata.JsonTypeInfo<global::Inworld.Realtime.SttSpeechStarted> ??
                                    throw new global::System.InvalidOperationException($"Cannot get type info for {typeof(global::Inworld.Realtime.SttSpeechStarted).Name}");
                     sttStarted = global::System.Text.Json.JsonSerializer.Deserialize(__rawJson, typeInfo);

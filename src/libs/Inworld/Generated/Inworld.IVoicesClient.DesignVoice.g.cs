@@ -23,6 +23,20 @@ namespace Inworld
         /// Generate candidate voice previews from a text description. Previews<br/>
         /// can be promoted to a persistent voice via Publish Voice.
         /// </summary>
+        /// <param name="request"></param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
+        /// <param name="cancellationToken">The token to cancel the operation with</param>
+        /// <exception cref="global::Inworld.ApiException"></exception>
+        global::System.Threading.Tasks.Task<global::Inworld.AutoSDKHttpResponse<global::Inworld.DesignVoiceResponse>> DesignVoiceAsResponseAsync(
+
+            global::Inworld.DesignVoiceRequest request,
+            global::Inworld.AutoSDKRequestOptions? requestOptions = default,
+            global::System.Threading.CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Design voice<br/>
+        /// Generate candidate voice previews from a text description. Previews<br/>
+        /// can be promoted to a persistent voice via Publish Voice.
+        /// </summary>
         /// <param name="langCode">
         /// BCP-47-like language code used by Inworld voice APIs.
         /// </param>

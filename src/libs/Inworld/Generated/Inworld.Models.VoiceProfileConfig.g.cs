@@ -50,5 +50,6 @@ namespace Inworld
         public VoiceProfileConfig()
         {
         }
+
     }
 }
