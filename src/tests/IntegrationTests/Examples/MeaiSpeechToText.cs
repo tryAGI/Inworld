@@ -32,5 +32,12 @@ public partial class Tests
 
         metadata.Should().NotBeNull();
         metadata!.ProviderName.Should().Be("inworld");
+
+        //// Provider-qualified STT model IDs can be passed through SpeechToTextOptions.ModelId.
+        var deepgram = InworldClient.DeepgramFluxGeneralEnglishSttModelId;
+        var soniox = InworldClient.SonioxSttRealtimeV5ModelId;
+
+        deepgram.Should().Be("deepgram/flux-general-en");
+        soniox.Should().Be("soniox/stt-rt-v5");
     }
 }

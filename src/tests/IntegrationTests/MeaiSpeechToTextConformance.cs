@@ -183,7 +183,7 @@ public sealed class InworldMeaiSpeechToTextConformanceTests : MeaiSpeechToTextCo
 
     protected override Meai.SpeechToTextOptions? StreamingOptions { get; } = new()
     {
-        ModelId = "inworld/inworld-stt-1",
+        ModelId = InworldClient.CurrentInworldSttModelId,
         SpeechLanguage = "en-US",
     };
 

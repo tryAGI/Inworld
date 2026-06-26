@@ -37,6 +37,21 @@ public partial class InworldClient : Meai.ISpeechToTextClient
     public const string CurrentInworldSttModelId = "inworld/inworld-stt-1";
 
     /// <summary>
+    /// Deepgram Flux English routed STT model id for Inworld's unified STT API.
+    /// </summary>
+    public const string DeepgramFluxGeneralEnglishSttModelId = "deepgram/flux-general-en";
+
+    /// <summary>
+    /// Deepgram Flux multilingual routed STT model id for Inworld's unified STT API.
+    /// </summary>
+    public const string DeepgramFluxGeneralMultilingualSttModelId = "deepgram/flux-general-multi";
+
+    /// <summary>
+    /// Soniox v5 realtime routed STT model id for Inworld's unified STT API.
+    /// </summary>
+    public const string SonioxSttRealtimeV5ModelId = "soniox/stt-rt-v5";
+
+    /// <summary>
     /// When <c>true</c> (default), the first call that passes
     /// <see cref="LegacyInworldSttModelId"/> logs a one-shot
     /// <see cref="System.Diagnostics.Trace.TraceWarning(string, object[])"/>

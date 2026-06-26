@@ -416,6 +416,10 @@ components:
       properties:
         modelId:
           type: string
+          description: |
+            Provider-qualified model ID, e.g. `inworld/inworld-stt-1`,
+            `deepgram/flux-general-en`, `deepgram/flux-general-multi`,
+            `soniox/stt-rt-v5`, or `assemblyai/universal-streaming-multilingual`.
         audioEncoding:
           $ref: '#/components/schemas/SttStreamAudioEncoding'
         language:

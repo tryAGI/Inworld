@@ -51,7 +51,7 @@ public partial class Tests
         //// https://github.com/inworld-ai/inworld-api-examples/issues/71.
         var options = new Meai.SpeechToTextOptions
         {
-            ModelId = "inworld/inworld-stt-1",
+            ModelId = InworldClient.CurrentInworldSttModelId,
             SpeechLanguage = "en-US",
         };
 
@@ -113,7 +113,7 @@ public partial class Tests
         var transcript = new System.Text.StringBuilder();
         await foreach (var update in speech.GetStreamingTextAsync(
             audioStream,
-            new Meai.SpeechToTextOptions { ModelId = "inworld/stt-v1", SpeechLanguage = "en-US" },
+            new Meai.SpeechToTextOptions { ModelId = InworldClient.LegacyInworldSttModelId, SpeechLanguage = "en-US" },
             CancellationToken.None))
         {
             if (update.Kind == Meai.SpeechToTextResponseUpdateKind.TextUpdated)

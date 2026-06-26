@@ -746,8 +746,10 @@ components:
         modelId:
           type: string
           description: |
-            Provider-qualified model ID, e.g. `inworld/inworld-stt-v1`,
-            `groq/whisper-large-v3`, or `assemblyai/universal-2`.
+            Provider-qualified model ID, e.g. `inworld/inworld-stt-1`,
+            `deepgram/flux-general-en`, `deepgram/flux-general-multi`,
+            `soniox/stt-rt-v5`, `groq/whisper-large-v3`, or
+            `assemblyai/universal-2`.
         audioEncoding:
           $ref: '#/components/schemas/SttAudioEncoding'
         language:
