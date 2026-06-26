@@ -9,8 +9,10 @@ namespace Inworld
     public sealed partial class TranscribeConfig
     {
         /// <summary>
-        /// Provider-qualified model ID, e.g. `inworld/inworld-stt-v1`,<br/>
-        /// `groq/whisper-large-v3`, or `assemblyai/universal-2`.
+        /// Provider-qualified model ID, e.g. `inworld/inworld-stt-1`,<br/>
+        /// `deepgram/flux-general-en`, `deepgram/flux-general-multi`,<br/>
+        /// `soniox/stt-rt-v5`, `groq/whisper-large-v3`, or<br/>
+        /// `assemblyai/universal-2`.
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("modelId")]
         public string? ModelId { get; set; }
@@ -62,8 +64,10 @@ namespace Inworld
         /// Initializes a new instance of the <see cref="TranscribeConfig" /> class.
         /// </summary>
         /// <param name="modelId">
-        /// Provider-qualified model ID, e.g. `inworld/inworld-stt-v1`,<br/>
-        /// `groq/whisper-large-v3`, or `assemblyai/universal-2`.
+        /// Provider-qualified model ID, e.g. `inworld/inworld-stt-1`,<br/>
+        /// `deepgram/flux-general-en`, `deepgram/flux-general-multi`,<br/>
+        /// `soniox/stt-rt-v5`, `groq/whisper-large-v3`, or<br/>
+        /// `assemblyai/universal-2`.
         /// </param>
         /// <param name="audioEncoding">
         /// Audio encoding used for STT input.

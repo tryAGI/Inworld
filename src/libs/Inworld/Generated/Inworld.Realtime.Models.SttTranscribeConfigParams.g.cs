@@ -9,7 +9,7 @@ namespace Inworld.Realtime
     public sealed partial class SttTranscribeConfigParams
     {
         /// <summary>
-        /// 
+        /// |
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("modelId")]
         public string? ModelId { get; set; }
@@ -95,7 +95,9 @@ namespace Inworld.Realtime
         /// <summary>
         /// Initializes a new instance of the <see cref="SttTranscribeConfigParams" /> class.
         /// </summary>
-        /// <param name="modelId"></param>
+        /// <param name="modelId">
+        /// |
+        /// </param>
         /// <param name="audioEncoding"></param>
         /// <param name="language"></param>
         /// <param name="sampleRateHertz"></param>
