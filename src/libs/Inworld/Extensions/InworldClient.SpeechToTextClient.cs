@@ -1,6 +1,7 @@
 #nullable enable
 #pragma warning disable MEAI001 // MEAI speech-to-text abstractions are preview-gated; opt in.
 
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using Meai = Microsoft.Extensions.AI;
 
@@ -195,20 +196,13 @@ public partial class InworldClient : Meai.ISpeechToTextClient
                 additionalHeaders: Realtime.InworldRealtimeAuth.BuildConnectHeaders(apiKey),
                 cancellationToken: cancellationToken).ConfigureAwait(false);
 
-            var sampleRate = options?.AdditionalProperties?.TryGetValue("sampleRateHertz", out var srObj) == true
-                && srObj is int sr ? sr : 16000;
+            var transcribeConfig = CreateStreamingTranscribeConfig(options);
+            var sendEndTurn = GetBoolOption(options, InworldSpeechToTextPropertyNames.SendEndTurn) == true;
 
             await realtime.SendSttConfigureAsync(
                 new Realtime.SttConfigure
                 {
-                    TranscribeConfig = new Realtime.SttTranscribeConfigParams
-                    {
-                        ModelId = NormalizeSttModelId(options?.ModelId, DefaultStreamingModelId),
-                        Language = options?.SpeechLanguage,
-                        AudioEncoding = "LINEAR16",
-                        SampleRateHertz = sampleRate,
-                        NumberOfChannels = 1,
-                    },
+                    TranscribeConfig = transcribeConfig,
                 },
                 cancellationToken: cancellationToken).ConfigureAwait(false);
 
@@ -239,6 +233,13 @@ public partial class InworldClient : Meai.ISpeechToTextClient
                                     Content = slice,
                                 },
                             },
+                            cancellationToken: cancellationToken).ConfigureAwait(false);
+                    }
+
+                    if (sendEndTurn)
+                    {
+                        await realtime.SendAsync(
+                            "{\"end_turn\":{}}",
                             cancellationToken: cancellationToken).ConfigureAwait(false);
                     }
 
@@ -302,6 +303,137 @@ public partial class InworldClient : Meai.ISpeechToTextClient
             }
             catch (OperationCanceledException)
             {
+            }
+        }
+    }
+
+    private static Realtime.SttTranscribeConfigParams CreateStreamingTranscribeConfig(
+        Meai.SpeechToTextOptions? options)
+    {
+        var voiceProfileConfig = GetGeneratedOption<Realtime.SttVoiceProfileConfig>(
+            options,
+            InworldSpeechToTextPropertyNames.VoiceProfileConfig);
+        if (voiceProfileConfig is null &&
+            GetBoolOption(options, InworldSpeechToTextPropertyNames.EnableVoiceProfile) is bool enableVoiceProfile)
+        {
+            voiceProfileConfig = new Realtime.SttVoiceProfileConfig
+            {
+                EnableVoiceProfile = enableVoiceProfile,
+            };
+        }
+
+        return new Realtime.SttTranscribeConfigParams
+        {
+            ModelId = NormalizeSttModelId(options?.ModelId, DefaultStreamingModelId),
+            Language = options?.SpeechLanguage,
+            AudioEncoding = GetStringOption(options, InworldSpeechToTextPropertyNames.AudioEncoding) ?? "LINEAR16",
+            SampleRateHertz = GetIntOption(options, InworldSpeechToTextPropertyNames.SampleRateHertz) ?? 16000,
+            NumberOfChannels = GetIntOption(options, InworldSpeechToTextPropertyNames.NumberOfChannels) ?? 1,
+            InactivityTimeoutSeconds = GetIntOption(options, InworldSpeechToTextPropertyNames.InactivityTimeoutSeconds),
+            EndOfTurnConfidenceThreshold = GetFloatOption(options, InworldSpeechToTextPropertyNames.EndOfTurnConfidenceThreshold),
+            Prompts = GetStringValues(options, InworldSpeechToTextPropertyNames.Prompts).ToList(),
+            IncludeWordTimestamps = GetBoolOption(options, InworldSpeechToTextPropertyNames.IncludeWordTimestamps),
+            GroqConfig = GetGeneratedOption<Realtime.SttGroqConfig>(options, InworldSpeechToTextPropertyNames.GroqConfig),
+            AssemblyaiConfig = GetGeneratedOption<Realtime.SttAssemblyAiConfig>(options, InworldSpeechToTextPropertyNames.AssemblyAiConfig),
+            InworldSttV1Config = GetGeneratedOption<Realtime.SttInworldSttV1Config>(options, InworldSpeechToTextPropertyNames.InworldSttV1Config),
+            VoiceProfileConfig = voiceProfileConfig,
+        };
+    }
+
+    private static T? GetGeneratedOption<T>(
+        Meai.SpeechToTextOptions? options,
+        string propertyName)
+        where T : class
+    {
+        return options?.AdditionalProperties?.TryGetValue(propertyName, out var value) == true
+            ? value as T
+            : null;
+    }
+
+    private static string? GetStringOption(
+        Meai.SpeechToTextOptions? options,
+        string propertyName)
+    {
+        return options?.AdditionalProperties?.TryGetValue(propertyName, out var value) == true &&
+            value is string stringValue &&
+            !string.IsNullOrWhiteSpace(stringValue)
+                ? stringValue
+                : null;
+    }
+
+    private static int? GetIntOption(
+        Meai.SpeechToTextOptions? options,
+        string propertyName)
+    {
+        return options?.AdditionalProperties?.TryGetValue(propertyName, out var value) == true
+            ? value switch
+            {
+                int intValue => intValue,
+                long longValue when longValue is >= int.MinValue and <= int.MaxValue => (int)longValue,
+                string stringValue when int.TryParse(stringValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsed) => parsed,
+                _ => null,
+            }
+            : null;
+    }
+
+    private static float? GetFloatOption(
+        Meai.SpeechToTextOptions? options,
+        string propertyName)
+    {
+        return options?.AdditionalProperties?.TryGetValue(propertyName, out var value) == true
+            ? value switch
+            {
+                float floatValue => floatValue,
+                double doubleValue => (float)doubleValue,
+                decimal decimalValue => (float)decimalValue,
+                string stringValue when float.TryParse(stringValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsed) => parsed,
+                _ => null,
+            }
+            : null;
+    }
+
+    private static bool? GetBoolOption(
+        Meai.SpeechToTextOptions? options,
+        string propertyName)
+    {
+        return options?.AdditionalProperties?.TryGetValue(propertyName, out var value) == true
+            ? value switch
+            {
+                bool boolValue => boolValue,
+                string stringValue when bool.TryParse(stringValue, out var parsed) => parsed,
+                _ => null,
+            }
+            : null;
+    }
+
+    private static IEnumerable<string> GetStringValues(
+        Meai.SpeechToTextOptions? options,
+        string propertyName)
+    {
+        if (options?.AdditionalProperties?.TryGetValue(propertyName, out var value) != true ||
+            value is null)
+        {
+            yield break;
+        }
+
+        if (value is string singleValue)
+        {
+            if (!string.IsNullOrWhiteSpace(singleValue))
+            {
+                yield return singleValue;
+            }
+
+            yield break;
+        }
+
+        if (value is IEnumerable<string> stringValues)
+        {
+            foreach (var stringValue in stringValues)
+            {
+                if (!string.IsNullOrWhiteSpace(stringValue))
+                {
+                    yield return stringValue;
+                }
             }
         }
     }
