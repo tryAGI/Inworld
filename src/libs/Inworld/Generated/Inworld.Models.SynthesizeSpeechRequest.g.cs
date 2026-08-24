@@ -23,7 +23,7 @@ namespace Inworld
         public required string VoiceId { get; set; }
 
         /// <summary>
-        /// Model identifier, e.g. `inworld-tts-1.5` or `inworld-tts-1.5-max`.
+        /// Model identifier, e.g. `inworld-tts-2`, `inworld-tts-1.5-max`, or `inworld-tts-1.5-mini`.
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("modelId")]
         [global::System.Text.Json.Serialization.JsonRequired]
@@ -56,6 +56,13 @@ namespace Inworld
         public global::Inworld.ApplyTextNormalization? ApplyTextNormalization { get; set; }
 
         /// <summary>
+        /// Variation and expressiveness mode for Realtime TTS-2.
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("deliveryMode")]
+        [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.JsonConverters.DeliveryModeJsonConverter))]
+        public global::Inworld.DeliveryMode? DeliveryMode { get; set; }
+
+        /// <summary>
         /// Additional properties that are not explicitly defined in the schema
         /// </summary>
         [global::System.Text.Json.Serialization.JsonExtensionData]
@@ -71,7 +78,7 @@ namespace Inworld
         /// Voice identifier.
         /// </param>
         /// <param name="modelId">
-        /// Model identifier, e.g. `inworld-tts-1.5` or `inworld-tts-1.5-max`.
+        /// Model identifier, e.g. `inworld-tts-2`, `inworld-tts-1.5-max`, or `inworld-tts-1.5-mini`.
         /// </param>
         /// <param name="audioConfig">
         /// Audio output configuration for TTS synthesis.
@@ -85,6 +92,9 @@ namespace Inworld
         /// <param name="applyTextNormalization">
         /// Whether text normalization is applied before synthesis.
         /// </param>
+        /// <param name="deliveryMode">
+        /// Variation and expressiveness mode for Realtime TTS-2.
+        /// </param>
 #if NET7_0_OR_GREATER
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
@@ -95,7 +105,8 @@ namespace Inworld
             global::Inworld.AudioConfig? audioConfig,
             double? temperature,
             global::Inworld.TimestampType? timestampType,
-            global::Inworld.ApplyTextNormalization? applyTextNormalization)
+            global::Inworld.ApplyTextNormalization? applyTextNormalization,
+            global::Inworld.DeliveryMode? deliveryMode)
         {
             this.Text = text ?? throw new global::System.ArgumentNullException(nameof(text));
             this.VoiceId = voiceId ?? throw new global::System.ArgumentNullException(nameof(voiceId));
@@ -104,6 +115,7 @@ namespace Inworld
             this.Temperature = temperature;
             this.TimestampType = timestampType;
             this.ApplyTextNormalization = applyTextNormalization;
+            this.DeliveryMode = deliveryMode;
         }
 
         /// <summary>

@@ -407,6 +407,14 @@ components:
         - 'ON'
         - 'OFF'
 
+    DeliveryMode:
+      type: string
+      description: Variation and expressiveness mode for Realtime TTS-2.
+      enum:
+        - STABLE
+        - BALANCED
+        - CREATIVE
+
     AudioConfig:
       type: object
       description: Audio output configuration for TTS synthesis.
@@ -441,7 +449,7 @@ components:
           description: Voice identifier.
         modelId:
           type: string
-          description: Model identifier, e.g. `inworld-tts-1.5` or `inworld-tts-1.5-max`.
+          description: Model identifier, e.g. `inworld-tts-2`, `inworld-tts-1.5-max`, or `inworld-tts-1.5-mini`.
         audioConfig:
           $ref: '#/components/schemas/AudioConfig'
         temperature:
@@ -452,6 +460,8 @@ components:
           $ref: '#/components/schemas/TimestampType'
         applyTextNormalization:
           $ref: '#/components/schemas/ApplyTextNormalization'
+        deliveryMode:
+          $ref: '#/components/schemas/DeliveryMode'
 
     Phone:
       type: object

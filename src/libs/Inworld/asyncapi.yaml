@@ -201,6 +201,11 @@ components:
       type: string
       enum: [APPLY_TEXT_NORMALIZATION_UNSPECIFIED, 'ON', 'OFF']
 
+    StreamDeliveryMode:
+      type: string
+      description: Variation and expressiveness mode for Realtime TTS-2.
+      enum: [STABLE, BALANCED, CREATIVE]
+
     StreamTimestampTransportStrategy:
       type: string
       enum: [TIMESTAMP_TRANSPORT_STRATEGY_UNSPECIFIED, SYNC, ASYNC]
@@ -244,6 +249,7 @@ components:
           type: string
         modelId:
           type: string
+          description: Model identifier, including `inworld-tts-2` for the latest research preview.
         audioConfig:
           $ref: '#/components/schemas/StreamAudioConfig'
         temperature:
@@ -259,6 +265,8 @@ components:
           format: int32
         applyTextNormalization:
           $ref: '#/components/schemas/StreamApplyTextNormalization'
+        deliveryMode:
+          $ref: '#/components/schemas/StreamDeliveryMode'
         autoMode:
           type: boolean
         timestampTransportStrategy:

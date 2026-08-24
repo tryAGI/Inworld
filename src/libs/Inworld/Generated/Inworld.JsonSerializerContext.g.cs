@@ -33,6 +33,10 @@ namespace Inworld
 
             typeof(global::Inworld.JsonConverters.ApplyTextNormalizationNullableJsonConverter),
 
+            typeof(global::Inworld.JsonConverters.DeliveryModeJsonConverter),
+
+            typeof(global::Inworld.JsonConverters.DeliveryModeNullableJsonConverter),
+
             typeof(global::Inworld.JsonConverters.SttAudioEncodingJsonConverter),
 
             typeof(global::Inworld.JsonConverters.SttAudioEncodingNullableJsonConverter),
@@ -56,6 +60,7 @@ namespace Inworld
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.AudioEncoding), TypeInfoPropertyName = "AudioEncoding2")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.TimestampType), TypeInfoPropertyName = "TimestampType2")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.ApplyTextNormalization), TypeInfoPropertyName = "ApplyTextNormalization2")]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.DeliveryMode), TypeInfoPropertyName = "DeliveryMode2")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.AudioConfig))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(double))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.SynthesizeSpeechRequest))]

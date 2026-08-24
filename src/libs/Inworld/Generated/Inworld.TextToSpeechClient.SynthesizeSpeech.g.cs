@@ -487,7 +487,7 @@ namespace Inworld
         /// Voice identifier.
         /// </param>
         /// <param name="modelId">
-        /// Model identifier, e.g. `inworld-tts-1.5` or `inworld-tts-1.5-max`.
+        /// Model identifier, e.g. `inworld-tts-2`, `inworld-tts-1.5-max`, or `inworld-tts-1.5-mini`.
         /// </param>
         /// <param name="audioConfig">
         /// Audio output configuration for TTS synthesis.
@@ -501,6 +501,9 @@ namespace Inworld
         /// <param name="applyTextNormalization">
         /// Whether text normalization is applied before synthesis.
         /// </param>
+        /// <param name="deliveryMode">
+        /// Variation and expressiveness mode for Realtime TTS-2.
+        /// </param>
         /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
         /// <param name="cancellationToken">The token to cancel the operation with</param>
         /// <exception cref="global::System.InvalidOperationException"></exception>
@@ -512,6 +515,7 @@ namespace Inworld
             double? temperature = default,
             global::Inworld.TimestampType? timestampType = default,
             global::Inworld.ApplyTextNormalization? applyTextNormalization = default,
+            global::Inworld.DeliveryMode? deliveryMode = default,
             global::Inworld.AutoSDKRequestOptions? requestOptions = default,
             global::System.Threading.CancellationToken cancellationToken = default)
         {
@@ -524,6 +528,7 @@ namespace Inworld
                 Temperature = temperature,
                 TimestampType = timestampType,
                 ApplyTextNormalization = applyTextNormalization,
+                DeliveryMode = deliveryMode,
             };
 
             return await SynthesizeSpeechAsync(

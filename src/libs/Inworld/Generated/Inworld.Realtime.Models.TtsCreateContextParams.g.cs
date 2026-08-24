@@ -15,7 +15,7 @@ namespace Inworld.Realtime
         public string? VoiceId { get; set; }
 
         /// <summary>
-        /// 
+        /// Model identifier, including `inworld-tts-2` for the latest research preview.
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("modelId")]
         public string? ModelId { get; set; }
@@ -57,6 +57,12 @@ namespace Inworld.Realtime
         public string? ApplyTextNormalization { get; set; }
 
         /// <summary>
+        /// Variation and expressiveness mode for Realtime TTS-2.
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("deliveryMode")]
+        public string? DeliveryMode { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("autoMode")]
@@ -78,7 +84,9 @@ namespace Inworld.Realtime
         /// Initializes a new instance of the <see cref="TtsCreateContextParams" /> class.
         /// </summary>
         /// <param name="voiceId"></param>
-        /// <param name="modelId"></param>
+        /// <param name="modelId">
+        /// Model identifier, including `inworld-tts-2` for the latest research preview.
+        /// </param>
         /// <param name="audioConfig">
         /// Audio output configuration for streaming TTS.
         /// </param>
@@ -87,6 +95,9 @@ namespace Inworld.Realtime
         /// <param name="maxBufferDelayMs"></param>
         /// <param name="bufferCharThreshold"></param>
         /// <param name="applyTextNormalization"></param>
+        /// <param name="deliveryMode">
+        /// Variation and expressiveness mode for Realtime TTS-2.
+        /// </param>
         /// <param name="autoMode"></param>
         /// <param name="timestampTransportStrategy"></param>
 #if NET7_0_OR_GREATER
@@ -101,6 +112,7 @@ namespace Inworld.Realtime
             int? maxBufferDelayMs,
             int? bufferCharThreshold,
             string? applyTextNormalization,
+            string? deliveryMode,
             bool? autoMode,
             string? timestampTransportStrategy)
         {
@@ -112,6 +124,7 @@ namespace Inworld.Realtime
             this.MaxBufferDelayMs = maxBufferDelayMs;
             this.BufferCharThreshold = bufferCharThreshold;
             this.ApplyTextNormalization = applyTextNormalization;
+            this.DeliveryMode = deliveryMode;
             this.AutoMode = autoMode;
             this.TimestampTransportStrategy = timestampTransportStrategy;
         }

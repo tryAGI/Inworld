@@ -16,11 +16,12 @@ public partial class Tests
         //// Create an Inworld client using your API key.
         using var client = GetAuthenticatedClient();
 
-        //// Synthesize a short greeting using the Inworld TTS 1.5 Max model.
+        //// Synthesize a short greeting using the latest Inworld TTS-2 model.
         var response = await client.TextToSpeech.SynthesizeSpeechAsync(
             text: "Hello, welcome to Inworld.",
             voiceId: "Dennis",
-            modelId: "inworld-tts-1.5-max");
+            modelId: InworldTtsModels.RealtimeTts2,
+            deliveryMode: DeliveryMode.Balanced);
 
         //// The response contains Base64-encoded audio bytes ready to decode into a playable file.
         response.Should().NotBeNull();

@@ -30,7 +30,7 @@ public static class InworldClientTools
                 var response = await client.TextToSpeech.SynthesizeSpeechAsync(
                     text: text,
                     voiceId: voiceId,
-                    modelId: modelId is { Length: > 0 } ? modelId : "inworld-tts-1.5-max",
+                    modelId: modelId is { Length: > 0 } ? modelId : InworldTtsModels.RealtimeTts15Max,
                     temperature: temperature,
                     cancellationToken: cancellationToken).ConfigureAwait(false);
 
