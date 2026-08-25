@@ -12,7 +12,8 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("audioEncoding")]
-        public string? AudioEncoding { get; set; }
+        [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.Realtime.JsonConverters.StreamAudioEncodingJsonConverter))]
+        public global::Inworld.Realtime.StreamAudioEncoding? AudioEncoding { get; set; }
 
         /// <summary>
         /// 
@@ -49,7 +50,7 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public StreamAudioConfig(
-            string? audioEncoding,
+            global::Inworld.Realtime.StreamAudioEncoding? audioEncoding,
             int? sampleRateHertz,
             int? bitRate,
             double? speakingRate)

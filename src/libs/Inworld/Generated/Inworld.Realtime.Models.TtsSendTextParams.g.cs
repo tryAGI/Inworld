@@ -12,7 +12,8 @@ namespace Inworld.Realtime
         /// Text to synthesize. Maximum 1000 characters per chunk.
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("text")]
-        public string? Text { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required string Text { get; set; }
 
         /// <summary>
         /// Optional empty object; if set, triggers flush after text is enqueued.
@@ -39,10 +40,10 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public TtsSendTextParams(
-            string? text,
+            string text,
             object? flushContext)
         {
-            this.Text = text;
+            this.Text = text ?? throw new global::System.ArgumentNullException(nameof(text));
             this.FlushContext = flushContext;
         }
 

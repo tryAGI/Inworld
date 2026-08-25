@@ -12,7 +12,8 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("create")]
-        public global::Inworld.Realtime.TtsCreateContextParams? Create { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required global::Inworld.Realtime.TtsCreateContextParams Create { get; set; }
 
         /// <summary>
         /// Optional stable context id; server generates one when omitted.
@@ -37,10 +38,10 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public TtsCreateContext(
-            global::Inworld.Realtime.TtsCreateContextParams? create,
+            global::Inworld.Realtime.TtsCreateContextParams create,
             string? contextId)
         {
-            this.Create = create;
+            this.Create = create ?? throw new global::System.ArgumentNullException(nameof(create));
             this.ContextId = contextId;
         }
 

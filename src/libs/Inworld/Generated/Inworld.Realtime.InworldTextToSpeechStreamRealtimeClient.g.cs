@@ -4,7 +4,10 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// |
+    /// Bidirectional streaming TTS. The client opens a context (or multiple)<br/>
+    /// with a chosen voice/model, sends text fragments, and receives audio<br/>
+    /// chunks as they are generated. Up to 20 concurrent connections, 5<br/>
+    /// contexts per connection, 10-minute inactivity timeout.
     /// </summary>
     public sealed partial class InworldTextToSpeechStreamRealtimeClient : global::System.IDisposable, global::System.IAsyncDisposable
     {

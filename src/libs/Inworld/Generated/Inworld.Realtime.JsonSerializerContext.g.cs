@@ -13,16 +13,45 @@ namespace Inworld.Realtime
         DefaultIgnoreCondition = global::System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
         Converters = new global::System.Type[]
         {
+            typeof(global::Inworld.Realtime.JsonConverters.StreamAudioEncodingJsonConverter),
+
+            typeof(global::Inworld.Realtime.JsonConverters.StreamAudioEncodingNullableJsonConverter),
+
+            typeof(global::Inworld.Realtime.JsonConverters.StreamTimestampTypeJsonConverter),
+
+            typeof(global::Inworld.Realtime.JsonConverters.StreamTimestampTypeNullableJsonConverter),
+
+            typeof(global::Inworld.Realtime.JsonConverters.StreamApplyTextNormalizationJsonConverter),
+
+            typeof(global::Inworld.Realtime.JsonConverters.StreamApplyTextNormalizationNullableJsonConverter),
+
+            typeof(global::Inworld.Realtime.JsonConverters.StreamDeliveryModeJsonConverter),
+
+            typeof(global::Inworld.Realtime.JsonConverters.StreamDeliveryModeNullableJsonConverter),
+
+            typeof(global::Inworld.Realtime.JsonConverters.StreamTimestampTransportStrategyJsonConverter),
+
+            typeof(global::Inworld.Realtime.JsonConverters.StreamTimestampTransportStrategyNullableJsonConverter),
+
+            typeof(global::Inworld.Realtime.JsonConverters.SttStreamAudioEncodingJsonConverter),
+
+            typeof(global::Inworld.Realtime.JsonConverters.SttStreamAudioEncodingNullableJsonConverter),
+
             typeof(global::Inworld.Realtime.JsonConverters.TextToSpeechStreamServerEventJsonConverter),
 
             typeof(global::Inworld.Realtime.JsonConverters.SpeechToTextStreamServerEventJsonConverter),
         })]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.JsonSerializerContextTypes))]
-    [global::System.Text.Json.Serialization.JsonSerializable(typeof(string))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.StreamAudioEncoding), TypeInfoPropertyName = "StreamAudioEncoding2")]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.StreamTimestampType), TypeInfoPropertyName = "StreamTimestampType2")]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.StreamApplyTextNormalization), TypeInfoPropertyName = "StreamApplyTextNormalization2")]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.StreamDeliveryMode), TypeInfoPropertyName = "StreamDeliveryMode2")]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.StreamTimestampTransportStrategy), TypeInfoPropertyName = "StreamTimestampTransportStrategy2")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.StreamAudioConfig))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(int))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(double))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.StreamStatus))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(string))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.IList<object>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(object))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.TtsCreateContextParams))]
@@ -37,6 +66,7 @@ namespace Inworld.Realtime
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.TtsAudioChunkData))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(byte[]))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.TtsResultEnvelope))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.SttStreamAudioEncoding), TypeInfoPropertyName = "SttStreamAudioEncoding2")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.SttVoiceProfileConfig))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.SttGroqConfig))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(float))]

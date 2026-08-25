@@ -12,7 +12,8 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("close_context")]
-        public object? CloseContext { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required object CloseContext { get; set; }
 
         /// <summary>
         /// 
@@ -35,10 +36,10 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public TtsCloseContext(
-            object? closeContext,
+            object closeContext,
             string? contextId)
         {
-            this.CloseContext = closeContext;
+            this.CloseContext = closeContext ?? throw new global::System.ArgumentNullException(nameof(closeContext));
             this.ContextId = contextId;
         }
 

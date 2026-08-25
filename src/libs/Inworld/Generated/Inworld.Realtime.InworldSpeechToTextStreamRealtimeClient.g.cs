@@ -4,7 +4,9 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// |
+    /// Bidirectional streaming STT. The client sends a `transcribe_config`<br/>
+    /// message, then a series of `audio_chunk` messages. The server emits<br/>
+    /// interim and final transcription results plus optional VAD events.
     /// </summary>
     public sealed partial class InworldSpeechToTextStreamRealtimeClient : global::System.IDisposable, global::System.IAsyncDisposable
     {

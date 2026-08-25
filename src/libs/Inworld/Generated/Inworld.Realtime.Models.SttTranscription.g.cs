@@ -12,7 +12,8 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("result")]
-        public global::Inworld.Realtime.SttTranscriptionResult? Result { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required global::Inworld.Realtime.SttTranscriptionResult Result { get; set; }
 
         /// <summary>
         /// Additional properties that are not explicitly defined in the schema
@@ -28,9 +29,9 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public SttTranscription(
-            global::Inworld.Realtime.SttTranscriptionResult? result)
+            global::Inworld.Realtime.SttTranscriptionResult result)
         {
-            this.Result = result;
+            this.Result = result ?? throw new global::System.ArgumentNullException(nameof(result));
         }
 
         /// <summary>

@@ -12,7 +12,8 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("transcribe_config")]
-        public global::Inworld.Realtime.SttTranscribeConfigParams? TranscribeConfig { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required global::Inworld.Realtime.SttTranscribeConfigParams TranscribeConfig { get; set; }
 
         /// <summary>
         /// Additional properties that are not explicitly defined in the schema
@@ -28,9 +29,9 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public SttConfigure(
-            global::Inworld.Realtime.SttTranscribeConfigParams? transcribeConfig)
+            global::Inworld.Realtime.SttTranscribeConfigParams transcribeConfig)
         {
-            this.TranscribeConfig = transcribeConfig;
+            this.TranscribeConfig = transcribeConfig ?? throw new global::System.ArgumentNullException(nameof(transcribeConfig));
         }
 
         /// <summary>

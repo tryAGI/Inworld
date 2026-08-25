@@ -12,7 +12,8 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("enableVoiceProfile")]
-        public bool? EnableVoiceProfile { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required bool EnableVoiceProfile { get; set; }
 
         /// <summary>
         /// 
@@ -35,7 +36,7 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public SttVoiceProfileConfig(
-            bool? enableVoiceProfile,
+            bool enableVoiceProfile,
             int? topN)
         {
             this.EnableVoiceProfile = enableVoiceProfile;

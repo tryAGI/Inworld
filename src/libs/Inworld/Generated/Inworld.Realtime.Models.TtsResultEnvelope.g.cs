@@ -4,7 +4,8 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// |
+    /// Server-side result envelope. Exactly one of `contextCreated`,<br/>
+    /// `audioChunk`, `flushCompleted`, or `contextClosed` is populated.
     /// </summary>
     public sealed partial class TtsResultEnvelope
     {
