@@ -9,16 +9,20 @@ namespace Inworld.Realtime
     public sealed partial class SttTranscribeConfigParams
     {
         /// <summary>
-        /// |
+        /// Provider-qualified model ID, e.g. `inworld/inworld-stt-1`,<br/>
+        /// `deepgram/flux-general-en`, `deepgram/flux-general-multi`,<br/>
+        /// `soniox/stt-rt-v5`, or `assemblyai/universal-streaming-multilingual`.
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("modelId")]
-        public string? ModelId { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required string ModelId { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("audioEncoding")]
-        public string? AudioEncoding { get; set; }
+        [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.Realtime.JsonConverters.SttStreamAudioEncodingJsonConverter))]
+        public global::Inworld.Realtime.SttStreamAudioEncoding? AudioEncoding { get; set; }
 
         /// <summary>
         /// 
@@ -96,7 +100,9 @@ namespace Inworld.Realtime
         /// Initializes a new instance of the <see cref="SttTranscribeConfigParams" /> class.
         /// </summary>
         /// <param name="modelId">
-        /// |
+        /// Provider-qualified model ID, e.g. `inworld/inworld-stt-1`,<br/>
+        /// `deepgram/flux-general-en`, `deepgram/flux-general-multi`,<br/>
+        /// `soniox/stt-rt-v5`, or `assemblyai/universal-streaming-multilingual`.
         /// </param>
         /// <param name="audioEncoding"></param>
         /// <param name="language"></param>
@@ -114,8 +120,8 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public SttTranscribeConfigParams(
-            string? modelId,
-            string? audioEncoding,
+            string modelId,
+            global::Inworld.Realtime.SttStreamAudioEncoding? audioEncoding,
             string? language,
             int? sampleRateHertz,
             int? numberOfChannels,
@@ -128,7 +134,7 @@ namespace Inworld.Realtime
             global::Inworld.Realtime.SttInworldSttV1Config? inworldSttV1Config,
             global::Inworld.Realtime.SttVoiceProfileConfig? voiceProfileConfig)
         {
-            this.ModelId = modelId;
+            this.ModelId = modelId ?? throw new global::System.ArgumentNullException(nameof(modelId));
             this.AudioEncoding = audioEncoding;
             this.Language = language;
             this.SampleRateHertz = sampleRateHertz;

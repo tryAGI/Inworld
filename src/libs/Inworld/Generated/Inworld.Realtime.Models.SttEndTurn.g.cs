@@ -12,7 +12,8 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("end_turn")]
-        public object? EndTurn { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required object EndTurn { get; set; }
 
         /// <summary>
         /// Additional properties that are not explicitly defined in the schema
@@ -28,9 +29,9 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public SttEndTurn(
-            object? endTurn)
+            object endTurn)
         {
-            this.EndTurn = endTurn;
+            this.EndTurn = endTurn ?? throw new global::System.ArgumentNullException(nameof(endTurn));
         }
 
         /// <summary>

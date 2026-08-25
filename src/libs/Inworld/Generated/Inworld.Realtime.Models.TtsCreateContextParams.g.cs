@@ -12,13 +12,15 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("voiceId")]
-        public string? VoiceId { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required string VoiceId { get; set; }
 
         /// <summary>
         /// Model identifier, including `inworld-tts-2` for the latest research preview.
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("modelId")]
-        public string? ModelId { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required string ModelId { get; set; }
 
         /// <summary>
         /// Audio output configuration for streaming TTS.
@@ -36,7 +38,8 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("timestampType")]
-        public string? TimestampType { get; set; }
+        [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.Realtime.JsonConverters.StreamTimestampTypeJsonConverter))]
+        public global::Inworld.Realtime.StreamTimestampType? TimestampType { get; set; }
 
         /// <summary>
         /// 
@@ -54,13 +57,15 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("applyTextNormalization")]
-        public string? ApplyTextNormalization { get; set; }
+        [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.Realtime.JsonConverters.StreamApplyTextNormalizationJsonConverter))]
+        public global::Inworld.Realtime.StreamApplyTextNormalization? ApplyTextNormalization { get; set; }
 
         /// <summary>
         /// Variation and expressiveness mode for Realtime TTS-2.
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("deliveryMode")]
-        public string? DeliveryMode { get; set; }
+        [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.Realtime.JsonConverters.StreamDeliveryModeJsonConverter))]
+        public global::Inworld.Realtime.StreamDeliveryMode? DeliveryMode { get; set; }
 
         /// <summary>
         /// 
@@ -72,7 +77,8 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("timestampTransportStrategy")]
-        public string? TimestampTransportStrategy { get; set; }
+        [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.Realtime.JsonConverters.StreamTimestampTransportStrategyJsonConverter))]
+        public global::Inworld.Realtime.StreamTimestampTransportStrategy? TimestampTransportStrategy { get; set; }
 
         /// <summary>
         /// Additional properties that are not explicitly defined in the schema
@@ -104,20 +110,20 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public TtsCreateContextParams(
-            string? voiceId,
-            string? modelId,
+            string voiceId,
+            string modelId,
             global::Inworld.Realtime.StreamAudioConfig? audioConfig,
             double? temperature,
-            string? timestampType,
+            global::Inworld.Realtime.StreamTimestampType? timestampType,
             int? maxBufferDelayMs,
             int? bufferCharThreshold,
-            string? applyTextNormalization,
-            string? deliveryMode,
+            global::Inworld.Realtime.StreamApplyTextNormalization? applyTextNormalization,
+            global::Inworld.Realtime.StreamDeliveryMode? deliveryMode,
             bool? autoMode,
-            string? timestampTransportStrategy)
+            global::Inworld.Realtime.StreamTimestampTransportStrategy? timestampTransportStrategy)
         {
-            this.VoiceId = voiceId;
-            this.ModelId = modelId;
+            this.VoiceId = voiceId ?? throw new global::System.ArgumentNullException(nameof(voiceId));
+            this.ModelId = modelId ?? throw new global::System.ArgumentNullException(nameof(modelId));
             this.AudioConfig = audioConfig;
             this.Temperature = temperature;
             this.TimestampType = timestampType;

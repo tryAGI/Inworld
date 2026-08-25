@@ -12,7 +12,8 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("close_stream")]
-        public object? CloseStream { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required object CloseStream { get; set; }
 
         /// <summary>
         /// Additional properties that are not explicitly defined in the schema
@@ -28,9 +29,9 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public SttCloseStream(
-            object? closeStream)
+            object closeStream)
         {
-            this.CloseStream = closeStream;
+            this.CloseStream = closeStream ?? throw new global::System.ArgumentNullException(nameof(closeStream));
         }
 
         /// <summary>

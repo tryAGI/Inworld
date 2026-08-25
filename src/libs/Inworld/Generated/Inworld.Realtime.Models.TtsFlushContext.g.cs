@@ -12,7 +12,8 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("flush_context")]
-        public object? FlushContext { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required object FlushContext { get; set; }
 
         /// <summary>
         /// 
@@ -35,10 +36,10 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public TtsFlushContext(
-            object? flushContext,
+            object flushContext,
             string? contextId)
         {
-            this.FlushContext = flushContext;
+            this.FlushContext = flushContext ?? throw new global::System.ArgumentNullException(nameof(flushContext));
             this.ContextId = contextId;
         }
 

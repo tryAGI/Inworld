@@ -12,7 +12,8 @@ namespace Inworld.Realtime
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("send_text")]
-        public global::Inworld.Realtime.TtsSendTextParams? SendText { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required global::Inworld.Realtime.TtsSendTextParams SendText { get; set; }
 
         /// <summary>
         /// 
@@ -35,10 +36,10 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public TtsSendText(
-            global::Inworld.Realtime.TtsSendTextParams? sendText,
+            global::Inworld.Realtime.TtsSendTextParams sendText,
             string? contextId)
         {
-            this.SendText = sendText;
+            this.SendText = sendText ?? throw new global::System.ArgumentNullException(nameof(sendText));
             this.ContextId = contextId;
         }
 

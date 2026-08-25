@@ -9,10 +9,12 @@ namespace Inworld.Realtime
     public sealed partial class TtsContextClosed
     {
         /// <summary>
-        /// |
+        /// Server-side result envelope. Exactly one of `contextCreated`,<br/>
+        /// `audioChunk`, `flushCompleted`, or `contextClosed` is populated.
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("result")]
-        public global::Inworld.Realtime.TtsResultEnvelope? Result { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required global::Inworld.Realtime.TtsResultEnvelope Result { get; set; }
 
         /// <summary>
         /// Additional properties that are not explicitly defined in the schema
@@ -24,15 +26,16 @@ namespace Inworld.Realtime
         /// Initializes a new instance of the <see cref="TtsContextClosed" /> class.
         /// </summary>
         /// <param name="result">
-        /// |
+        /// Server-side result envelope. Exactly one of `contextCreated`,<br/>
+        /// `audioChunk`, `flushCompleted`, or `contextClosed` is populated.
         /// </param>
 #if NET7_0_OR_GREATER
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public TtsContextClosed(
-            global::Inworld.Realtime.TtsResultEnvelope? result)
+            global::Inworld.Realtime.TtsResultEnvelope result)
         {
-            this.Result = result;
+            this.Result = result ?? throw new global::System.ArgumentNullException(nameof(result));
         }
 
         /// <summary>

@@ -12,7 +12,8 @@ namespace Inworld.Realtime
         /// Base64-encoded audio bytes whose encoding matches transcribe_config.audioEncoding.
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("content")]
-        public byte[]? Content { get; set; }
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required byte[] Content { get; set; }
 
         /// <summary>
         /// Additional properties that are not explicitly defined in the schema
@@ -30,9 +31,9 @@ namespace Inworld.Realtime
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public SttAudioChunkData(
-            byte[]? content)
+            byte[] content)
         {
-            this.Content = content;
+            this.Content = content ?? throw new global::System.ArgumentNullException(nameof(content));
         }
 
         /// <summary>
