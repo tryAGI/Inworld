@@ -322,11 +322,19 @@ public partial class InworldClient : Meai.ISpeechToTextClient
             };
         }
 
+        var audioEncodingValue =
+            GetStringOption(options, InworldSpeechToTextPropertyNames.AudioEncoding) ??
+            Realtime.SttStreamAudioEncodingExtensions.ToValueString(Realtime.SttStreamAudioEncoding.Linear16);
+        var audioEncoding = Realtime.SttStreamAudioEncodingExtensions.ToEnum(audioEncodingValue) ??
+            throw new ArgumentException(
+                $"Unsupported streaming audio encoding '{audioEncodingValue}'.",
+                nameof(options));
+
         return new Realtime.SttTranscribeConfigParams
         {
             ModelId = NormalizeSttModelId(options?.ModelId, DefaultStreamingModelId),
             Language = options?.SpeechLanguage,
-            AudioEncoding = GetStringOption(options, InworldSpeechToTextPropertyNames.AudioEncoding) ?? "LINEAR16",
+            AudioEncoding = audioEncoding,
             SampleRateHertz = GetIntOption(options, InworldSpeechToTextPropertyNames.SampleRateHertz) ?? 16000,
             NumberOfChannels = GetIntOption(options, InworldSpeechToTextPropertyNames.NumberOfChannels) ?? 1,
             InactivityTimeoutSeconds = GetIntOption(options, InworldSpeechToTextPropertyNames.InactivityTimeoutSeconds),

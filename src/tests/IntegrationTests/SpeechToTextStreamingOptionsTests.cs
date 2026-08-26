@@ -17,7 +17,7 @@ public partial class Tests
             SpeechLanguage = "ru-RU",
             AdditionalProperties = new Meai.AdditionalPropertiesDictionary
             {
-                [InworldSpeechToTextPropertyNames.AudioEncoding] = "MULAW",
+                [InworldSpeechToTextPropertyNames.AudioEncoding] = "MP3",
                 [InworldSpeechToTextPropertyNames.SampleRateHertz] = 8000,
                 [InworldSpeechToTextPropertyNames.NumberOfChannels] = 2,
                 [InworldSpeechToTextPropertyNames.InactivityTimeoutSeconds] = 15,
@@ -32,7 +32,7 @@ public partial class Tests
 
         config.ModelId.Should().Be(InworldClient.SonioxSttRealtimeV5ModelId);
         config.Language.Should().Be("ru-RU");
-        config.AudioEncoding.Should().Be("MULAW");
+        config.AudioEncoding.Should().Be(Realtime.SttStreamAudioEncoding.Mp3);
         config.SampleRateHertz.Should().Be(8000);
         config.NumberOfChannels.Should().Be(2);
         config.InactivityTimeoutSeconds.Should().Be(15);
