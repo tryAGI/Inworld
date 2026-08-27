@@ -4,12 +4,12 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class TtsCreateContextParams
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("voiceId")]
         [global::System.Text.Json.Serialization.JsonRequired]
@@ -29,32 +29,32 @@ namespace Inworld.Realtime
         public global::Inworld.Realtime.StreamAudioConfig? AudioConfig { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("temperature")]
         public double? Temperature { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("timestampType")]
         [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.Realtime.JsonConverters.StreamTimestampTypeJsonConverter))]
         public global::Inworld.Realtime.StreamTimestampType? TimestampType { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("maxBufferDelayMs")]
         public int? MaxBufferDelayMs { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("bufferCharThreshold")]
         public int? BufferCharThreshold { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("applyTextNormalization")]
         [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.Realtime.JsonConverters.StreamApplyTextNormalizationJsonConverter))]
@@ -68,13 +68,13 @@ namespace Inworld.Realtime
         public global::Inworld.Realtime.StreamDeliveryMode? DeliveryMode { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("autoMode")]
         public bool? AutoMode { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("timestampTransportStrategy")]
         [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.Realtime.JsonConverters.StreamTimestampTransportStrategyJsonConverter))]

@@ -4,24 +4,24 @@
 namespace Inworld
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class PreviewVoice
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("voiceId")]
         public string? VoiceId { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("previewText")]
         public string? PreviewText { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("previewAudio")]
         public byte[]? PreviewAudio { get; set; }

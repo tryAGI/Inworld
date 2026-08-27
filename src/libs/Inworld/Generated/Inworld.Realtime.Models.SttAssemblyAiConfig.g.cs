@@ -4,30 +4,30 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class SttAssemblyAiConfig
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("minEndOfTurnSilenceWhenConfident")]
         public int? MinEndOfTurnSilenceWhenConfident { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("maxTurnSilence")]
         public int? MaxTurnSilence { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("vadThreshold")]
         public float? VadThreshold { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("prompt")]
         public string? Prompt { get; set; }

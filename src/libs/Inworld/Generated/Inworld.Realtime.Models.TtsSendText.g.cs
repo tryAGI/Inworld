@@ -4,19 +4,19 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class TtsSendText
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("send_text")]
         [global::System.Text.Json.Serialization.JsonRequired]
         public required global::Inworld.Realtime.TtsSendTextParams SendText { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("contextId")]
         public string? ContextId { get; set; }

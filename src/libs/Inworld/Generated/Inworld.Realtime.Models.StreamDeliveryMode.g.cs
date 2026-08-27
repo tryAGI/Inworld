@@ -9,15 +9,15 @@ namespace Inworld.Realtime
     public enum StreamDeliveryMode
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Balanced,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Creative,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Stable,
     }

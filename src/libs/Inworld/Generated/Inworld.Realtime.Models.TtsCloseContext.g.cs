@@ -4,19 +4,19 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class TtsCloseContext
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("close_context")]
         [global::System.Text.Json.Serialization.JsonRequired]
         public required object CloseContext { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("contextId")]
         public string? ContextId { get; set; }

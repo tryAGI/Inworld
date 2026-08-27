@@ -4,18 +4,18 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class TtsStreamUsage
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("processedCharactersCount")]
         public int? ProcessedCharactersCount { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("modelId")]
         public string? ModelId { get; set; }

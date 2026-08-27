@@ -9,23 +9,23 @@ namespace Inworld
     public enum SttAudioEncoding
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         AutoDetect,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Flac,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Linear16,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Mp3,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         OggOpus,
     }

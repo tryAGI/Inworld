@@ -9,15 +9,15 @@ namespace Inworld
     public enum ApplyTextNormalization
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         ApplyTextNormalizationUnspecified,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Off,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         On,
     }

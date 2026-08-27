@@ -4,20 +4,20 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public enum StreamApplyTextNormalization
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         ApplyTextNormalizationUnspecified,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Off,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         On,
     }

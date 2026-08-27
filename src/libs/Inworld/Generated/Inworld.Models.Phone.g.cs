@@ -15,13 +15,13 @@ namespace Inworld
         public string? PhoneSymbol { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("startTimeSeconds")]
         public double? StartTimeSeconds { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("durationSeconds")]
         public double? DurationSeconds { get; set; }

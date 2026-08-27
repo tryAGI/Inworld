@@ -4,7 +4,7 @@
 namespace Inworld
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class DesignVoiceRequest
     {

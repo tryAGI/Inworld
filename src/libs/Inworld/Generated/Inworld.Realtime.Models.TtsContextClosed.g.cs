@@ -4,7 +4,7 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class TtsContextClosed
     {

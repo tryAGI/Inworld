@@ -20,7 +20,7 @@ namespace Inworld.JsonConverters
                     {
                         return global::Inworld.AudioEncodingExtensions.ToEnum(stringValue) ?? default;
                     }
-                    
+
                     break;
                 }
                 case global::System.Text.Json.JsonTokenType.Number:

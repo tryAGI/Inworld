@@ -4,7 +4,7 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class TtsAudioChunkData
     {
@@ -15,13 +15,13 @@ namespace Inworld.Realtime
         public byte[]? AudioContent { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("usage")]
         public global::Inworld.Realtime.TtsStreamUsage? Usage { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("timestampInfo")]
         public global::Inworld.Realtime.TtsTimestampInfo? TimestampInfo { get; set; }

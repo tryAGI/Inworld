@@ -4,42 +4,42 @@
 namespace Inworld
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class ModelSpec
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("inputModalities")]
         public global::System.Collections.Generic.IList<global::Inworld.Modality>? InputModalities { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("outputModalities")]
         public global::System.Collections.Generic.IList<global::Inworld.Modality>? OutputModalities { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("contextLength")]
         public int? ContextLength { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("maxCompletionTokens")]
         public int? MaxCompletionTokens { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("supportedParameters")]
         public global::System.Collections.Generic.IList<string>? SupportedParameters { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("capabilities")]
         public global::Inworld.ModelCapabilities? Capabilities { get; set; }

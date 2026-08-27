@@ -4,24 +4,24 @@
 namespace Inworld
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class WordTimestamp
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("word")]
         public string? Word { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("startTimeMs")]
         public int? StartTimeMs { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("endTimeMs")]
         public int? EndTimeMs { get; set; }

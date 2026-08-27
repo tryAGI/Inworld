@@ -4,12 +4,12 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class SttAudioChunk
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("audio_chunk")]
         [global::System.Text.Json.Serialization.JsonRequired]

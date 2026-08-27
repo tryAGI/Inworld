@@ -4,7 +4,7 @@
 namespace Inworld
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class CloneVoiceResponse
     {
@@ -15,7 +15,7 @@ namespace Inworld
         public global::Inworld.Voice? Voice { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("audioSamplesValidated")]
         public global::System.Collections.Generic.IList<global::Inworld.ValidatedAudioSample>? AudioSamplesValidated { get; set; }
