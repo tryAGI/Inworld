@@ -9,7 +9,7 @@ namespace Inworld
     public sealed partial class VoiceProfileConfig
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("enableVoiceProfile")]
         public bool? EnableVoiceProfile { get; set; }

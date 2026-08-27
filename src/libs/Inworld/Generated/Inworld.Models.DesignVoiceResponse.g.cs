@@ -4,18 +4,18 @@
 namespace Inworld
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class DesignVoiceResponse
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("langCode")]
         public string? LangCode { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("previewVoices")]
         public global::System.Collections.Generic.IList<global::Inworld.PreviewVoice>? PreviewVoices { get; set; }

@@ -4,18 +4,18 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class SttInworldSttV1Config
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("minEndOfTurnSilenceWhenConfident")]
         public int? MinEndOfTurnSilenceWhenConfident { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("vadThreshold")]
         public float? VadThreshold { get; set; }

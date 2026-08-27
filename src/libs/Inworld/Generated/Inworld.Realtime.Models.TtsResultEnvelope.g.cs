@@ -10,7 +10,7 @@ namespace Inworld.Realtime
     public sealed partial class TtsResultEnvelope
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("contextId")]
         public string? ContextId { get; set; }
@@ -22,25 +22,25 @@ namespace Inworld.Realtime
         public global::Inworld.Realtime.StreamStatus? Status { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("contextCreated")]
         public global::Inworld.Realtime.TtsCreateContextParams? ContextCreated { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("audioChunk")]
         public global::Inworld.Realtime.TtsAudioChunkData? AudioChunk { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("flushCompleted")]
         public object? FlushCompleted { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("contextClosed")]
         public object? ContextClosed { get; set; }

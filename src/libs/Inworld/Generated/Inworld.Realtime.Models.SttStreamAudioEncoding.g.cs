@@ -4,32 +4,32 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public enum SttStreamAudioEncoding
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         AudioEncodingUnspecified,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         AutoDetect,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Flac,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Linear16,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Mp3,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         OggOpus,
     }

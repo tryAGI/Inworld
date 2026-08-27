@@ -9,15 +9,15 @@ namespace Inworld
     public enum TimestampType
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Character,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         TimestampTypeUnspecified,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Word,
     }

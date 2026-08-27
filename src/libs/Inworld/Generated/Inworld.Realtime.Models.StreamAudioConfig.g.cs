@@ -9,26 +9,26 @@ namespace Inworld.Realtime
     public sealed partial class StreamAudioConfig
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("audioEncoding")]
         [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.Realtime.JsonConverters.StreamAudioEncodingJsonConverter))]
         public global::Inworld.Realtime.StreamAudioEncoding? AudioEncoding { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("sampleRateHertz")]
         public int? SampleRateHertz { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("bitRate")]
         public int? BitRate { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("speakingRate")]
         public double? SpeakingRate { get; set; }

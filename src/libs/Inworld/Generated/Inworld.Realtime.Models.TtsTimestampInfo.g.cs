@@ -4,18 +4,18 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class TtsTimestampInfo
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("wordAlignment")]
         public global::Inworld.Realtime.TtsWordAlignment? WordAlignment { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("characterAlignment")]
         public global::Inworld.Realtime.TtsCharacterAlignment? CharacterAlignment { get; set; }

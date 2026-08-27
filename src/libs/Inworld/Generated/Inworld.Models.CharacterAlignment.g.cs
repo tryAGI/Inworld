@@ -9,19 +9,19 @@ namespace Inworld
     public sealed partial class CharacterAlignment
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("characters")]
         public global::System.Collections.Generic.IList<string>? Characters { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("characterStartTimeSeconds")]
         public global::System.Collections.Generic.IList<double>? CharacterStartTimeSeconds { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("characterEndTimeSeconds")]
         public global::System.Collections.Generic.IList<double>? CharacterEndTimeSeconds { get; set; }

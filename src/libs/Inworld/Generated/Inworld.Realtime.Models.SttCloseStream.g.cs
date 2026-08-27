@@ -4,12 +4,12 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class SttCloseStream
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("close_stream")]
         [global::System.Text.Json.Serialization.JsonRequired]

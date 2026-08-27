@@ -4,20 +4,20 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public enum StreamTimestampTransportStrategy
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Async,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Sync,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         TimestampTransportStrategyUnspecified,
     }

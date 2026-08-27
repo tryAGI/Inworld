@@ -4,20 +4,20 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public enum StreamTimestampType
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Character,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         TimestampTypeUnspecified,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Word,
     }

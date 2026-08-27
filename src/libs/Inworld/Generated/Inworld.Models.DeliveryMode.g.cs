@@ -9,15 +9,15 @@ namespace Inworld
     public enum DeliveryMode
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Balanced,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Creative,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Stable,
     }

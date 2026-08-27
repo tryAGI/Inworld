@@ -20,7 +20,7 @@ namespace Inworld.Realtime.JsonConverters
                     {
                         return global::Inworld.Realtime.SttStreamAudioEncodingExtensions.ToEnum(stringValue);
                     }
-                    
+
                     break;
                 }
                 case global::System.Text.Json.JsonTokenType.Number:

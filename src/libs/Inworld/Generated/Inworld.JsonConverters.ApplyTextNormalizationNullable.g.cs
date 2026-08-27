@@ -20,7 +20,7 @@ namespace Inworld.JsonConverters
                     {
                         return global::Inworld.ApplyTextNormalizationExtensions.ToEnum(stringValue);
                     }
-                    
+
                     break;
                 }
                 case global::System.Text.Json.JsonTokenType.Number:

@@ -5,12 +5,12 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public readonly partial struct SpeechToTextStreamServerEvent : global::System.IEquatable<SpeechToTextStreamServerEvent>
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.SttTranscription? SttTranscription { get; init; }
@@ -19,7 +19,7 @@ namespace Inworld.Realtime
 #endif
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         [global::System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(SttTranscription))]
@@ -27,7 +27,7 @@ namespace Inworld.Realtime
         public bool IsSttTranscription => SttTranscription != null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool TryPickSttTranscription(
 #if NET6_0_OR_GREATER
@@ -40,14 +40,14 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public global::Inworld.Realtime.SttTranscription PickSttTranscription() => IsSttTranscription
             ? SttTranscription!
             : throw new global::System.InvalidOperationException($"Expected union variant 'SttTranscription' but the value was {ToString()}.");
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.SttUsage? SttUsage { get; init; }
@@ -56,7 +56,7 @@ namespace Inworld.Realtime
 #endif
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         [global::System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(SttUsage))]
@@ -64,7 +64,7 @@ namespace Inworld.Realtime
         public bool IsSttUsage => SttUsage != null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool TryPickSttUsage(
 #if NET6_0_OR_GREATER
@@ -77,14 +77,14 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public global::Inworld.Realtime.SttUsage PickSttUsage() => IsSttUsage
             ? SttUsage!
             : throw new global::System.InvalidOperationException($"Expected union variant 'SttUsage' but the value was {ToString()}.");
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.SttSpeechStarted? SttStarted { get; init; }
@@ -93,7 +93,7 @@ namespace Inworld.Realtime
 #endif
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         [global::System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(SttStarted))]
@@ -101,7 +101,7 @@ namespace Inworld.Realtime
         public bool IsSttStarted => SttStarted != null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool TryPickSttStarted(
 #if NET6_0_OR_GREATER
@@ -114,23 +114,23 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public global::Inworld.Realtime.SttSpeechStarted PickSttStarted() => IsSttStarted
             ? SttStarted!
             : throw new global::System.InvalidOperationException($"Expected union variant 'SttStarted' but the value was {ToString()}.");
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator SpeechToTextStreamServerEvent(global::Inworld.Realtime.SttTranscription value) => new SpeechToTextStreamServerEvent((global::Inworld.Realtime.SttTranscription?)value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator global::Inworld.Realtime.SttTranscription?(SpeechToTextStreamServerEvent @this) => @this.SttTranscription;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public SpeechToTextStreamServerEvent(global::Inworld.Realtime.SttTranscription? value)
         {
@@ -138,22 +138,22 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static SpeechToTextStreamServerEvent FromSttTranscription(global::Inworld.Realtime.SttTranscription? value) => new SpeechToTextStreamServerEvent(value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator SpeechToTextStreamServerEvent(global::Inworld.Realtime.SttUsage value) => new SpeechToTextStreamServerEvent((global::Inworld.Realtime.SttUsage?)value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator global::Inworld.Realtime.SttUsage?(SpeechToTextStreamServerEvent @this) => @this.SttUsage;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public SpeechToTextStreamServerEvent(global::Inworld.Realtime.SttUsage? value)
         {
@@ -161,22 +161,22 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static SpeechToTextStreamServerEvent FromSttUsage(global::Inworld.Realtime.SttUsage? value) => new SpeechToTextStreamServerEvent(value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator SpeechToTextStreamServerEvent(global::Inworld.Realtime.SttSpeechStarted value) => new SpeechToTextStreamServerEvent((global::Inworld.Realtime.SttSpeechStarted?)value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator global::Inworld.Realtime.SttSpeechStarted?(SpeechToTextStreamServerEvent @this) => @this.SttStarted;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public SpeechToTextStreamServerEvent(global::Inworld.Realtime.SttSpeechStarted? value)
         {
@@ -184,12 +184,12 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static SpeechToTextStreamServerEvent FromSttStarted(global::Inworld.Realtime.SttSpeechStarted? value) => new SpeechToTextStreamServerEvent(value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public SpeechToTextStreamServerEvent(
             global::Inworld.Realtime.SttTranscription? sttTranscription,
@@ -203,25 +203,25 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public object? Object =>
             SttStarted as object ??
             SttUsage as object ??
-            SttTranscription as object 
+            SttTranscription as object
             ;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public override string? ToString() =>
             SttTranscription?.ToString() ??
             SttUsage?.ToString() ??
-            SttStarted?.ToString() 
+            SttStarted?.ToString()
             ;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool Validate()
         {
@@ -229,7 +229,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public TResult? Match<TResult>(
             global::System.Func<global::Inworld.Realtime.SttTranscription, TResult>? sttTranscription = null,
@@ -259,7 +259,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Match(
             global::System.Action<global::Inworld.Realtime.SttTranscription>? sttTranscription = null,
@@ -289,7 +289,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Switch(
             global::System.Action<global::Inworld.Realtime.SttTranscription>? sttTranscription = null,
@@ -317,7 +317,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public override int GetHashCode()
         {
@@ -340,19 +340,19 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool Equals(SpeechToTextStreamServerEvent other)
         {
             return
                 global::System.Collections.Generic.EqualityComparer<global::Inworld.Realtime.SttTranscription?>.Default.Equals(SttTranscription, other.SttTranscription) &&
                 global::System.Collections.Generic.EqualityComparer<global::Inworld.Realtime.SttUsage?>.Default.Equals(SttUsage, other.SttUsage) &&
-                global::System.Collections.Generic.EqualityComparer<global::Inworld.Realtime.SttSpeechStarted?>.Default.Equals(SttStarted, other.SttStarted) 
+                global::System.Collections.Generic.EqualityComparer<global::Inworld.Realtime.SttSpeechStarted?>.Default.Equals(SttStarted, other.SttStarted)
                 ;
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static bool operator ==(SpeechToTextStreamServerEvent obj1, SpeechToTextStreamServerEvent obj2)
         {
@@ -360,7 +360,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static bool operator !=(SpeechToTextStreamServerEvent obj1, SpeechToTextStreamServerEvent obj2)
         {
@@ -368,7 +368,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public override bool Equals(object? obj)
         {

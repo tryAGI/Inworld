@@ -285,7 +285,7 @@ namespace Inworld.Realtime
         public event global::System.EventHandler<AutoSDKWebSocketMessageEventArgs<global::Inworld.Realtime.TtsContextClosed>>? TtsContextClosedReceived;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 
         public global::System.Text.Json.Serialization.JsonSerializerContext JsonSerializerContext { get; set; } = global::Inworld.Realtime.RealtimeSourceGenerationContext.Default;

@@ -6,7 +6,7 @@ namespace Inworld.Realtime
     public sealed partial class InworldSpeechToTextStreamRealtimeClient
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="message">The message to send.</param>
         /// <param name="cancellationToken">A cancellation token.</param>

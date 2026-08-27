@@ -5,12 +5,12 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public readonly partial struct TextToSpeechStreamServerEvent : global::System.IEquatable<TextToSpeechStreamServerEvent>
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.TtsContextCreated? TtsContextCreated { get; init; }
@@ -19,7 +19,7 @@ namespace Inworld.Realtime
 #endif
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         [global::System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(TtsContextCreated))]
@@ -27,7 +27,7 @@ namespace Inworld.Realtime
         public bool IsTtsContextCreated => TtsContextCreated != null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool TryPickTtsContextCreated(
 #if NET6_0_OR_GREATER
@@ -40,14 +40,14 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public global::Inworld.Realtime.TtsContextCreated PickTtsContextCreated() => IsTtsContextCreated
             ? TtsContextCreated!
             : throw new global::System.InvalidOperationException($"Expected union variant 'TtsContextCreated' but the value was {ToString()}.");
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.TtsAudioChunk? TtsAudioChunk { get; init; }
@@ -56,7 +56,7 @@ namespace Inworld.Realtime
 #endif
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         [global::System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(TtsAudioChunk))]
@@ -64,7 +64,7 @@ namespace Inworld.Realtime
         public bool IsTtsAudioChunk => TtsAudioChunk != null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool TryPickTtsAudioChunk(
 #if NET6_0_OR_GREATER
@@ -77,14 +77,14 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public global::Inworld.Realtime.TtsAudioChunk PickTtsAudioChunk() => IsTtsAudioChunk
             ? TtsAudioChunk!
             : throw new global::System.InvalidOperationException($"Expected union variant 'TtsAudioChunk' but the value was {ToString()}.");
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.TtsFlushCompleted? TtsFlushCompleted { get; init; }
@@ -93,7 +93,7 @@ namespace Inworld.Realtime
 #endif
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         [global::System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(TtsFlushCompleted))]
@@ -101,7 +101,7 @@ namespace Inworld.Realtime
         public bool IsTtsFlushCompleted => TtsFlushCompleted != null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool TryPickTtsFlushCompleted(
 #if NET6_0_OR_GREATER
@@ -114,14 +114,14 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public global::Inworld.Realtime.TtsFlushCompleted PickTtsFlushCompleted() => IsTtsFlushCompleted
             ? TtsFlushCompleted!
             : throw new global::System.InvalidOperationException($"Expected union variant 'TtsFlushCompleted' but the value was {ToString()}.");
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         public global::Inworld.Realtime.TtsContextClosed? TtsContextClosed { get; init; }
@@ -130,7 +130,7 @@ namespace Inworld.Realtime
 #endif
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
 #if NET6_0_OR_GREATER
         [global::System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(TtsContextClosed))]
@@ -138,7 +138,7 @@ namespace Inworld.Realtime
         public bool IsTtsContextClosed => TtsContextClosed != null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool TryPickTtsContextClosed(
 #if NET6_0_OR_GREATER
@@ -151,23 +151,23 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public global::Inworld.Realtime.TtsContextClosed PickTtsContextClosed() => IsTtsContextClosed
             ? TtsContextClosed!
             : throw new global::System.InvalidOperationException($"Expected union variant 'TtsContextClosed' but the value was {ToString()}.");
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator TextToSpeechStreamServerEvent(global::Inworld.Realtime.TtsContextCreated value) => new TextToSpeechStreamServerEvent((global::Inworld.Realtime.TtsContextCreated?)value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator global::Inworld.Realtime.TtsContextCreated?(TextToSpeechStreamServerEvent @this) => @this.TtsContextCreated;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public TextToSpeechStreamServerEvent(global::Inworld.Realtime.TtsContextCreated? value)
         {
@@ -175,22 +175,22 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static TextToSpeechStreamServerEvent FromTtsContextCreated(global::Inworld.Realtime.TtsContextCreated? value) => new TextToSpeechStreamServerEvent(value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator TextToSpeechStreamServerEvent(global::Inworld.Realtime.TtsAudioChunk value) => new TextToSpeechStreamServerEvent((global::Inworld.Realtime.TtsAudioChunk?)value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator global::Inworld.Realtime.TtsAudioChunk?(TextToSpeechStreamServerEvent @this) => @this.TtsAudioChunk;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public TextToSpeechStreamServerEvent(global::Inworld.Realtime.TtsAudioChunk? value)
         {
@@ -198,22 +198,22 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static TextToSpeechStreamServerEvent FromTtsAudioChunk(global::Inworld.Realtime.TtsAudioChunk? value) => new TextToSpeechStreamServerEvent(value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator TextToSpeechStreamServerEvent(global::Inworld.Realtime.TtsFlushCompleted value) => new TextToSpeechStreamServerEvent((global::Inworld.Realtime.TtsFlushCompleted?)value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator global::Inworld.Realtime.TtsFlushCompleted?(TextToSpeechStreamServerEvent @this) => @this.TtsFlushCompleted;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public TextToSpeechStreamServerEvent(global::Inworld.Realtime.TtsFlushCompleted? value)
         {
@@ -221,22 +221,22 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static TextToSpeechStreamServerEvent FromTtsFlushCompleted(global::Inworld.Realtime.TtsFlushCompleted? value) => new TextToSpeechStreamServerEvent(value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator TextToSpeechStreamServerEvent(global::Inworld.Realtime.TtsContextClosed value) => new TextToSpeechStreamServerEvent((global::Inworld.Realtime.TtsContextClosed?)value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static implicit operator global::Inworld.Realtime.TtsContextClosed?(TextToSpeechStreamServerEvent @this) => @this.TtsContextClosed;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public TextToSpeechStreamServerEvent(global::Inworld.Realtime.TtsContextClosed? value)
         {
@@ -244,12 +244,12 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static TextToSpeechStreamServerEvent FromTtsContextClosed(global::Inworld.Realtime.TtsContextClosed? value) => new TextToSpeechStreamServerEvent(value);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public TextToSpeechStreamServerEvent(
             global::Inworld.Realtime.TtsContextCreated? ttsContextCreated,
@@ -265,27 +265,27 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public object? Object =>
             TtsContextClosed as object ??
             TtsFlushCompleted as object ??
             TtsAudioChunk as object ??
-            TtsContextCreated as object 
+            TtsContextCreated as object
             ;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public override string? ToString() =>
             TtsContextCreated?.ToString() ??
             TtsAudioChunk?.ToString() ??
             TtsFlushCompleted?.ToString() ??
-            TtsContextClosed?.ToString() 
+            TtsContextClosed?.ToString()
             ;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool Validate()
         {
@@ -293,7 +293,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public TResult? Match<TResult>(
             global::System.Func<global::Inworld.Realtime.TtsContextCreated, TResult>? ttsContextCreated = null,
@@ -328,7 +328,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Match(
             global::System.Action<global::Inworld.Realtime.TtsContextCreated>? ttsContextCreated = null,
@@ -364,7 +364,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Switch(
             global::System.Action<global::Inworld.Realtime.TtsContextCreated>? ttsContextCreated = null,
@@ -397,7 +397,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public override int GetHashCode()
         {
@@ -422,7 +422,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool Equals(TextToSpeechStreamServerEvent other)
         {
@@ -430,12 +430,12 @@ namespace Inworld.Realtime
                 global::System.Collections.Generic.EqualityComparer<global::Inworld.Realtime.TtsContextCreated?>.Default.Equals(TtsContextCreated, other.TtsContextCreated) &&
                 global::System.Collections.Generic.EqualityComparer<global::Inworld.Realtime.TtsAudioChunk?>.Default.Equals(TtsAudioChunk, other.TtsAudioChunk) &&
                 global::System.Collections.Generic.EqualityComparer<global::Inworld.Realtime.TtsFlushCompleted?>.Default.Equals(TtsFlushCompleted, other.TtsFlushCompleted) &&
-                global::System.Collections.Generic.EqualityComparer<global::Inworld.Realtime.TtsContextClosed?>.Default.Equals(TtsContextClosed, other.TtsContextClosed) 
+                global::System.Collections.Generic.EqualityComparer<global::Inworld.Realtime.TtsContextClosed?>.Default.Equals(TtsContextClosed, other.TtsContextClosed)
                 ;
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static bool operator ==(TextToSpeechStreamServerEvent obj1, TextToSpeechStreamServerEvent obj2)
         {
@@ -443,7 +443,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static bool operator !=(TextToSpeechStreamServerEvent obj1, TextToSpeechStreamServerEvent obj2)
         {
@@ -451,7 +451,7 @@ namespace Inworld.Realtime
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public override bool Equals(object? obj)
         {

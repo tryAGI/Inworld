@@ -9,15 +9,15 @@ namespace Inworld
     public enum VoiceSource
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Ivc,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Pvc,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         System,
     }

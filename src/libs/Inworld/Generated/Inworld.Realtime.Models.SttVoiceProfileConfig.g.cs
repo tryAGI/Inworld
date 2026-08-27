@@ -4,19 +4,19 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class SttVoiceProfileConfig
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("enableVoiceProfile")]
         [global::System.Text.Json.Serialization.JsonRequired]
         public required bool EnableVoiceProfile { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("topN")]
         public int? TopN { get; set; }

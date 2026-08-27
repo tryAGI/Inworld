@@ -4,7 +4,7 @@
 namespace Inworld.Realtime
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class SttTranscribeConfigParams
     {
@@ -18,74 +18,74 @@ namespace Inworld.Realtime
         public required string ModelId { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("audioEncoding")]
         [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.Realtime.JsonConverters.SttStreamAudioEncodingJsonConverter))]
         public global::Inworld.Realtime.SttStreamAudioEncoding? AudioEncoding { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("language")]
         public string? Language { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("sampleRateHertz")]
         public int? SampleRateHertz { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("numberOfChannels")]
         public int? NumberOfChannels { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("inactivityTimeoutSeconds")]
         public int? InactivityTimeoutSeconds { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("endOfTurnConfidenceThreshold")]
         public float? EndOfTurnConfidenceThreshold { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("prompts")]
         public global::System.Collections.Generic.IList<string>? Prompts { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("includeWordTimestamps")]
         public bool? IncludeWordTimestamps { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("groqConfig")]
         public global::Inworld.Realtime.SttGroqConfig? GroqConfig { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("assemblyaiConfig")]
         public global::Inworld.Realtime.SttAssemblyAiConfig? AssemblyaiConfig { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("inworldSttV1Config")]
         public global::Inworld.Realtime.SttInworldSttV1Config? InworldSttV1Config { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("voiceProfileConfig")]
         public global::Inworld.Realtime.SttVoiceProfileConfig? VoiceProfileConfig { get; set; }

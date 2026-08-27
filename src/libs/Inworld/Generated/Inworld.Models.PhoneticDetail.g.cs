@@ -9,19 +9,19 @@ namespace Inworld
     public sealed partial class PhoneticDetail
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("wordIndex")]
         public int? WordIndex { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("phones")]
         public global::System.Collections.Generic.IList<global::Inworld.Phone>? Phones { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("isPartial")]
         public bool? IsPartial { get; set; }
