@@ -42,6 +42,7 @@ namespace Inworld.Realtime
             typeof(global::Inworld.Realtime.JsonConverters.SpeechToTextStreamServerEventJsonConverter),
         })]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.JsonSerializerContextTypes))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.List<object>), TypeInfoPropertyName = "SystemCollectionsGeneric_ObjectList")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.StreamAudioEncoding), TypeInfoPropertyName = "StreamAudioEncoding2")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.StreamTimestampType), TypeInfoPropertyName = "StreamTimestampType2")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.StreamApplyTextNormalization), TypeInfoPropertyName = "StreamApplyTextNormalization2")]
@@ -99,7 +100,6 @@ namespace Inworld.Realtime
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.SttSpeechStarted))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.TextToSpeechStreamServerEvent), TypeInfoPropertyName = "TextToSpeechStreamServerEvent2")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.SpeechToTextStreamServerEvent), TypeInfoPropertyName = "SpeechToTextStreamServerEvent2")]
-    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.List<object>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.List<string>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.List<double>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.List<global::Inworld.Realtime.SttWordTimestamp>))]
