@@ -23,15 +23,21 @@ public static class InworldClientTools
             async (
                 [Description("The text to synthesize. Max 2,000 characters.")] string text,
                 [Description("Voice identifier (e.g. 'Dennis' or 'Alice'). Use list_voices to discover.")] string voiceId,
-                [Description("Model identifier. Defaults to 'inworld-tts-1.5-max'.")] string? modelId,
+                [Description("Model identifier. Defaults to 'inworld-tts-2'; use 'inworld-tts-2-flash' for minimum latency and cost.")] string? modelId,
+                [Description("Optional BCP-47 language tag such as 'en-US', 'fr-FR', or 'ja-JP'.")] string? language,
+                [Description("Optional English direction for tone, pacing, emotion, or emphasis. Supported by inworld-tts-2.")] string? instruction,
+                [Description("Apply denoising to reduce background noise and synthesis artifacts.")] bool? enhanceGeneration,
                 [Description("Sampling temperature. Range (0, 2]. Defaults to 1.0.")] double? temperature,
                 CancellationToken cancellationToken) =>
             {
                 var response = await client.TextToSpeech.SynthesizeSpeechAsync(
                     text: text,
                     voiceId: voiceId,
-                    modelId: modelId is { Length: > 0 } ? modelId : InworldTtsModels.RealtimeTts15Max,
+                    modelId: modelId is { Length: > 0 } ? modelId : InworldTtsModels.RealtimeTts2,
                     temperature: temperature,
+                    language: language,
+                    instruction: instruction,
+                    enhanceGeneration: enhanceGeneration,
                     cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 return new
@@ -135,20 +141,16 @@ public static class InworldClientTools
 
         return AIFunctionFactory.Create(
             async (
-                [Description("English description of the desired voice. 30–250 characters.")] string designPrompt,
-                [Description("Text to speak in the generated preview. Should produce 1–15 seconds of audio.")] string previewText,
-                [Description("Target language code (e.g. EN_US, JA_JP, ES_ES). Defaults to EN_US.")] string? language,
+                [Description("English description of the desired voice. Up to 1,000 characters; descriptions under 30 characters rarely produce useful results.")] string designPrompt,
+                [Description("Text to speak in the generated preview. Must produce 1–30 seconds of audio.")] string previewText,
+                [Description("Optional BCP-47 target language or locale (e.g. en-US, en-GB, vi). Omit to auto-detect.")] string? language,
                 [Description("Number of preview voices to generate (1–3). Defaults to 1.")] int? numberOfSamples,
                 CancellationToken cancellationToken) =>
             {
-                var langCode = language is { Length: > 0 } l
-                    ? (LangCodeExtensions.ToEnum(l) ?? LangCode.EnUs)
-                    : LangCode.EnUs;
-
                 var response = await client.Voices.DesignVoiceAsync(
                     new DesignVoiceRequest
                     {
-                        LangCode = langCode,
+                        LanguageCode = language,
                         DesignPrompt = designPrompt,
                         PreviewText = previewText,
                         VoiceDesignConfig = numberOfSamples is int n

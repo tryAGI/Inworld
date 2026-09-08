@@ -20,8 +20,13 @@ namespace Inworld
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("langCode")]
         [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.JsonConverters.LangCodeJsonConverter))]
-        [global::System.Text.Json.Serialization.JsonRequired]
-        public required global::Inworld.LangCode LangCode { get; set; }
+        public global::Inworld.LangCode? LangCode { get; set; }
+
+        /// <summary>
+        /// BCP-47 language or locale (for example `en-US`, `en-GB`, or `vi`). Omit to auto-detect from the samples.
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("languageCode")]
+        public string? LanguageCode { get; set; }
 
         /// <summary>
         ///
@@ -58,10 +63,13 @@ namespace Inworld
         /// Initializes a new instance of the <see cref="CloneVoiceRequest" /> class.
         /// </summary>
         /// <param name="displayName"></param>
+        /// <param name="voiceSamples"></param>
         /// <param name="langCode">
         /// BCP-47-like language code used by Inworld voice APIs.
         /// </param>
-        /// <param name="voiceSamples"></param>
+        /// <param name="languageCode">
+        /// BCP-47 language or locale (for example `en-US`, `en-GB`, or `vi`). Omit to auto-detect from the samples.
+        /// </param>
         /// <param name="description"></param>
         /// <param name="tags"></param>
         /// <param name="audioProcessingConfig">
@@ -72,14 +80,16 @@ namespace Inworld
 #endif
         public CloneVoiceRequest(
             string displayName,
-            global::Inworld.LangCode langCode,
             global::System.Collections.Generic.IList<global::Inworld.VoiceSample> voiceSamples,
+            global::Inworld.LangCode? langCode,
+            string? languageCode,
             string? description,
             global::System.Collections.Generic.IList<string>? tags,
             global::Inworld.AudioProcessingConfig? audioProcessingConfig)
         {
             this.DisplayName = displayName ?? throw new global::System.ArgumentNullException(nameof(displayName));
             this.LangCode = langCode;
+            this.LanguageCode = languageCode;
             this.VoiceSamples = voiceSamples ?? throw new global::System.ArgumentNullException(nameof(voiceSamples));
             this.Description = description;
             this.Tags = tags;

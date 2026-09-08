@@ -19,6 +19,10 @@ namespace Inworld.Realtime
         /// <summary>
         ///
         /// </summary>
+        DeliveryModeUnspecified,
+        /// <summary>
+        ///
+        /// </summary>
         Stable,
     }
 
@@ -36,6 +40,7 @@ namespace Inworld.Realtime
             {
                 StreamDeliveryMode.Balanced => "BALANCED",
                 StreamDeliveryMode.Creative => "CREATIVE",
+                StreamDeliveryMode.DeliveryModeUnspecified => "DELIVERY_MODE_UNSPECIFIED",
                 StreamDeliveryMode.Stable => "STABLE",
                 _ => throw new global::System.ArgumentOutOfRangeException(nameof(value), value, null),
             };
@@ -49,6 +54,7 @@ namespace Inworld.Realtime
             {
                 "BALANCED" => StreamDeliveryMode.Balanced,
                 "CREATIVE" => StreamDeliveryMode.Creative,
+                "DELIVERY_MODE_UNSPECIFIED" => StreamDeliveryMode.DeliveryModeUnspecified,
                 "STABLE" => StreamDeliveryMode.Stable,
                 _ => null,
             };

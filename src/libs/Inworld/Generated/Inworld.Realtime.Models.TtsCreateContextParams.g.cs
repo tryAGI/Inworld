@@ -16,7 +16,7 @@ namespace Inworld.Realtime
         public required string VoiceId { get; set; }
 
         /// <summary>
-        /// Model identifier, including `inworld-tts-2` for the latest research preview.
+        /// Model identifier. Use `inworld-tts-2` for flagship quality or `inworld-tts-2-flash` for the lowest latency and cost.
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("modelId")]
         [global::System.Text.Json.Serialization.JsonRequired]
@@ -81,6 +81,12 @@ namespace Inworld.Realtime
         public global::Inworld.Realtime.StreamTimestampTransportStrategy? TimestampTransportStrategy { get; set; }
 
         /// <summary>
+        /// BCP-47 language tag (for example `en-US`, `fr-FR`, or `ja-JP`). Omit to auto-detect the input language.
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("language")]
+        public string? Language { get; set; }
+
+        /// <summary>
         /// Additional properties that are not explicitly defined in the schema
         /// </summary>
         [global::System.Text.Json.Serialization.JsonExtensionData]
@@ -91,7 +97,7 @@ namespace Inworld.Realtime
         /// </summary>
         /// <param name="voiceId"></param>
         /// <param name="modelId">
-        /// Model identifier, including `inworld-tts-2` for the latest research preview.
+        /// Model identifier. Use `inworld-tts-2` for flagship quality or `inworld-tts-2-flash` for the lowest latency and cost.
         /// </param>
         /// <param name="audioConfig">
         /// Audio output configuration for streaming TTS.
@@ -106,6 +112,9 @@ namespace Inworld.Realtime
         /// </param>
         /// <param name="autoMode"></param>
         /// <param name="timestampTransportStrategy"></param>
+        /// <param name="language">
+        /// BCP-47 language tag (for example `en-US`, `fr-FR`, or `ja-JP`). Omit to auto-detect the input language.
+        /// </param>
 #if NET7_0_OR_GREATER
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
@@ -120,7 +129,8 @@ namespace Inworld.Realtime
             global::Inworld.Realtime.StreamApplyTextNormalization? applyTextNormalization,
             global::Inworld.Realtime.StreamDeliveryMode? deliveryMode,
             bool? autoMode,
-            global::Inworld.Realtime.StreamTimestampTransportStrategy? timestampTransportStrategy)
+            global::Inworld.Realtime.StreamTimestampTransportStrategy? timestampTransportStrategy,
+            string? language)
         {
             this.VoiceId = voiceId ?? throw new global::System.ArgumentNullException(nameof(voiceId));
             this.ModelId = modelId ?? throw new global::System.ArgumentNullException(nameof(modelId));
@@ -133,6 +143,7 @@ namespace Inworld.Realtime
             this.DeliveryMode = deliveryMode;
             this.AutoMode = autoMode;
             this.TimestampTransportStrategy = timestampTransportStrategy;
+            this.Language = language;
         }
 
         /// <summary>

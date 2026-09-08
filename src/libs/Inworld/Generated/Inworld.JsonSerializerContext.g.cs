@@ -37,6 +37,10 @@ namespace Inworld
 
             typeof(global::Inworld.JsonConverters.DeliveryModeNullableJsonConverter),
 
+            typeof(global::Inworld.JsonConverters.DesignPromptModeJsonConverter),
+
+            typeof(global::Inworld.JsonConverters.DesignPromptModeNullableJsonConverter),
+
             typeof(global::Inworld.JsonConverters.SttAudioEncodingJsonConverter),
 
             typeof(global::Inworld.JsonConverters.SttAudioEncodingNullableJsonConverter),
@@ -65,10 +69,13 @@ namespace Inworld
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.AudioConfig))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(double))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.SynthesizeSpeechRequest))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(bool))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.SynthesisContext))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.PreviousSynthesisRequest))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.IList<global::Inworld.PreviousSynthesisRequest>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Phone))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.PhoneticDetail))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.IList<global::Inworld.Phone>))]
-    [global::System.Text.Json.Serialization.JsonSerializable(typeof(bool))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.WordAlignment))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.IList<double>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.IList<global::Inworld.PhoneticDetail>))]
@@ -90,6 +97,7 @@ namespace Inworld
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.CloneVoiceResponse))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.IList<global::Inworld.ValidatedAudioSample>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.VoiceDesignConfig))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.DesignPromptMode), TypeInfoPropertyName = "DesignPromptMode2")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.DesignVoiceRequest))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.PreviewVoice))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.DesignVoiceResponse))]
@@ -115,6 +123,7 @@ namespace Inworld
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.IList<global::Inworld.Model>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.IList<global::Inworld.LangCode>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.List<string>))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.List<global::Inworld.PreviousSynthesisRequest>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.List<global::Inworld.Phone>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.List<double>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.List<global::Inworld.PhoneticDetail>))]

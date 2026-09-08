@@ -4,13 +4,13 @@
 
 Auto-generated C# SDK for [Inworld AI](https://inworld.ai/) — a realtime voice and AI platform. Covers:
 
-- **REST**: TTS synthesis, STT transcription, voice management (list/get/clone/design/publish/update/delete), LLM model discovery.
+- **REST**: TTS synthesis (Realtime TTS-2 and TTS-2 Flash, steering, multilingual generation, enhancement, and conversation context), STT transcription, voice management (list/get/clone/design/publish/update/delete), LLM model discovery.
 - **Realtime (WebSocket)**: bidirectional TTS streaming (`/tts/v1/voice:streamBidirectional`) and STT streaming (`/stt/v1/transcribe:streamBidirectional`).
 - **MEAI**: `Microsoft.Extensions.AI.ISpeechToTextClient` implementation wired to REST (non-streaming) and WebSocket (streaming) + AIFunction tools.
 - **JWT auth helper**: `InworldJwt.GenerateAsync(key, secret)` mints short-lived tokens via Inworld's IW1-HMAC-SHA256 token-exchange endpoint for client-side (Blazor, browser, mobile) use.
 - **tryAGI.OpenAI**: Inworld's OpenAI-compatible chat completions (`/v1/chat/completions`) are exposed as `CustomProviders.Inworld(...)`.
 
-**Excluded** (for now): Inworld Realtime (OpenAI-Realtime-compatible `/api/v1/realtime/session`), Router long-running management endpoints, REST streaming TTS (`/tts/v1/voice:stream`). The WebSocket TTS channel supersedes the REST streaming path.
+**Excluded** (for now): Inworld Realtime (OpenAI-Realtime-compatible `/api/v1/realtime/session`), Router long-running management endpoints, REST streaming TTS (`/tts/v1/voice:stream`), and Professional Voice Clone training (currently a Portal-only workflow). The WebSocket TTS channel supersedes the REST streaming path; trained professional clones work through every synthesis API by passing their `voiceId`.
 
 ## Build & Test
 
@@ -98,7 +98,7 @@ When Inworld updates the docs, update these files by hand and re-run `./generate
 ### TextToSpeech (`/tts/v1/voice:streamBidirectional`)
 - Client → server: `TtsCreateContext`, `TtsSendText`, `TtsFlushContext`, `TtsCloseContext`
 - Server → client: `TtsContextCreated`, `TtsAudioChunk`, `TtsFlushCompleted`, `TtsContextClosed`
-- Limits: 20 concurrent connections, 5 contexts/connection, 10-min inactivity timeout, 1,000-char text chunks
+- Limits: 20 concurrent connections, 5 contexts/connection, 10-min inactivity timeout, 2,000-char text requests
 
 ### SpeechToText (`/stt/v1/transcribe:streamBidirectional`)
 - Client → server: `SttConfigure` (must be first), `SttAudioChunk`, `SttEndTurn`, `SttCloseStream`

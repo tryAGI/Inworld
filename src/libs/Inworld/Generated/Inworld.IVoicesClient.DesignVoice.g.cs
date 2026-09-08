@@ -40,11 +40,17 @@ namespace Inworld
         /// <param name="langCode">
         /// BCP-47-like language code used by Inworld voice APIs.
         /// </param>
+        /// <param name="languageCode">
+        /// BCP-47 language or locale (for example `en-US`, `en-GB`, or `vi`). Omit to auto-detect.
+        /// </param>
         /// <param name="designPrompt">
-        /// English description of the desired voice. 30–250 characters.
+        /// English description of the desired voice. Up to 1,000 characters; descriptions under 30 characters rarely produce useful results.
+        /// </param>
+        /// <param name="designPromptMode">
+        /// How the voice-design prompt is interpreted.
         /// </param>
         /// <param name="previewText">
-        /// Text to speak in the generated preview. Should produce 1–15 seconds of audio.
+        /// Text to speak in the generated preview. Must produce 1–30 seconds of audio.
         /// </param>
         /// <param name="voiceDesignConfig">
         /// Tuning parameters for voice design.
@@ -53,9 +59,11 @@ namespace Inworld
         /// <param name="cancellationToken">The token to cancel the operation with</param>
         /// <exception cref="global::System.InvalidOperationException"></exception>
         global::System.Threading.Tasks.Task<global::Inworld.DesignVoiceResponse> DesignVoiceAsync(
-            global::Inworld.LangCode langCode,
             string designPrompt,
             string previewText,
+            global::Inworld.LangCode? langCode = default,
+            string? languageCode = default,
+            global::Inworld.DesignPromptMode? designPromptMode = default,
             global::Inworld.VoiceDesignConfig? voiceDesignConfig = default,
             global::Inworld.AutoSDKRequestOptions? requestOptions = default,
             global::System.Threading.CancellationToken cancellationToken = default);

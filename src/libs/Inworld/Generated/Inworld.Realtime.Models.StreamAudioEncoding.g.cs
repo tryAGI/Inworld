@@ -15,6 +15,10 @@ namespace Inworld.Realtime
         /// <summary>
         ///
         /// </summary>
+        AudioEncodingUnspecified,
+        /// <summary>
+        ///
+        /// </summary>
         Linear16,
         /// <summary>
         ///
@@ -51,6 +55,7 @@ namespace Inworld.Realtime
             return value switch
             {
                 StreamAudioEncoding.Alaw => "ALAW",
+                StreamAudioEncoding.AudioEncodingUnspecified => "AUDIO_ENCODING_UNSPECIFIED",
                 StreamAudioEncoding.Linear16 => "LINEAR16",
                 StreamAudioEncoding.Mp3 => "MP3",
                 StreamAudioEncoding.Mulaw => "MULAW",
@@ -68,6 +73,7 @@ namespace Inworld.Realtime
             return value switch
             {
                 "ALAW" => StreamAudioEncoding.Alaw,
+                "AUDIO_ENCODING_UNSPECIFIED" => StreamAudioEncoding.AudioEncodingUnspecified,
                 "LINEAR16" => StreamAudioEncoding.Linear16,
                 "MP3" => StreamAudioEncoding.Mp3,
                 "MULAW" => StreamAudioEncoding.Mulaw,

@@ -9,7 +9,7 @@ namespace Inworld
     public sealed partial class Model
     {
         /// <summary>
-        /// Fully-qualified model id (e.g. `inworld/inworld-tts-1.5-max`).
+        /// Fully-qualified model id (for example `inworld/inworld-tts-2`).
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("model")]
         public string? Model1 { get; set; }
@@ -54,7 +54,7 @@ namespace Inworld
         /// Initializes a new instance of the <see cref="Model" /> class.
         /// </summary>
         /// <param name="model1">
-        /// Fully-qualified model id (e.g. `inworld/inworld-tts-1.5-max`).
+        /// Fully-qualified model id (for example `inworld/inworld-tts-2`).
         /// </param>
         /// <param name="provider"></param>
         /// <param name="modelCreator"></param>

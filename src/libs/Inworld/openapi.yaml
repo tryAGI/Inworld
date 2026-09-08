@@ -411,6 +411,7 @@ components:
       type: string
       description: Variation and expressiveness mode for Realtime TTS-2.
       enum:
+        - DELIVERY_MODE_UNSPECIFIED
         - STABLE
         - BALANCED
         - CREATIVE
@@ -449,7 +450,7 @@ components:
           description: Voice identifier.
         modelId:
           type: string
-          description: Model identifier, e.g. `inworld-tts-2`, `inworld-tts-1.5-max`, or `inworld-tts-1.5-mini`.
+          description: Model identifier. Use `inworld-tts-2` for flagship quality and steering, or `inworld-tts-2-flash` for the lowest latency and cost.
         audioConfig:
           $ref: '#/components/schemas/AudioConfig'
         temperature:
@@ -462,6 +463,36 @@ components:
           $ref: '#/components/schemas/ApplyTextNormalization'
         deliveryMode:
           $ref: '#/components/schemas/DeliveryMode'
+        language:
+          type: string
+          description: BCP-47 language tag (for example `en-US`, `fr-FR`, or `ja-JP`). Omit to auto-detect the input language.
+        instruction:
+          type: string
+          description: English speaking-style direction for the whole request. Supported by `inworld-tts-2`; inline bracketed instructions can override it.
+        enhanceGeneration:
+          type: boolean
+          default: false
+          description: Apply denoising to reduce background noise and synthesis artifacts.
+        synthesisContext:
+          $ref: '#/components/schemas/SynthesisContext'
+
+    PreviousSynthesisRequest:
+      type: object
+      description: Text from an earlier synthesis request in the same conversation.
+      properties:
+        text:
+          type: string
+          description: Text synthesized in the earlier request.
+
+    SynthesisContext:
+      type: object
+      description: Prior synthesis requests used to improve continuity for short or ambiguous text. Context text is not billed.
+      properties:
+        previousRequests:
+          type: array
+          description: Earlier request texts in synthesis order. Their combined text must not exceed 2,000 characters.
+          items:
+            $ref: '#/components/schemas/PreviousSynthesisRequest'
 
     Phone:
       type: object
@@ -613,12 +644,16 @@ components:
 
     CloneVoiceRequest:
       type: object
-      required: [displayName, langCode, voiceSamples]
+      required: [displayName, voiceSamples]
       properties:
         displayName:
           type: string
         langCode:
+          description: Legacy language enum. Prefer `languageCode` for new integrations and set at most one of the two fields.
           $ref: '#/components/schemas/LangCode'
+        languageCode:
+          type: string
+          description: BCP-47 language or locale (for example `en-US`, `en-GB`, or `vi`). Omit to auto-detect from the samples.
         voiceSamples:
           type: array
           minItems: 1
@@ -677,20 +712,32 @@ components:
           format: int32
           description: Number of preview voices to generate. Range [1, 3]. Defaults to 1.
 
+    DesignPromptMode:
+      type: string
+      description: How the voice-design prompt is interpreted.
+      enum:
+        - DESIGN_PROMPT_MODE_ASSISTED
+        - DESIGN_PROMPT_MODE_VERBATIM
+
     DesignVoiceRequest:
       type: object
-      required: [langCode, designPrompt, previewText]
+      required: [designPrompt, previewText]
       properties:
         langCode:
+          description: Legacy language enum. Prefer `languageCode` for new integrations and set at most one of the two fields.
           $ref: '#/components/schemas/LangCode'
+        languageCode:
+          type: string
+          description: BCP-47 language or locale (for example `en-US`, `en-GB`, or `vi`). Omit to auto-detect.
         designPrompt:
           type: string
-          description: English description of the desired voice. 30–250 characters.
-          minLength: 30
-          maxLength: 250
+          description: English description of the desired voice. Up to 1,000 characters; descriptions under 30 characters rarely produce useful results.
+          maxLength: 1000
+        designPromptMode:
+          $ref: '#/components/schemas/DesignPromptMode'
         previewText:
           type: string
-          description: Text to speak in the generated preview. Should produce 1–15 seconds of audio.
+          description: Text to speak in the generated preview. Must produce 1–30 seconds of audio.
         voiceDesignConfig:
           $ref: '#/components/schemas/VoiceDesignConfig'
 
@@ -710,6 +757,9 @@ components:
       properties:
         langCode:
           type: string
+        languageCode:
+          type: string
+          description: Canonical BCP-47 language or locale when returned by the service.
         previewVoices:
           type: array
           items:
@@ -905,7 +955,7 @@ components:
       properties:
         model:
           type: string
-          description: Fully-qualified model id (e.g. `inworld/inworld-tts-1.5-max`).
+          description: Fully-qualified model id (for example `inworld/inworld-tts-2`).
         provider:
           type: string
         modelCreator:

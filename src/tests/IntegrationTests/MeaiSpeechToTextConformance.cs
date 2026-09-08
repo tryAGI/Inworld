@@ -206,7 +206,7 @@ public sealed class InworldMeaiSpeechToTextConformanceTests : MeaiSpeechToTextCo
         var tts = await client.TextToSpeech.SynthesizeSpeechAsync(
             text: phrase,
             voiceId: "Dennis",
-            modelId: "inworld-tts-1.5-max",
+            modelId: InworldTtsModels.RealtimeTts2,
             audioConfig: new AudioConfig
             {
                 AudioEncoding = AudioEncoding.Linear16,

@@ -191,7 +191,7 @@ components:
     # -- Shared TTS config --------------------------------------------------
     StreamAudioEncoding:
       type: string
-      enum: [LINEAR16, MP3, OGG_OPUS, ALAW, MULAW, PCM, WAV]
+      enum: [AUDIO_ENCODING_UNSPECIFIED, LINEAR16, MP3, OGG_OPUS, ALAW, MULAW, PCM, WAV]
 
     StreamTimestampType:
       type: string
@@ -204,7 +204,7 @@ components:
     StreamDeliveryMode:
       type: string
       description: Variation and expressiveness mode for Realtime TTS-2.
-      enum: [STABLE, BALANCED, CREATIVE]
+      enum: [DELIVERY_MODE_UNSPECIFIED, STABLE, BALANCED, CREATIVE]
 
     StreamTimestampTransportStrategy:
       type: string
@@ -249,7 +249,7 @@ components:
           type: string
         modelId:
           type: string
-          description: Model identifier, including `inworld-tts-2` for the latest research preview.
+          description: Model identifier. Use `inworld-tts-2` for flagship quality or `inworld-tts-2-flash` for the lowest latency and cost.
         audioConfig:
           $ref: '#/components/schemas/StreamAudioConfig'
         temperature:
@@ -271,6 +271,9 @@ components:
           type: boolean
         timestampTransportStrategy:
           $ref: '#/components/schemas/StreamTimestampTransportStrategy'
+        language:
+          type: string
+          description: BCP-47 language tag (for example `en-US`, `fr-FR`, or `ja-JP`). Omit to auto-detect the input language.
 
     TtsSendTextParams:
       type: object
@@ -278,8 +281,8 @@ components:
       properties:
         text:
           type: string
-          description: Text to synthesize. Maximum 1000 characters per chunk.
-          maxLength: 1000
+          description: Text to synthesize. Maximum 2,000 characters per request.
+          maxLength: 2000
         flush_context:
           type: object
           description: Optional empty object; if set, triggers flush after text is enqueued.

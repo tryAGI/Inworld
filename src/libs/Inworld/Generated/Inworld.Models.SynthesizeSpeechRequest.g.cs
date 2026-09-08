@@ -23,7 +23,7 @@ namespace Inworld
         public required string VoiceId { get; set; }
 
         /// <summary>
-        /// Model identifier, e.g. `inworld-tts-2`, `inworld-tts-1.5-max`, or `inworld-tts-1.5-mini`.
+        /// Model identifier. Use `inworld-tts-2` for flagship quality and steering, or `inworld-tts-2-flash` for the lowest latency and cost.
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("modelId")]
         [global::System.Text.Json.Serialization.JsonRequired]
@@ -63,6 +63,31 @@ namespace Inworld
         public global::Inworld.DeliveryMode? DeliveryMode { get; set; }
 
         /// <summary>
+        /// BCP-47 language tag (for example `en-US`, `fr-FR`, or `ja-JP`). Omit to auto-detect the input language.
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("language")]
+        public string? Language { get; set; }
+
+        /// <summary>
+        /// English speaking-style direction for the whole request. Supported by `inworld-tts-2`; inline bracketed instructions can override it.
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("instruction")]
+        public string? Instruction { get; set; }
+
+        /// <summary>
+        /// Apply denoising to reduce background noise and synthesis artifacts.<br/>
+        /// Default Value: false
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("enhanceGeneration")]
+        public bool? EnhanceGeneration { get; set; }
+
+        /// <summary>
+        /// Prior synthesis requests used to improve continuity for short or ambiguous text. Context text is not billed.
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("synthesisContext")]
+        public global::Inworld.SynthesisContext? SynthesisContext { get; set; }
+
+        /// <summary>
         /// Additional properties that are not explicitly defined in the schema
         /// </summary>
         [global::System.Text.Json.Serialization.JsonExtensionData]
@@ -78,7 +103,7 @@ namespace Inworld
         /// Voice identifier.
         /// </param>
         /// <param name="modelId">
-        /// Model identifier, e.g. `inworld-tts-2`, `inworld-tts-1.5-max`, or `inworld-tts-1.5-mini`.
+        /// Model identifier. Use `inworld-tts-2` for flagship quality and steering, or `inworld-tts-2-flash` for the lowest latency and cost.
         /// </param>
         /// <param name="audioConfig">
         /// Audio output configuration for TTS synthesis.
@@ -95,6 +120,19 @@ namespace Inworld
         /// <param name="deliveryMode">
         /// Variation and expressiveness mode for Realtime TTS-2.
         /// </param>
+        /// <param name="language">
+        /// BCP-47 language tag (for example `en-US`, `fr-FR`, or `ja-JP`). Omit to auto-detect the input language.
+        /// </param>
+        /// <param name="instruction">
+        /// English speaking-style direction for the whole request. Supported by `inworld-tts-2`; inline bracketed instructions can override it.
+        /// </param>
+        /// <param name="enhanceGeneration">
+        /// Apply denoising to reduce background noise and synthesis artifacts.<br/>
+        /// Default Value: false
+        /// </param>
+        /// <param name="synthesisContext">
+        /// Prior synthesis requests used to improve continuity for short or ambiguous text. Context text is not billed.
+        /// </param>
 #if NET7_0_OR_GREATER
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
@@ -106,7 +144,11 @@ namespace Inworld
             double? temperature,
             global::Inworld.TimestampType? timestampType,
             global::Inworld.ApplyTextNormalization? applyTextNormalization,
-            global::Inworld.DeliveryMode? deliveryMode)
+            global::Inworld.DeliveryMode? deliveryMode,
+            string? language,
+            string? instruction,
+            bool? enhanceGeneration,
+            global::Inworld.SynthesisContext? synthesisContext)
         {
             this.Text = text ?? throw new global::System.ArgumentNullException(nameof(text));
             this.VoiceId = voiceId ?? throw new global::System.ArgumentNullException(nameof(voiceId));
@@ -116,6 +158,10 @@ namespace Inworld
             this.TimestampType = timestampType;
             this.ApplyTextNormalization = applyTextNormalization;
             this.DeliveryMode = deliveryMode;
+            this.Language = language;
+            this.Instruction = instruction;
+            this.EnhanceGeneration = enhanceGeneration;
+            this.SynthesisContext = synthesisContext;
         }
 
         /// <summary>

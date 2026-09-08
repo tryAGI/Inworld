@@ -19,6 +19,10 @@ namespace Inworld
         /// <summary>
         ///
         /// </summary>
+        DeliveryModeUnspecified,
+        /// <summary>
+        ///
+        /// </summary>
         Stable,
     }
 
@@ -36,6 +40,7 @@ namespace Inworld
             {
                 DeliveryMode.Balanced => "BALANCED",
                 DeliveryMode.Creative => "CREATIVE",
+                DeliveryMode.DeliveryModeUnspecified => "DELIVERY_MODE_UNSPECIFIED",
                 DeliveryMode.Stable => "STABLE",
                 _ => throw new global::System.ArgumentOutOfRangeException(nameof(value), value, null),
             };
@@ -49,6 +54,7 @@ namespace Inworld
             {
                 "BALANCED" => DeliveryMode.Balanced,
                 "CREATIVE" => DeliveryMode.Creative,
+                "DELIVERY_MODE_UNSPECIFIED" => DeliveryMode.DeliveryModeUnspecified,
                 "STABLE" => DeliveryMode.Stable,
                 _ => null,
             };

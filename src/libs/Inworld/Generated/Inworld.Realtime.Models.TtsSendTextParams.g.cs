@@ -9,7 +9,7 @@ namespace Inworld.Realtime
     public sealed partial class TtsSendTextParams
     {
         /// <summary>
-        /// Text to synthesize. Maximum 1000 characters per chunk.
+        /// Text to synthesize. Maximum 2,000 characters per request.
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("text")]
         [global::System.Text.Json.Serialization.JsonRequired]
@@ -31,7 +31,7 @@ namespace Inworld.Realtime
         /// Initializes a new instance of the <see cref="TtsSendTextParams" /> class.
         /// </summary>
         /// <param name="text">
-        /// Text to synthesize. Maximum 1000 characters per chunk.
+        /// Text to synthesize. Maximum 2,000 characters per request.
         /// </param>
         /// <param name="flushContext">
         /// Optional empty object; if set, triggers flush after text is enqueued.

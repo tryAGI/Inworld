@@ -30,7 +30,7 @@ public partial class Tests
         var tts = await client.TextToSpeech.SynthesizeSpeechAsync(
             text: phrase,
             voiceId: "Dennis",
-            modelId: "inworld-tts-1.5-max",
+            modelId: InworldTtsModels.RealtimeTts2,
             audioConfig: new AudioConfig
             {
                 AudioEncoding = AudioEncoding.Linear16,
@@ -94,7 +94,7 @@ public partial class Tests
         var tts = await client.TextToSpeech.SynthesizeSpeechAsync(
             text: "Model id rewrite works.",
             voiceId: "Dennis",
-            modelId: "inworld-tts-1.5-max",
+            modelId: InworldTtsModels.RealtimeTts2,
             audioConfig: new AudioConfig
             {
                 AudioEncoding = AudioEncoding.Linear16,

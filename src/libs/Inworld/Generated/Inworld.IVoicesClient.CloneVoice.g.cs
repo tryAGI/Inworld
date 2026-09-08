@@ -41,6 +41,9 @@ namespace Inworld
         /// <param name="langCode">
         /// BCP-47-like language code used by Inworld voice APIs.
         /// </param>
+        /// <param name="languageCode">
+        /// BCP-47 language or locale (for example `en-US`, `en-GB`, or `vi`). Omit to auto-detect from the samples.
+        /// </param>
         /// <param name="voiceSamples"></param>
         /// <param name="description"></param>
         /// <param name="tags"></param>
@@ -52,8 +55,9 @@ namespace Inworld
         /// <exception cref="global::System.InvalidOperationException"></exception>
         global::System.Threading.Tasks.Task<global::Inworld.CloneVoiceResponse> CloneVoiceAsync(
             string displayName,
-            global::Inworld.LangCode langCode,
             global::System.Collections.Generic.IList<global::Inworld.VoiceSample> voiceSamples,
+            global::Inworld.LangCode? langCode = default,
+            string? languageCode = default,
             string? description = default,
             global::System.Collections.Generic.IList<string>? tags = default,
             global::Inworld.AudioProcessingConfig? audioProcessingConfig = default,

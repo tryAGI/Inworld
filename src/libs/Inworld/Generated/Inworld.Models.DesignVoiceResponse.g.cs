@@ -15,6 +15,12 @@ namespace Inworld
         public string? LangCode { get; set; }
 
         /// <summary>
+        /// Canonical BCP-47 language or locale when returned by the service.
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("languageCode")]
+        public string? LanguageCode { get; set; }
+
+        /// <summary>
         ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("previewVoices")]
@@ -30,15 +36,20 @@ namespace Inworld
         /// Initializes a new instance of the <see cref="DesignVoiceResponse" /> class.
         /// </summary>
         /// <param name="langCode"></param>
+        /// <param name="languageCode">
+        /// Canonical BCP-47 language or locale when returned by the service.
+        /// </param>
         /// <param name="previewVoices"></param>
 #if NET7_0_OR_GREATER
         [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
 #endif
         public DesignVoiceResponse(
             string? langCode,
+            string? languageCode,
             global::System.Collections.Generic.IList<global::Inworld.PreviewVoice>? previewVoices)
         {
             this.LangCode = langCode;
+            this.LanguageCode = languageCode;
             this.PreviewVoices = previewVoices;
         }
 

@@ -97,199 +97,215 @@ namespace Inworld
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.Phone? Type16 { get; set; }
+        public bool? Type16 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.PhoneticDetail? Type17 { get; set; }
+        public global::Inworld.SynthesisContext? Type17 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.IList<global::Inworld.Phone>? Type18 { get; set; }
+        public global::Inworld.PreviousSynthesisRequest? Type18 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public bool? Type19 { get; set; }
+        public global::System.Collections.Generic.IList<global::Inworld.PreviousSynthesisRequest>? Type19 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.WordAlignment? Type20 { get; set; }
+        public global::Inworld.Phone? Type20 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.IList<double>? Type21 { get; set; }
+        public global::Inworld.PhoneticDetail? Type21 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.IList<global::Inworld.PhoneticDetail>? Type22 { get; set; }
+        public global::System.Collections.Generic.IList<global::Inworld.Phone>? Type22 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.CharacterAlignment? Type23 { get; set; }
+        public global::Inworld.WordAlignment? Type23 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.TimestampInfo? Type24 { get; set; }
+        public global::System.Collections.Generic.IList<double>? Type24 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.Usage? Type25 { get; set; }
+        public global::System.Collections.Generic.IList<global::Inworld.PhoneticDetail>? Type25 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.SynthesizeSpeechResponse? Type26 { get; set; }
+        public global::Inworld.CharacterAlignment? Type26 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public byte[]? Type27 { get; set; }
+        public global::Inworld.TimestampInfo? Type27 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.ListVoicesResponse? Type28 { get; set; }
+        public global::Inworld.Usage? Type28 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.IList<global::Inworld.Voice>? Type29 { get; set; }
+        public global::Inworld.SynthesizeSpeechResponse? Type29 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.UpdateVoiceRequest? Type30 { get; set; }
+        public byte[]? Type30 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.VoiceSample? Type31 { get; set; }
+        public global::Inworld.ListVoicesResponse? Type31 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.AudioProcessingConfig? Type32 { get; set; }
+        public global::System.Collections.Generic.IList<global::Inworld.Voice>? Type32 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.CloneVoiceRequest? Type33 { get; set; }
+        public global::Inworld.UpdateVoiceRequest? Type33 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.IList<global::Inworld.VoiceSample>? Type34 { get; set; }
+        public global::Inworld.VoiceSample? Type34 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.ValidationMessage? Type35 { get; set; }
+        public global::Inworld.AudioProcessingConfig? Type35 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.ValidatedAudioSample? Type36 { get; set; }
+        public global::Inworld.CloneVoiceRequest? Type36 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.IList<global::Inworld.ValidationMessage>? Type37 { get; set; }
+        public global::System.Collections.Generic.IList<global::Inworld.VoiceSample>? Type37 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.CloneVoiceResponse? Type38 { get; set; }
+        public global::Inworld.ValidationMessage? Type38 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.IList<global::Inworld.ValidatedAudioSample>? Type39 { get; set; }
+        public global::Inworld.ValidatedAudioSample? Type39 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.VoiceDesignConfig? Type40 { get; set; }
+        public global::System.Collections.Generic.IList<global::Inworld.ValidationMessage>? Type40 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.DesignVoiceRequest? Type41 { get; set; }
+        public global::Inworld.CloneVoiceResponse? Type41 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.PreviewVoice? Type42 { get; set; }
+        public global::System.Collections.Generic.IList<global::Inworld.ValidatedAudioSample>? Type42 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.DesignVoiceResponse? Type43 { get; set; }
+        public global::Inworld.VoiceDesignConfig? Type43 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.IList<global::Inworld.PreviewVoice>? Type44 { get; set; }
+        public global::Inworld.DesignPromptMode? Type44 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.PublishVoiceRequest? Type45 { get; set; }
+        public global::Inworld.DesignVoiceRequest? Type45 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.SttAudioEncoding? Type46 { get; set; }
+        public global::Inworld.PreviewVoice? Type46 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.VoiceProfileConfig? Type47 { get; set; }
+        public global::Inworld.DesignVoiceResponse? Type47 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.TranscribeConfig? Type48 { get; set; }
+        public global::System.Collections.Generic.IList<global::Inworld.PreviewVoice>? Type48 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.AudioData? Type49 { get; set; }
+        public global::Inworld.PublishVoiceRequest? Type49 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.TranscribeRequest? Type50 { get; set; }
+        public global::Inworld.SttAudioEncoding? Type50 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.WordTimestamp? Type51 { get; set; }
+        public global::Inworld.VoiceProfileConfig? Type51 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.Transcription? Type52 { get; set; }
+        public global::Inworld.TranscribeConfig? Type52 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.IList<global::Inworld.WordTimestamp>? Type53 { get; set; }
+        public global::Inworld.AudioData? Type53 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.TranscribeUsage? Type54 { get; set; }
+        public global::Inworld.TranscribeRequest? Type54 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.TranscribeResponse? Type55 { get; set; }
+        public global::Inworld.WordTimestamp? Type55 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.Modality? Type56 { get; set; }
+        public global::Inworld.Transcription? Type56 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.ModelPricing? Type57 { get; set; }
+        public global::System.Collections.Generic.IList<global::Inworld.WordTimestamp>? Type57 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.ModelCapabilities? Type58 { get; set; }
+        public global::Inworld.TranscribeUsage? Type58 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.ModelSpec? Type59 { get; set; }
+        public global::Inworld.TranscribeResponse? Type59 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.IList<global::Inworld.Modality>? Type60 { get; set; }
+        public global::Inworld.Modality? Type60 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.Model? Type61 { get; set; }
+        public global::Inworld.ModelPricing? Type61 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.ListModelsResponse? Type62 { get; set; }
+        public global::Inworld.ModelCapabilities? Type62 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.IList<global::Inworld.Model>? Type63 { get; set; }
+        public global::Inworld.ModelSpec? Type63 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.IList<global::Inworld.LangCode>? Type64 { get; set; }
+        public global::System.Collections.Generic.IList<global::Inworld.Modality>? Type64 { get; set; }
+        /// <summary>
+        ///
+        /// </summary>
+        public global::Inworld.Model? Type65 { get; set; }
+        /// <summary>
+        ///
+        /// </summary>
+        public global::Inworld.ListModelsResponse? Type66 { get; set; }
+        /// <summary>
+        ///
+        /// </summary>
+        public global::System.Collections.Generic.IList<global::Inworld.Model>? Type67 { get; set; }
+        /// <summary>
+        ///
+        /// </summary>
+        public global::System.Collections.Generic.IList<global::Inworld.LangCode>? Type68 { get; set; }
 
         /// <summary>
         ///
@@ -302,50 +318,54 @@ namespace Inworld
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.List<global::Inworld.Phone>? ListType2 { get; set; }
+        public global::System.Collections.Generic.List<global::Inworld.PreviousSynthesisRequest>? ListType2 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.List<double>? ListType3 { get; set; }
+        public global::System.Collections.Generic.List<global::Inworld.Phone>? ListType3 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.List<global::Inworld.PhoneticDetail>? ListType4 { get; set; }
+        public global::System.Collections.Generic.List<double>? ListType4 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.List<global::Inworld.Voice>? ListType5 { get; set; }
+        public global::System.Collections.Generic.List<global::Inworld.PhoneticDetail>? ListType5 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.List<global::Inworld.VoiceSample>? ListType6 { get; set; }
+        public global::System.Collections.Generic.List<global::Inworld.Voice>? ListType6 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.List<global::Inworld.ValidationMessage>? ListType7 { get; set; }
+        public global::System.Collections.Generic.List<global::Inworld.VoiceSample>? ListType7 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.List<global::Inworld.ValidatedAudioSample>? ListType8 { get; set; }
+        public global::System.Collections.Generic.List<global::Inworld.ValidationMessage>? ListType8 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.List<global::Inworld.PreviewVoice>? ListType9 { get; set; }
+        public global::System.Collections.Generic.List<global::Inworld.ValidatedAudioSample>? ListType9 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.List<global::Inworld.WordTimestamp>? ListType10 { get; set; }
+        public global::System.Collections.Generic.List<global::Inworld.PreviewVoice>? ListType10 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.List<global::Inworld.Modality>? ListType11 { get; set; }
+        public global::System.Collections.Generic.List<global::Inworld.WordTimestamp>? ListType11 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.List<global::Inworld.Model>? ListType12 { get; set; }
+        public global::System.Collections.Generic.List<global::Inworld.Modality>? ListType12 { get; set; }
         /// <summary>
         ///
         /// </summary>
-        public global::System.Collections.Generic.List<global::Inworld.LangCode>? ListType13 { get; set; }
+        public global::System.Collections.Generic.List<global::Inworld.Model>? ListType13 { get; set; }
+        /// <summary>
+        ///
+        /// </summary>
+        public global::System.Collections.Generic.List<global::Inworld.LangCode>? ListType14 { get; set; }
     }
 }
