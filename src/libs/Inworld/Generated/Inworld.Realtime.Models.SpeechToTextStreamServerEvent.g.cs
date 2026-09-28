@@ -42,8 +42,8 @@ namespace Inworld.Realtime
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.Realtime.SttTranscription PickSttTranscription() => IsSttTranscription
-            ? SttTranscription!
+        public global::Inworld.Realtime.SttTranscription PickSttTranscription() => SttTranscription is { } value
+            ? value
             : throw new global::System.InvalidOperationException($"Expected union variant 'SttTranscription' but the value was {ToString()}.");
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace Inworld.Realtime
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.Realtime.SttUsage PickSttUsage() => IsSttUsage
-            ? SttUsage!
+        public global::Inworld.Realtime.SttUsage PickSttUsage() => SttUsage is { } value
+            ? value
             : throw new global::System.InvalidOperationException($"Expected union variant 'SttUsage' but the value was {ToString()}.");
 
         /// <summary>
@@ -116,8 +116,8 @@ namespace Inworld.Realtime
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.Realtime.SttSpeechStarted PickSttStarted() => IsSttStarted
-            ? SttStarted!
+        public global::Inworld.Realtime.SttSpeechStarted PickSttStarted() => SttStarted is { } value
+            ? value
             : throw new global::System.InvalidOperationException($"Expected union variant 'SttStarted' but the value was {ToString()}.");
         /// <summary>
         ///
@@ -242,17 +242,17 @@ namespace Inworld.Realtime
                 Validate();
             }
 
-            if (IsSttTranscription && sttTranscription != null)
+            if (SttTranscription is { } __value0 && sttTranscription != null)
             {
-                return sttTranscription(SttTranscription!);
+                return sttTranscription(__value0);
             }
-            else if (IsSttUsage && sttUsage != null)
+            else if (SttUsage is { } __value1 && sttUsage != null)
             {
-                return sttUsage(SttUsage!);
+                return sttUsage(__value1);
             }
-            else if (IsSttStarted && sttStarted != null)
+            else if (SttStarted is { } __value2 && sttStarted != null)
             {
-                return sttStarted(SttStarted!);
+                return sttStarted(__value2);
             }
 
             return default(TResult);
@@ -274,17 +274,17 @@ namespace Inworld.Realtime
                 Validate();
             }
 
-            if (IsSttTranscription)
+            if (SttTranscription is { } __value0)
             {
-                sttTranscription?.Invoke(SttTranscription!);
+                sttTranscription?.Invoke(__value0);
             }
-            else if (IsSttUsage)
+            else if (SttUsage is { } __value1)
             {
-                sttUsage?.Invoke(SttUsage!);
+                sttUsage?.Invoke(__value1);
             }
-            else if (IsSttStarted)
+            else if (SttStarted is { } __value2)
             {
-                sttStarted?.Invoke(SttStarted!);
+                sttStarted?.Invoke(__value2);
             }
         }
 
@@ -302,17 +302,17 @@ namespace Inworld.Realtime
                 Validate();
             }
 
-            if (IsSttTranscription)
+            if (SttTranscription is { } __value0)
             {
-                sttTranscription?.Invoke(SttTranscription!);
+                sttTranscription?.Invoke(__value0);
             }
-            else if (IsSttUsage)
+            else if (SttUsage is { } __value1)
             {
-                sttUsage?.Invoke(SttUsage!);
+                sttUsage?.Invoke(__value1);
             }
-            else if (IsSttStarted)
+            else if (SttStarted is { } __value2)
             {
-                sttStarted?.Invoke(SttStarted!);
+                sttStarted?.Invoke(__value2);
             }
         }
 
