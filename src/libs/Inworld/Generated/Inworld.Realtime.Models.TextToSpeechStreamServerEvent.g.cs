@@ -42,8 +42,8 @@ namespace Inworld.Realtime
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.Realtime.TtsContextCreated PickTtsContextCreated() => IsTtsContextCreated
-            ? TtsContextCreated!
+        public global::Inworld.Realtime.TtsContextCreated PickTtsContextCreated() => TtsContextCreated is { } value
+            ? value
             : throw new global::System.InvalidOperationException($"Expected union variant 'TtsContextCreated' but the value was {ToString()}.");
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace Inworld.Realtime
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.Realtime.TtsAudioChunk PickTtsAudioChunk() => IsTtsAudioChunk
-            ? TtsAudioChunk!
+        public global::Inworld.Realtime.TtsAudioChunk PickTtsAudioChunk() => TtsAudioChunk is { } value
+            ? value
             : throw new global::System.InvalidOperationException($"Expected union variant 'TtsAudioChunk' but the value was {ToString()}.");
 
         /// <summary>
@@ -116,8 +116,8 @@ namespace Inworld.Realtime
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.Realtime.TtsFlushCompleted PickTtsFlushCompleted() => IsTtsFlushCompleted
-            ? TtsFlushCompleted!
+        public global::Inworld.Realtime.TtsFlushCompleted PickTtsFlushCompleted() => TtsFlushCompleted is { } value
+            ? value
             : throw new global::System.InvalidOperationException($"Expected union variant 'TtsFlushCompleted' but the value was {ToString()}.");
 
         /// <summary>
@@ -153,8 +153,8 @@ namespace Inworld.Realtime
         /// <summary>
         ///
         /// </summary>
-        public global::Inworld.Realtime.TtsContextClosed PickTtsContextClosed() => IsTtsContextClosed
-            ? TtsContextClosed!
+        public global::Inworld.Realtime.TtsContextClosed PickTtsContextClosed() => TtsContextClosed is { } value
+            ? value
             : throw new global::System.InvalidOperationException($"Expected union variant 'TtsContextClosed' but the value was {ToString()}.");
         /// <summary>
         ///
@@ -307,21 +307,21 @@ namespace Inworld.Realtime
                 Validate();
             }
 
-            if (IsTtsContextCreated && ttsContextCreated != null)
+            if (TtsContextCreated is { } __value0 && ttsContextCreated != null)
             {
-                return ttsContextCreated(TtsContextCreated!);
+                return ttsContextCreated(__value0);
             }
-            else if (IsTtsAudioChunk && ttsAudioChunk != null)
+            else if (TtsAudioChunk is { } __value1 && ttsAudioChunk != null)
             {
-                return ttsAudioChunk(TtsAudioChunk!);
+                return ttsAudioChunk(__value1);
             }
-            else if (IsTtsFlushCompleted && ttsFlushCompleted != null)
+            else if (TtsFlushCompleted is { } __value2 && ttsFlushCompleted != null)
             {
-                return ttsFlushCompleted(TtsFlushCompleted!);
+                return ttsFlushCompleted(__value2);
             }
-            else if (IsTtsContextClosed && ttsContextClosed != null)
+            else if (TtsContextClosed is { } __value3 && ttsContextClosed != null)
             {
-                return ttsContextClosed(TtsContextClosed!);
+                return ttsContextClosed(__value3);
             }
 
             return default(TResult);
@@ -345,21 +345,21 @@ namespace Inworld.Realtime
                 Validate();
             }
 
-            if (IsTtsContextCreated)
+            if (TtsContextCreated is { } __value0)
             {
-                ttsContextCreated?.Invoke(TtsContextCreated!);
+                ttsContextCreated?.Invoke(__value0);
             }
-            else if (IsTtsAudioChunk)
+            else if (TtsAudioChunk is { } __value1)
             {
-                ttsAudioChunk?.Invoke(TtsAudioChunk!);
+                ttsAudioChunk?.Invoke(__value1);
             }
-            else if (IsTtsFlushCompleted)
+            else if (TtsFlushCompleted is { } __value2)
             {
-                ttsFlushCompleted?.Invoke(TtsFlushCompleted!);
+                ttsFlushCompleted?.Invoke(__value2);
             }
-            else if (IsTtsContextClosed)
+            else if (TtsContextClosed is { } __value3)
             {
-                ttsContextClosed?.Invoke(TtsContextClosed!);
+                ttsContextClosed?.Invoke(__value3);
             }
         }
 
@@ -378,21 +378,21 @@ namespace Inworld.Realtime
                 Validate();
             }
 
-            if (IsTtsContextCreated)
+            if (TtsContextCreated is { } __value0)
             {
-                ttsContextCreated?.Invoke(TtsContextCreated!);
+                ttsContextCreated?.Invoke(__value0);
             }
-            else if (IsTtsAudioChunk)
+            else if (TtsAudioChunk is { } __value1)
             {
-                ttsAudioChunk?.Invoke(TtsAudioChunk!);
+                ttsAudioChunk?.Invoke(__value1);
             }
-            else if (IsTtsFlushCompleted)
+            else if (TtsFlushCompleted is { } __value2)
             {
-                ttsFlushCompleted?.Invoke(TtsFlushCompleted!);
+                ttsFlushCompleted?.Invoke(__value2);
             }
-            else if (IsTtsContextClosed)
+            else if (TtsContextClosed is { } __value3)
             {
-                ttsContextClosed?.Invoke(TtsContextClosed!);
+                ttsContextClosed?.Invoke(__value3);
             }
         }
 

@@ -176,19 +176,19 @@ namespace Inworld.Realtime.JsonConverters
             {
                 var typeInfo = typeInfoResolver.GetTypeInfo(typeof(global::Inworld.Realtime.SttTranscription), options) as global::System.Text.Json.Serialization.Metadata.JsonTypeInfo<global::Inworld.Realtime.SttTranscription?> ??
                                throw new global::System.InvalidOperationException($"Cannot get type info for {typeof(global::Inworld.Realtime.SttTranscription).Name}");
-                global::System.Text.Json.JsonSerializer.Serialize(writer, value.SttTranscription!, typeInfo);
+                global::System.Text.Json.JsonSerializer.Serialize(writer, value.PickSttTranscription(), typeInfo);
             }
             else if (value.IsSttUsage)
             {
                 var typeInfo = typeInfoResolver.GetTypeInfo(typeof(global::Inworld.Realtime.SttUsage), options) as global::System.Text.Json.Serialization.Metadata.JsonTypeInfo<global::Inworld.Realtime.SttUsage?> ??
                                throw new global::System.InvalidOperationException($"Cannot get type info for {typeof(global::Inworld.Realtime.SttUsage).Name}");
-                global::System.Text.Json.JsonSerializer.Serialize(writer, value.SttUsage!, typeInfo);
+                global::System.Text.Json.JsonSerializer.Serialize(writer, value.PickSttUsage(), typeInfo);
             }
             else if (value.IsSttStarted)
             {
                 var typeInfo = typeInfoResolver.GetTypeInfo(typeof(global::Inworld.Realtime.SttSpeechStarted), options) as global::System.Text.Json.Serialization.Metadata.JsonTypeInfo<global::Inworld.Realtime.SttSpeechStarted?> ??
                                throw new global::System.InvalidOperationException($"Cannot get type info for {typeof(global::Inworld.Realtime.SttSpeechStarted).Name}");
-                global::System.Text.Json.JsonSerializer.Serialize(writer, value.SttStarted!, typeInfo);
+                global::System.Text.Json.JsonSerializer.Serialize(writer, value.PickSttStarted(), typeInfo);
             }
         }
     }
