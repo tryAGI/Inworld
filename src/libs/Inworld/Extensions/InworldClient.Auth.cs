@@ -34,7 +34,7 @@ public sealed class InworldAuthHook : AutoSDKHook
     {
         System.ArgumentNullException.ThrowIfNull(context);
 
-        var request = context.Request;
+        var request = context.Request ?? throw new System.InvalidOperationException("The request hook has no HTTP request.");
 
         // If a JwtCache is registered for this client, refresh the token
         // asynchronously. Cache hits return immediately; misses await the
