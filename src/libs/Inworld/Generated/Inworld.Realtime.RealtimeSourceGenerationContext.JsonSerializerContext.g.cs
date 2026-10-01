@@ -40,7 +40,7 @@ namespace Inworld.Realtime
             typeof(global::Inworld.Realtime.JsonConverters.SpeechToTextStreamServerEventJsonConverter),
         })]
     #pragma warning restore CS3016
-    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.JsonSerializerContextTypes))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.RealtimeSourceGenerationContextTypes))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.List<object>), TypeInfoPropertyName = "SystemCollectionsGeneric_ObjectList")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.StreamAudioEncoding), TypeInfoPropertyName = "StreamAudioEncoding2")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Inworld.Realtime.StreamTimestampType), TypeInfoPropertyName = "StreamTimestampType2")]
