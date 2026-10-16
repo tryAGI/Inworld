@@ -40,6 +40,8 @@ using Inworld;
 using var client = new InworldClient(apiKey);
 ```
 
+See the [Realtime TTS-2 guide](docs/guides/realtime-tts-2.md) for steering, crosslingual speech, voice design/cloning, HTTP audio streaming, and multi-turn speech-to-speech sessions.
+
 <!-- EXAMPLES:START -->
 <!-- EXAMPLES:END -->
 

@@ -5,12 +5,12 @@
 Auto-generated C# SDK for [Inworld AI](https://inworld.ai/) — a realtime voice and AI platform. Covers:
 
 - **REST**: TTS synthesis (Realtime TTS-2 and TTS-2 Flash, steering, multilingual generation, enhancement, and conversation context), STT transcription, voice management (list/get/clone/design/publish/update/delete), LLM model discovery.
-- **Realtime (WebSocket)**: bidirectional TTS streaming (`/tts/v1/voice:streamBidirectional`) and STT streaming (`/stt/v1/transcribe:streamBidirectional`).
+- **Realtime (WebSocket)**: unified speech-to-speech (`InworldConversationClient`, JSON events including all providerData extensions), plus bidirectional TTS streaming (`/tts/v1/voice:streamBidirectional`) and STT streaming (`/stt/v1/transcribe:streamBidirectional`).
 - **MEAI**: `Microsoft.Extensions.AI.ISpeechToTextClient` implementation wired to REST (non-streaming) and WebSocket (streaming) + AIFunction tools.
 - **JWT auth helper**: `InworldJwt.GenerateAsync(key, secret)` mints short-lived tokens via Inworld's IW1-HMAC-SHA256 token-exchange endpoint for client-side (Blazor, browser, mobile) use.
 - **tryAGI.OpenAI**: Inworld's OpenAI-compatible chat completions (`/v1/chat/completions`) are exposed as `CustomProviders.Inworld(...)`.
 
-**Excluded** (for now): Inworld Realtime (OpenAI-Realtime-compatible `/api/v1/realtime/session`), Router long-running management endpoints, REST streaming TTS (`/tts/v1/voice:stream`), and Professional Voice Clone training (currently a Portal-only workflow). The WebSocket TTS channel supersedes the REST streaming path; trained professional clones work through every synthesis API by passing their `voiceId`.
+**Excluded** (for now): Router long-running management endpoints, Professional Voice Clone training management. Trained professional clones work through every synthesis API by passing their `voiceId`. HTTP NDJSON streaming TTS is available via `TextToSpeech.SynthesizeSpeechStreamAsync`; inspect each envelope for `Error` and read until EOF.
 
 ## Build & Test
 
@@ -53,7 +53,7 @@ See `Extensions/InworldClient.Auth.cs` and `Extensions/InworldRealtimeClient.Aut
 
 Inworld has **no public OpenAPI or AsyncAPI specs**. Both are **handcrafted** from the published docs and maintained in this repo:
 
-- `src/libs/Inworld/openapi.yaml` — 10 REST endpoints (TTS, STT, Voices, Models)
+- `src/libs/Inworld/openapi.yaml` — 11 REST endpoints (TTS, STT, Voices, Models)
 - `src/libs/Inworld/asyncapi.yaml` — two WebSocket channels (TTS bidirectional, STT bidirectional)
 
 When Inworld updates the docs, update these files by hand and re-run `./generate.sh`.
@@ -83,6 +83,7 @@ When Inworld updates the docs, update these files by hand and re-run `./generate
 | Tag | Method | Path | Description |
 |-----|--------|------|-------------|
 | TextToSpeech | POST | `/tts/v1/voice` | Synthesize speech |
+| TextToSpeech | POST | `/tts/v1/voice:stream` | HTTP NDJSON streaming synthesis |
 | Voices | GET | `/voices/v1/voices` | List voices |
 | Voices | GET | `/voices/v1/voices/{voiceId}` | Get voice |
 | Voices | PATCH | `/voices/v1/voices/{voiceId}` | Update voice metadata |
@@ -123,3 +124,7 @@ When Inworld updates the docs, update these files by hand and re-run `./generate
 - **IW1-HMAC-SHA256 signing**: the signature uses `api-engine.inworld.ai` as the host even though the request goes to `api.inworld.ai`. The "method" in the signature is the gRPC service name (`ai.inworld.engine.WorldEngine/GenerateToken`), not the HTTP path.
 - **AsyncAPI discriminator**: Inworld's realtime messages use the top-level JSON key (`create`, `send_text`, ...) as the discriminator, not a `type` field. The spec models each message shape separately; autosdk generates one `Send*Async` method per message type.
 - **REST `SpeechToText` vs MEAI `ISpeechToTextClient`**: the generated tag-grouped sub-client is `SpeechToTextClient` (accessible via `client.SpeechToText.*`). The MEAI interface is implemented on the main `InworldClient` class using a `Meai = Microsoft.Extensions.AI` namespace alias to avoid the ambiguity with generated `Inworld.ISpeechToTextClient`.
+
+## TTS-2 launch coverage
+
+See `docs/guides/realtime-tts-2.md` for the capability matrix, HTTP streaming, and unified Realtime examples. Use the API reference for wire fields: delivery presets are synthesis `deliveryMode` values (CREATIVE/BALANCED/STABLE), not an undocumented voice-design stability parameter. Conversational audio context requires `providerData.tts.conversational = true` in the first session update; JSON events retain voice profiles, tool calls, routing configuration, audio, and provider extensions.

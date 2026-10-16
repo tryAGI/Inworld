@@ -10,9 +10,9 @@ namespace Inworld
     /// This SDK covers the REST surface: TTS synthesis, STT transcription, Voice<br/>
     /// management (list, get, clone, design, publish, update, delete), and model<br/>
     /// discovery.<br/>
-    /// **Excluded from this SDK:**<br/>
-    ///   - WebSocket/Realtime streaming (`/tts/v1/voice:streamBidirectional`,<br/>
-    ///     `/stt/v1/transcribe:streamBidirectional`, Realtime API)<br/>
+    /// **Defined separately:** WebSocket TTS/STT are in asyncapi.yaml; the unified<br/>
+    /// Realtime API is exposed by the hand-written InworldConversationClient.<br/>
+    /// **Excluded from this REST spec:**<br/>
     ///   - OpenAI-compatible Chat Completions (`/v1/chat/completions` — use<br/>
     ///     `tryAGI.OpenAI` with Inworld as a CustomProvider)<br/>
     ///   - Router long-running management endpoints<br/>

@@ -10,9 +10,10 @@ info:
     management (list, get, clone, design, publish, update, delete), and model
     discovery.
 
-    **Excluded from this SDK:**
-      - WebSocket/Realtime streaming (`/tts/v1/voice:streamBidirectional`,
-        `/stt/v1/transcribe:streamBidirectional`, Realtime API)
+    **Defined separately:** WebSocket TTS/STT are in asyncapi.yaml; the unified
+    Realtime API is exposed by the hand-written InworldConversationClient.
+
+    **Excluded from this REST spec:**
       - OpenAI-compatible Chat Completions (`/v1/chat/completions` — use
         `tryAGI.OpenAI` with Inworld as a CustomProvider)
       - Router long-running management endpoints
@@ -71,6 +72,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SynthesizeSpeechResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /tts/v1/voice:stream:
+    post:
+      operationId: synthesizeSpeechStream
+      tags: [TextToSpeech]
+      summary: Stream synthesized speech over HTTP
+      description: |
+        Newline-delimited JSON envelopes containing audio, usage, or timestamps.
+        Read until EOF, including timestamp-only messages after audio. Check each
+        envelope's error field as well as the HTTP status. Audio chunks are
+        independently base64 encoded; framing depends on the selected encoding.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SynthesizeSpeechRequest'
+      responses:
+        '200':
+          description: NDJSON stream of synthesis results or an in-stream error.
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/SynthesizeSpeechStreamResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
 
@@ -475,6 +502,15 @@ components:
           description: Apply denoising to reduce background noise and synthesis artifacts.
         synthesisContext:
           $ref: '#/components/schemas/SynthesisContext'
+
+    SynthesizeSpeechStreamResponse:
+      type: object
+      description: One NDJSON message. Inspect error before using result.
+      properties:
+        result:
+          $ref: '#/components/schemas/SynthesizeSpeechResponse'
+        error:
+          $ref: '#/components/schemas/RpcStatus'
 
     PreviousSynthesisRequest:
       type: object

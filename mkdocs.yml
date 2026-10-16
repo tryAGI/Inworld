@@ -8,6 +8,7 @@ nav:
 - Overview: index.md
 - Guides:
   - Microsoft.Extensions.AI: guides/meai.md
+  - Realtime TTS-2: guides/realtime-tts-2.md
 # EXAMPLES:START
 # EXAMPLES:END
         
