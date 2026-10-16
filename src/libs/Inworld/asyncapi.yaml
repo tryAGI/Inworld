@@ -3,8 +3,8 @@ info:
   title: Inworld AI Realtime API
   version: 1.0.0
   description: |
-    Bidirectional WebSocket channels for Inworld AI's realtime TTS and STT
-    endpoints.
+    WebSocket channels for Inworld AI's realtime TTS, STT, and unified
+    speech-to-speech endpoints.
 
     Auth: `Authorization: Basic <API_KEY>` (header or `?Authorization=Basic%20<key>`
     query parameter) where `<API_KEY>` is the already-Base64-encoded key issued
@@ -78,6 +78,128 @@ channels:
         $ref: '#/components/messages/SttUsage'
       SttSpeechStarted:
         $ref: '#/components/messages/SttSpeechStarted'
+
+  Unified:
+    address: /api/v1/realtime/session
+    description: Unified Realtime speech-to-speech sessions. Configure model, audio, tools and providerData; exchange
+      typed events. Unknown events are available through UnknownMessage.
+    servers:
+    - $ref: '#/servers/production'
+    messages:
+      UnifiedSessionUpdate:
+        $ref: '#/components/messages/UnifiedSessionUpdate'
+      UnifiedConversationItemCreate:
+        $ref: '#/components/messages/UnifiedConversationItemCreate'
+      UnifiedConversationItemTruncate:
+        $ref: '#/components/messages/UnifiedConversationItemTruncate'
+      UnifiedConversationItemDelete:
+        $ref: '#/components/messages/UnifiedConversationItemDelete'
+      UnifiedConversationItemRetrieve:
+        $ref: '#/components/messages/UnifiedConversationItemRetrieve'
+      UnifiedResponseCreate:
+        $ref: '#/components/messages/UnifiedResponseCreate'
+      UnifiedResponseCancel:
+        $ref: '#/components/messages/UnifiedResponseCancel'
+      UnifiedResponseSpeak:
+        $ref: '#/components/messages/UnifiedResponseSpeak'
+      UnifiedInputAudioBufferAppend:
+        $ref: '#/components/messages/UnifiedInputAudioBufferAppend'
+      UnifiedInputAudioBufferCommit:
+        $ref: '#/components/messages/UnifiedInputAudioBufferCommit'
+      UnifiedInputAudioBufferClear:
+        $ref: '#/components/messages/UnifiedInputAudioBufferClear'
+      UnifiedOutputAudioBufferClear:
+        $ref: '#/components/messages/UnifiedOutputAudioBufferClear'
+      UnifiedSessionCreated:
+        $ref: '#/components/messages/UnifiedSessionCreated'
+      UnifiedSessionUpdated:
+        $ref: '#/components/messages/UnifiedSessionUpdated'
+      UnifiedError:
+        $ref: '#/components/messages/UnifiedError'
+      UnifiedConversationItemAdded:
+        $ref: '#/components/messages/UnifiedConversationItemAdded'
+      UnifiedConversationItemDone:
+        $ref: '#/components/messages/UnifiedConversationItemDone'
+      UnifiedConversationItemDeleted:
+        $ref: '#/components/messages/UnifiedConversationItemDeleted'
+      UnifiedConversationItemRetrieved:
+        $ref: '#/components/messages/UnifiedConversationItemRetrieved'
+      UnifiedConversationItemTruncated:
+        $ref: '#/components/messages/UnifiedConversationItemTruncated'
+      UnifiedConversationItemInputAudioTranscriptionDelta:
+        $ref: '#/components/messages/UnifiedConversationItemInputAudioTranscriptionDelta'
+      UnifiedConversationItemInputAudioTranscriptionCompleted:
+        $ref: '#/components/messages/UnifiedConversationItemInputAudioTranscriptionCompleted'
+      UnifiedResponseSpeakAcknowledged:
+        $ref: '#/components/messages/UnifiedResponseSpeakAcknowledged'
+      UnifiedResponseCreated:
+        $ref: '#/components/messages/UnifiedResponseCreated'
+      UnifiedResponseDone:
+        $ref: '#/components/messages/UnifiedResponseDone'
+      UnifiedResponseOutputItemAdded:
+        $ref: '#/components/messages/UnifiedResponseOutputItemAdded'
+      UnifiedResponseOutputItemDone:
+        $ref: '#/components/messages/UnifiedResponseOutputItemDone'
+      UnifiedResponseContentPartAdded:
+        $ref: '#/components/messages/UnifiedResponseContentPartAdded'
+      UnifiedResponseContentPartDone:
+        $ref: '#/components/messages/UnifiedResponseContentPartDone'
+      UnifiedResponseOutputTextDelta:
+        $ref: '#/components/messages/UnifiedResponseOutputTextDelta'
+      UnifiedResponseOutputTextDone:
+        $ref: '#/components/messages/UnifiedResponseOutputTextDone'
+      UnifiedResponseOutputAudioTranscriptDelta:
+        $ref: '#/components/messages/UnifiedResponseOutputAudioTranscriptDelta'
+      UnifiedResponseOutputAudioTranscriptDone:
+        $ref: '#/components/messages/UnifiedResponseOutputAudioTranscriptDone'
+      UnifiedResponseOutputAudioDone:
+        $ref: '#/components/messages/UnifiedResponseOutputAudioDone'
+      UnifiedResponseFunctionCallArgumentsDelta:
+        $ref: '#/components/messages/UnifiedResponseFunctionCallArgumentsDelta'
+      UnifiedResponseFunctionCallArgumentsDone:
+        $ref: '#/components/messages/UnifiedResponseFunctionCallArgumentsDone'
+      UnifiedInputAudioBufferSpeechStarted:
+        $ref: '#/components/messages/UnifiedInputAudioBufferSpeechStarted'
+      UnifiedInputAudioBufferSpeechStopped:
+        $ref: '#/components/messages/UnifiedInputAudioBufferSpeechStopped'
+      UnifiedInputAudioBufferCommitted:
+        $ref: '#/components/messages/UnifiedInputAudioBufferCommitted'
+      UnifiedInputAudioBufferCleared:
+        $ref: '#/components/messages/UnifiedInputAudioBufferCleared'
+      UnifiedInputAudioBufferTimeoutTriggered:
+        $ref: '#/components/messages/UnifiedInputAudioBufferTimeoutTriggered'
+      UnifiedInputAudioBufferTurnSuggestion:
+        $ref: '#/components/messages/UnifiedInputAudioBufferTurnSuggestion'
+      UnifiedInputAudioBufferTurnSuggestionRevoked:
+        $ref: '#/components/messages/UnifiedInputAudioBufferTurnSuggestionRevoked'
+      UnifiedOutputAudioBufferStarted:
+        $ref: '#/components/messages/UnifiedOutputAudioBufferStarted'
+      UnifiedOutputAudioBufferStopped:
+        $ref: '#/components/messages/UnifiedOutputAudioBufferStopped'
+      UnifiedOutputAudioBufferCleared:
+        $ref: '#/components/messages/UnifiedOutputAudioBufferCleared'
+      UnifiedResponseBackchannelAudioDelta:
+        $ref: '#/components/messages/UnifiedResponseBackchannelAudioDelta'
+      UnifiedResponseBackchannelAudioDone:
+        $ref: '#/components/messages/UnifiedResponseBackchannelAudioDone'
+      UnifiedResponseBackchannelSkipped:
+        $ref: '#/components/messages/UnifiedResponseBackchannelSkipped'
+      UnifiedRateLimitsUpdated:
+        $ref: '#/components/messages/UnifiedRateLimitsUpdated'
+      UnifiedResponseOutputAudioDelta:
+        $ref: '#/components/messages/UnifiedResponseOutputAudioDelta'
+      UnifiedResponseAudioDelta:
+        $ref: '#/components/messages/UnifiedResponseAudioDelta'
+      UnifiedResponseAudioDone:
+        $ref: '#/components/messages/UnifiedResponseAudioDone'
+      UnifiedResponseTextDelta:
+        $ref: '#/components/messages/UnifiedResponseTextDelta'
+      UnifiedResponseTextDone:
+        $ref: '#/components/messages/UnifiedResponseTextDone'
+      UnifiedResponseAudioTranscriptDelta:
+        $ref: '#/components/messages/UnifiedResponseAudioTranscriptDelta'
+      UnifiedResponseAudioTranscriptDone:
+        $ref: '#/components/messages/UnifiedResponseAudioTranscriptDone'
 
 operations:
 
@@ -175,6 +297,349 @@ operations:
     messages:
       - $ref: '#/channels/SpeechToTextStream/messages/SttSpeechStarted'
 
+  sendUnifiedSessionUpdate:
+    action: send
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedSessionUpdate'
+  sendUnifiedConversationItemCreate:
+    action: send
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedConversationItemCreate'
+  sendUnifiedConversationItemTruncate:
+    action: send
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedConversationItemTruncate'
+  sendUnifiedConversationItemDelete:
+    action: send
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedConversationItemDelete'
+  sendUnifiedConversationItemRetrieve:
+    action: send
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedConversationItemRetrieve'
+  sendUnifiedResponseCreate:
+    action: send
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseCreate'
+  sendUnifiedResponseCancel:
+    action: send
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseCancel'
+  sendUnifiedResponseSpeak:
+    action: send
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseSpeak'
+  sendUnifiedInputAudioBufferAppend:
+    action: send
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedInputAudioBufferAppend'
+  sendUnifiedInputAudioBufferCommit:
+    action: send
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedInputAudioBufferCommit'
+  sendUnifiedInputAudioBufferClear:
+    action: send
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedInputAudioBufferClear'
+  sendUnifiedOutputAudioBufferClear:
+    action: send
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedOutputAudioBufferClear'
+  receiveUnifiedSessionCreated:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedSessionCreated'
+  receiveUnifiedSessionUpdated:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedSessionUpdated'
+  receiveUnifiedError:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedError'
+  receiveUnifiedConversationItemAdded:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedConversationItemAdded'
+  receiveUnifiedConversationItemDone:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedConversationItemDone'
+  receiveUnifiedConversationItemDeleted:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedConversationItemDeleted'
+  receiveUnifiedConversationItemRetrieved:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedConversationItemRetrieved'
+  receiveUnifiedConversationItemTruncated:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedConversationItemTruncated'
+  receiveUnifiedConversationItemInputAudioTranscriptionDelta:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedConversationItemInputAudioTranscriptionDelta'
+  receiveUnifiedConversationItemInputAudioTranscriptionCompleted:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedConversationItemInputAudioTranscriptionCompleted'
+  receiveUnifiedResponseSpeakAcknowledged:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseSpeakAcknowledged'
+  receiveUnifiedResponseCreated:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseCreated'
+  receiveUnifiedResponseDone:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseDone'
+  receiveUnifiedResponseOutputItemAdded:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseOutputItemAdded'
+  receiveUnifiedResponseOutputItemDone:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseOutputItemDone'
+  receiveUnifiedResponseContentPartAdded:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseContentPartAdded'
+  receiveUnifiedResponseContentPartDone:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseContentPartDone'
+  receiveUnifiedResponseOutputTextDelta:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseOutputTextDelta'
+  receiveUnifiedResponseOutputTextDone:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseOutputTextDone'
+  receiveUnifiedResponseOutputAudioTranscriptDelta:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseOutputAudioTranscriptDelta'
+  receiveUnifiedResponseOutputAudioTranscriptDone:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseOutputAudioTranscriptDone'
+  receiveUnifiedResponseOutputAudioDone:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseOutputAudioDone'
+  receiveUnifiedResponseFunctionCallArgumentsDelta:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseFunctionCallArgumentsDelta'
+  receiveUnifiedResponseFunctionCallArgumentsDone:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseFunctionCallArgumentsDone'
+  receiveUnifiedInputAudioBufferSpeechStarted:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedInputAudioBufferSpeechStarted'
+  receiveUnifiedInputAudioBufferSpeechStopped:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedInputAudioBufferSpeechStopped'
+  receiveUnifiedInputAudioBufferCommitted:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedInputAudioBufferCommitted'
+  receiveUnifiedInputAudioBufferCleared:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedInputAudioBufferCleared'
+  receiveUnifiedInputAudioBufferTimeoutTriggered:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedInputAudioBufferTimeoutTriggered'
+  receiveUnifiedInputAudioBufferTurnSuggestion:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedInputAudioBufferTurnSuggestion'
+  receiveUnifiedInputAudioBufferTurnSuggestionRevoked:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedInputAudioBufferTurnSuggestionRevoked'
+  receiveUnifiedOutputAudioBufferStarted:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedOutputAudioBufferStarted'
+  receiveUnifiedOutputAudioBufferStopped:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedOutputAudioBufferStopped'
+  receiveUnifiedOutputAudioBufferCleared:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedOutputAudioBufferCleared'
+  receiveUnifiedResponseBackchannelAudioDelta:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseBackchannelAudioDelta'
+  receiveUnifiedResponseBackchannelAudioDone:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseBackchannelAudioDone'
+  receiveUnifiedResponseBackchannelSkipped:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseBackchannelSkipped'
+  receiveUnifiedRateLimitsUpdated:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedRateLimitsUpdated'
+  receiveUnifiedResponseOutputAudioDelta:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseOutputAudioDelta'
+  receiveUnifiedResponseAudioDelta:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseAudioDelta'
+  receiveUnifiedResponseAudioDone:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseAudioDone'
+  receiveUnifiedResponseTextDelta:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseTextDelta'
+  receiveUnifiedResponseTextDone:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseTextDone'
+  receiveUnifiedResponseAudioTranscriptDelta:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseAudioTranscriptDelta'
+  receiveUnifiedResponseAudioTranscriptDone:
+    action: receive
+    channel:
+      $ref: '#/channels/Unified'
+    messages:
+    - $ref: '#/channels/Unified/messages/UnifiedResponseAudioTranscriptDone'
+
 components:
 
   securitySchemes:
@@ -187,6 +652,10 @@ components:
         JWT Bearer tokens are also accepted (`Bearer <JWT>`).
 
   schemas:
+
+    # Unified channel/model sources: https://docs.inworld.ai/api-reference/realtimeAPI/realtime/realtime-websocket
+    # Provider extensions: https://docs.inworld.ai/realtime/provider-data
+    # All unified objects retain additional properties for protocol forward compatibility.
 
     # -- Shared TTS config --------------------------------------------------
     StreamAudioEncoding:
@@ -517,6 +986,731 @@ components:
           type: number
           format: float
 
+    UnifiedSession:
+      type: object
+      additionalProperties: true
+      properties:
+        object:
+          type: string
+        type:
+          type: string
+        id:
+          type: string
+        model:
+          type: string
+        instructions:
+          type: string
+        output_modalities:
+          type: array
+          items:
+            type: string
+        temperature:
+          type: number
+          format: double
+        max_output_tokens:
+          oneOf:
+          - type: integer
+            format: int32
+          - type: string
+        audio:
+          type: object
+          additionalProperties: true
+          properties:
+            input:
+              type: object
+              additionalProperties: true
+              properties:
+                format:
+                  oneOf:
+                  - type: string
+                  - $ref: '#/components/schemas/UnifiedAudioFormat'
+                noise_reduction:
+                  type: object
+                  additionalProperties: true
+                  properties:
+                    type:
+                      type: string
+                  required:
+                  - type
+                transcription:
+                  type: object
+                  additionalProperties: true
+                  properties:
+                    model:
+                      type: string
+                    language:
+                      type: string
+                    prompt:
+                      type: string
+                    prompts:
+                      type: array
+                      items:
+                        type: string
+                turn_detection:
+                  allOf:
+                  - $ref: '#/components/schemas/UnifiedTurnDetection'
+                  nullable: true
+            output:
+              type: object
+              additionalProperties: true
+              properties:
+                format:
+                  oneOf:
+                  - type: string
+                  - $ref: '#/components/schemas/UnifiedAudioFormat'
+                voice:
+                  type: string
+                model:
+                  type: string
+                speed:
+                  type: number
+                  format: double
+        tools:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+            properties:
+              type:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              parameters:
+                type: object
+                additionalProperties: true
+                properties: {}
+            required:
+            - type
+            - name
+        tool_choice:
+          oneOf:
+          - type: string
+          - $ref: '#/components/schemas/UnifiedToolChoice'
+        truncation:
+          oneOf:
+          - type: string
+          - $ref: '#/components/schemas/UnifiedTruncation'
+        tracing:
+          oneOf:
+          - type: string
+          - $ref: '#/components/schemas/UnifiedTracing'
+        include:
+          type: array
+          items:
+            type: string
+        prompt:
+          type: string
+          nullable: true
+        providerData:
+          $ref: '#/components/schemas/UnifiedProviderData'
+        text_generation_config: &id001
+          $ref: '#/components/schemas/UnifiedTextGenerationConfig'
+        expires_at:
+          type: integer
+          format: int64
+    UnifiedConversationItem:
+      type: object
+      additionalProperties: true
+      properties:
+        object:
+          type: string
+        id:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        role:
+          type: string
+        content:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+            properties:
+              type:
+                type: string
+              text:
+                type: string
+              audio:
+                type: string
+              transcript:
+                type: string
+              image:
+                type: string
+              image_url:
+                type: string
+              detail:
+                type: string
+            required:
+            - type
+        call_id:
+          type: string
+        name:
+          type: string
+        arguments:
+          type: string
+        output:
+          type: string
+        force_uninterruptible:
+          type: boolean
+      required:
+      - type
+    UnifiedResponseOptions:
+      type: object
+      additionalProperties: true
+      properties:
+        conversation:
+          type: string
+        output_modalities:
+          type: array
+          items:
+            type: string
+        instructions:
+          type: string
+        voice:
+          type: string
+        max_output_tokens:
+          oneOf:
+          - type: integer
+            format: int32
+          - type: string
+        tool_choice:
+          oneOf:
+          - type: string
+          - $ref: '#/components/schemas/UnifiedToolChoice'
+        tools:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+            properties:
+              type:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              parameters:
+                type: object
+                additionalProperties: true
+                properties: {}
+            required:
+            - type
+            - name
+        metadata:
+          type: object
+          additionalProperties: true
+          properties: {}
+    UnifiedResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+        status:
+          type: string
+        status_details:
+          type: object
+          additionalProperties: true
+          properties: {}
+        output:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+            properties:
+              object:
+                type: string
+              id:
+                type: string
+              type:
+                type: string
+              status:
+                type: string
+              role:
+                type: string
+              content:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                  properties:
+                    type:
+                      type: string
+                    text:
+                      type: string
+                    audio:
+                      type: string
+                    transcript:
+                      type: string
+                    image:
+                      type: string
+                    image_url:
+                      type: string
+                    detail:
+                      type: string
+                  required:
+                  - type
+              call_id:
+                type: string
+              name:
+                type: string
+              arguments:
+                type: string
+              output:
+                type: string
+              force_uninterruptible:
+                type: boolean
+            required:
+            - type
+        conversation_id:
+          type: string
+        output_modalities:
+          type: array
+          items:
+            type: string
+        max_output_tokens:
+          oneOf:
+          - type: integer
+            format: int32
+          - type: string
+        audio:
+          type: object
+          additionalProperties: true
+          properties: {}
+        instructions:
+          type: string
+        usage:
+          type: object
+          additionalProperties: true
+          properties:
+            total_tokens:
+              type: integer
+              format: int32
+            input_tokens:
+              type: integer
+              format: int32
+            output_tokens:
+              type: integer
+              format: int32
+            input_token_details:
+              type: object
+              additionalProperties: true
+              properties:
+                cached_tokens:
+                  type: integer
+                  format: int32
+                cache_write_tokens:
+                  type: integer
+                  format: int32
+                text_tokens:
+                  type: integer
+                  format: int32
+                audio_tokens:
+                  type: integer
+                  format: int32
+            output_token_details:
+              type: object
+              additionalProperties: true
+              properties:
+                text_tokens:
+                  type: integer
+                  format: int32
+                audio_tokens:
+                  type: integer
+                  format: int32
+                reasoning_tokens:
+                  type: integer
+                  format: int32
+            llm:
+              type: object
+              additionalProperties: true
+              properties:
+                model:
+                  type: string
+            tts:
+              type: object
+              additionalProperties: true
+              properties:
+                model:
+                  type: string
+                characters:
+                  type: integer
+                  format: int32
+                audio_seconds:
+                  type: number
+                  format: double
+            stt:
+              type: object
+              additionalProperties: true
+              properties:
+                model:
+                  type: string
+                audio_seconds:
+                  type: number
+                  format: double
+        metadata:
+          type: object
+          additionalProperties: true
+          properties: {}
+    UnifiedContentPart:
+      type: object
+      additionalProperties: true
+      properties: {}
+    UnifiedAudioFormat:
+      type: object
+      additionalProperties: true
+      properties:
+        type:
+          type: string
+        rate:
+          type: integer
+          format: int32
+    UnifiedTurnDetection:
+      type: object
+      additionalProperties: true
+      properties:
+        type:
+          type: string
+        eagerness:
+          type: string
+        create_response:
+          type: boolean
+        interrupt_response:
+          type: boolean
+        threshold:
+          type: number
+          format: double
+        prefix_padding_ms:
+          type: integer
+          format: int32
+        silence_duration_ms:
+          type: integer
+          format: int32
+        idle_timeout_ms:
+          type: integer
+          format: int32
+    UnifiedToolChoice:
+      type: object
+      additionalProperties: true
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        server_label:
+          type: string
+    UnifiedTruncation:
+      type: object
+      additionalProperties: true
+      properties:
+        type:
+          type: string
+        retention_ratio:
+          type: number
+          format: double
+        token_limits:
+          type: object
+          additionalProperties: true
+          properties:
+            post_instructions:
+              type: integer
+              format: int32
+    UnifiedTracing:
+      type: object
+      additionalProperties: true
+      properties:
+        workflow_name:
+          type: string
+        group_id:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+          properties: {}
+    UnifiedVoiceProfileLabel:
+      type: object
+      additionalProperties: true
+      properties:
+        label:
+          type: string
+        confidence:
+          type: number
+          format: double
+    UnifiedVoiceProfile:
+      type: object
+      additionalProperties: true
+      properties:
+        age:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnifiedVoiceProfileLabel'
+        emotion:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnifiedVoiceProfileLabel'
+        pitch:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnifiedVoiceProfileLabel'
+        vocal_style:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnifiedVoiceProfileLabel'
+        accent:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnifiedVoiceProfileLabel'
+    UnifiedSttProviderData:
+      type: object
+      additionalProperties: true
+      properties:
+        prompt:
+          type: string
+        voice_profile:
+          type: boolean
+        end_of_turn_confidence_threshold:
+          type: number
+          format: double
+        vad_threshold:
+          type: number
+          format: double
+        min_end_of_turn_silence:
+          type: integer
+          format: int32
+        max_turn_silence:
+          type: integer
+          format: int32
+    UnifiedTtsProviderData:
+      type: object
+      additionalProperties: true
+      properties:
+        segmenter_strategy:
+          type: string
+        steering_handling:
+          type: string
+        language:
+          type: string
+        delivery_mode:
+          type: string
+        conversational:
+          type: boolean
+        user_turn_mode:
+          type: string
+        timestamp_type:
+          type: string
+        timestamp_transport_strategy:
+          type: string
+    UnifiedMemoryProviderData:
+      type: object
+      additionalProperties: true
+      properties:
+        enabled:
+          type: boolean
+        turn_interval:
+          type: integer
+          format: int32
+        max_memory_length:
+          type: integer
+          format: int32
+        max_transcript_items:
+          type: integer
+          format: int32
+        max_facts:
+          type: integer
+          format: int32
+        trim_after_summarize:
+          type: boolean
+    UnifiedBackchannelProviderData:
+      type: object
+      additionalProperties: true
+      properties:
+        enabled:
+          type: boolean
+        small_model:
+          type: string
+        eval_interval_ms:
+          type: integer
+          format: int32
+        min_speech_ms:
+          type: integer
+          format: int32
+        min_gap_ms:
+          type: integer
+          format: int32
+        max_per_turn:
+          type: integer
+          format: int32
+        hard_deadline_ms:
+          type: integer
+          format: int32
+        history_tail_items:
+          type: integer
+          format: int32
+        temperature:
+          type: number
+          format: double
+        max_tokens:
+          type: integer
+          format: int32
+        volume_gain:
+          type: number
+          format: double
+        require_pause:
+          type: boolean
+        allowed_phrases:
+          type: array
+          items:
+            type: string
+        prompt_template:
+          type: string
+        rule_fire_probability:
+          type: number
+          format: double
+    UnifiedResponsivenessProviderData:
+      type: object
+      additionalProperties: true
+      properties:
+        enabled:
+          type: boolean
+        small_model:
+          type: string
+        initial_wait_timeout_ms:
+          type: integer
+          format: int32
+        hard_deadline_ms:
+          type: integer
+          format: int32
+        history_tail_items:
+          type: integer
+          format: int32
+        temperature:
+          type: number
+          format: double
+        max_tokens:
+          type: integer
+          format: int32
+        min_filler_gap_ms:
+          type: integer
+          format: int32
+        max_initial_per_turn:
+          type: integer
+          format: int32
+        max_buffer_deltas:
+          type: integer
+          format: int32
+        enable_filler_on_first_assistant_reply:
+          type: boolean
+        prompt_template:
+          type: string
+        pause_text:
+          type: string
+    UnifiedProviderData:
+      type: object
+      additionalProperties: true
+      properties:
+        auto_tool_response:
+          type: boolean
+        voiceProfile:
+          $ref: '#/components/schemas/UnifiedVoiceProfile'
+        stt:
+          $ref: '#/components/schemas/UnifiedSttProviderData'
+        tts:
+          $ref: '#/components/schemas/UnifiedTtsProviderData'
+        memory:
+          $ref: '#/components/schemas/UnifiedMemoryProviderData'
+        backchannel:
+          $ref: '#/components/schemas/UnifiedBackchannelProviderData'
+        responsiveness:
+          $ref: '#/components/schemas/UnifiedResponsivenessProviderData'
+        text_generation_config: *id001
+        user_id:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+    UnifiedTimestampInfo:
+      type: object
+      additionalProperties: true
+      properties:
+        word_alignment:
+          type: object
+          additionalProperties: true
+          properties:
+            words:
+              type: array
+              items:
+                type: string
+            word_start_time_seconds:
+              type: array
+              items:
+                type: number
+                format: double
+            word_end_time_seconds:
+              type: array
+              items:
+                type: number
+                format: double
+            phonetic_details:
+              type: array
+              items:
+                type: object
+                additionalProperties: true
+                properties: {}
+        character_alignment:
+          type: object
+          additionalProperties: true
+          properties:
+            characters:
+              type: array
+              items:
+                type: string
+            character_start_time_seconds:
+              type: array
+              items:
+                type: number
+                format: double
+            character_end_time_seconds:
+              type: array
+              items:
+                type: number
+                format: double
+    UnifiedTextGenerationConfig:
+      type: object
+      additionalProperties: true
+      properties:
+        reasoning:
+          type: object
+          additionalProperties: true
+          properties:
+            effort:
+              type: string
+            maxTokens:
+              type: integer
+              format: int32
+            exclude:
+              type: boolean
+        temperature:
+          type: number
+          format: double
+        topP:
+          type: number
+          format: double
+        maxNewTokens:
+          type: integer
+          format: int32
+        frequencyPenalty:
+          type: number
+          format: double
+        presencePenalty:
+          type: number
+          format: double
+
   messages:
 
     # -- TTS client messages -------------------------------------------------
@@ -694,3 +1888,1389 @@ components:
             properties:
               speechStarted:
                 $ref: '#/components/schemas/SttSpeechStartedData'
+
+    UnifiedSessionUpdate:
+      name: UnifiedSessionUpdate
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - session.update
+          event_id:
+            type: string
+          session:
+            $ref: '#/components/schemas/UnifiedSession'
+        required:
+        - type
+        - session
+    UnifiedConversationItemCreate:
+      name: UnifiedConversationItemCreate
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - conversation.item.create
+          event_id:
+            type: string
+          previous_item_id:
+            type: string
+          item:
+            $ref: '#/components/schemas/UnifiedConversationItem'
+        required:
+        - type
+        - item
+    UnifiedConversationItemTruncate:
+      name: UnifiedConversationItemTruncate
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - conversation.item.truncate
+          event_id:
+            type: string
+          item_id:
+            type: string
+          content_index:
+            type: integer
+            format: int32
+          audio_end_ms:
+            type: integer
+            format: int32
+        required:
+        - type
+        - item_id
+        - content_index
+        - audio_end_ms
+    UnifiedConversationItemDelete:
+      name: UnifiedConversationItemDelete
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - conversation.item.delete
+          event_id:
+            type: string
+          item_id:
+            type: string
+        required:
+        - type
+        - item_id
+    UnifiedConversationItemRetrieve:
+      name: UnifiedConversationItemRetrieve
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - conversation.item.retrieve
+          event_id:
+            type: string
+          item_id:
+            type: string
+        required:
+        - type
+        - item_id
+    UnifiedResponseCreate:
+      name: UnifiedResponseCreate
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.create
+          event_id:
+            type: string
+          response:
+            $ref: '#/components/schemas/UnifiedResponseOptions'
+        required:
+        - type
+    UnifiedResponseCancel:
+      name: UnifiedResponseCancel
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.cancel
+          event_id:
+            type: string
+          response_id:
+            type: string
+        required:
+        - type
+    UnifiedResponseSpeak:
+      name: UnifiedResponseSpeak
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.speak
+          event_id:
+            type: string
+          text:
+            type: string
+          force_uninterruptible:
+            type: boolean
+          metadata:
+            type: object
+            additionalProperties: true
+            properties: {}
+        required:
+        - type
+        - text
+    UnifiedInputAudioBufferAppend:
+      name: UnifiedInputAudioBufferAppend
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - input_audio_buffer.append
+          event_id:
+            type: string
+          audio:
+            type: string
+            format: byte
+        required:
+        - type
+        - audio
+    UnifiedInputAudioBufferCommit:
+      name: UnifiedInputAudioBufferCommit
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - input_audio_buffer.commit
+          event_id:
+            type: string
+        required:
+        - type
+    UnifiedInputAudioBufferClear:
+      name: UnifiedInputAudioBufferClear
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - input_audio_buffer.clear
+          event_id:
+            type: string
+        required:
+        - type
+    UnifiedOutputAudioBufferClear:
+      name: UnifiedOutputAudioBufferClear
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - output_audio_buffer.clear
+          event_id:
+            type: string
+        required:
+        - type
+    UnifiedSessionCreated:
+      name: UnifiedSessionCreated
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - session.created
+          event_id:
+            type: string
+          session:
+            $ref: '#/components/schemas/UnifiedSession'
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - session
+    UnifiedSessionUpdated:
+      name: UnifiedSessionUpdated
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - session.updated
+          event_id:
+            type: string
+          session:
+            $ref: '#/components/schemas/UnifiedSession'
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - session
+    UnifiedError:
+      name: UnifiedError
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - error
+          event_id:
+            type: string
+          error:
+            type: object
+            additionalProperties: true
+            properties:
+              type:
+                type: string
+              code:
+                type: string
+              message:
+                type: string
+              param:
+                type: string
+              event_id:
+                type: string
+            required:
+            - type
+            - message
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - error
+    UnifiedConversationItemAdded:
+      name: UnifiedConversationItemAdded
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - conversation.item.added
+          event_id:
+            type: string
+          previous_item_id:
+            type: string
+            nullable: true
+          item:
+            $ref: '#/components/schemas/UnifiedConversationItem'
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - item
+    UnifiedConversationItemDone:
+      name: UnifiedConversationItemDone
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - conversation.item.done
+          event_id:
+            type: string
+          previous_item_id:
+            type: string
+            nullable: true
+          item:
+            $ref: '#/components/schemas/UnifiedConversationItem'
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - item
+    UnifiedConversationItemDeleted:
+      name: UnifiedConversationItemDeleted
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - conversation.item.deleted
+          event_id:
+            type: string
+          item_id:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - item_id
+    UnifiedConversationItemRetrieved:
+      name: UnifiedConversationItemRetrieved
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - conversation.item.retrieved
+          event_id:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+    UnifiedConversationItemTruncated:
+      name: UnifiedConversationItemTruncated
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - conversation.item.truncated
+          event_id:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+    UnifiedConversationItemInputAudioTranscriptionDelta:
+      name: UnifiedConversationItemInputAudioTranscriptionDelta
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - conversation.item.input_audio_transcription.delta
+          event_id:
+            type: string
+          item_id:
+            type: string
+          content_index:
+            type: integer
+            format: int32
+          delta:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - item_id
+        - delta
+    UnifiedConversationItemInputAudioTranscriptionCompleted:
+      name: UnifiedConversationItemInputAudioTranscriptionCompleted
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - conversation.item.input_audio_transcription.completed
+          event_id:
+            type: string
+          item_id:
+            type: string
+          content_index:
+            type: integer
+            format: int32
+          transcript:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - item_id
+        - transcript
+    UnifiedResponseSpeakAcknowledged:
+      name: UnifiedResponseSpeakAcknowledged
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.speak.acknowledged
+          event_id:
+            type: string
+          request_event_id:
+            type: string
+          accepted:
+            type: boolean
+          response_id:
+            type: string
+          metadata:
+            type: object
+            additionalProperties: true
+            properties: {}
+          error:
+            type: object
+            additionalProperties: true
+            properties:
+              type:
+                type: string
+              code:
+                type: string
+              message:
+                type: string
+              param:
+                type: string
+                nullable: true
+            required:
+            - type
+            - message
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - accepted
+    UnifiedResponseCreated:
+      name: UnifiedResponseCreated
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.created
+          event_id:
+            type: string
+          response:
+            $ref: '#/components/schemas/UnifiedResponse'
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response
+    UnifiedResponseDone:
+      name: UnifiedResponseDone
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.done
+          event_id:
+            type: string
+          response:
+            $ref: '#/components/schemas/UnifiedResponse'
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response
+    UnifiedResponseOutputItemAdded:
+      name: UnifiedResponseOutputItemAdded
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.output_item.added
+          event_id:
+            type: string
+          response_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          item:
+            $ref: '#/components/schemas/UnifiedConversationItem'
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - item
+    UnifiedResponseOutputItemDone:
+      name: UnifiedResponseOutputItemDone
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.output_item.done
+          event_id:
+            type: string
+          response_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          item:
+            $ref: '#/components/schemas/UnifiedConversationItem'
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - item
+    UnifiedResponseContentPartAdded:
+      name: UnifiedResponseContentPartAdded
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.content_part.added
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          part:
+            $ref: '#/components/schemas/UnifiedContentPart'
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - part
+    UnifiedResponseContentPartDone:
+      name: UnifiedResponseContentPartDone
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.content_part.done
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          part:
+            $ref: '#/components/schemas/UnifiedContentPart'
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - part
+    UnifiedResponseOutputTextDelta:
+      name: UnifiedResponseOutputTextDelta
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.output_text.delta
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          delta:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - delta
+    UnifiedResponseOutputTextDone:
+      name: UnifiedResponseOutputTextDone
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.output_text.done
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          text:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - text
+    UnifiedResponseOutputAudioTranscriptDelta:
+      name: UnifiedResponseOutputAudioTranscriptDelta
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.output_audio_transcript.delta
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          delta:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - delta
+    UnifiedResponseOutputAudioTranscriptDone:
+      name: UnifiedResponseOutputAudioTranscriptDone
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.output_audio_transcript.done
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          transcript:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - transcript
+    UnifiedResponseOutputAudioDone:
+      name: UnifiedResponseOutputAudioDone
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.output_audio.done
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+    UnifiedResponseFunctionCallArgumentsDelta:
+      name: UnifiedResponseFunctionCallArgumentsDelta
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.function_call_arguments.delta
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          call_id:
+            type: string
+          delta:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - item_id
+        - output_index
+        - call_id
+        - delta
+    UnifiedResponseFunctionCallArgumentsDone:
+      name: UnifiedResponseFunctionCallArgumentsDone
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.function_call_arguments.done
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          call_id:
+            type: string
+          name:
+            type: string
+          arguments:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - item_id
+        - output_index
+        - call_id
+        - name
+        - arguments
+    UnifiedInputAudioBufferSpeechStarted:
+      name: UnifiedInputAudioBufferSpeechStarted
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - input_audio_buffer.speech_started
+          event_id:
+            type: string
+          audio_start_ms:
+            type: integer
+            format: int32
+          item_id:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - item_id
+    UnifiedInputAudioBufferSpeechStopped:
+      name: UnifiedInputAudioBufferSpeechStopped
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - input_audio_buffer.speech_stopped
+          event_id:
+            type: string
+          audio_end_ms:
+            type: integer
+            format: int32
+          item_id:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - item_id
+    UnifiedInputAudioBufferCommitted:
+      name: UnifiedInputAudioBufferCommitted
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - input_audio_buffer.committed
+          event_id:
+            type: string
+          previous_item_id:
+            type: string
+            nullable: true
+          item_id:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - item_id
+    UnifiedInputAudioBufferCleared:
+      name: UnifiedInputAudioBufferCleared
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - input_audio_buffer.cleared
+          event_id:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+    UnifiedInputAudioBufferTimeoutTriggered:
+      name: UnifiedInputAudioBufferTimeoutTriggered
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - input_audio_buffer.timeout_triggered
+          event_id:
+            type: string
+          audio_start_ms:
+            type: integer
+            format: int32
+          audio_end_ms:
+            type: integer
+            format: int32
+          item_id:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - audio_start_ms
+        - audio_end_ms
+        - item_id
+    UnifiedInputAudioBufferTurnSuggestion:
+      name: UnifiedInputAudioBufferTurnSuggestion
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - input_audio_buffer.turn_suggestion
+          event_id:
+            type: string
+          item_id:
+            type: string
+          utterance_index:
+            type: integer
+            format: int32
+          probability:
+            type: number
+            format: double
+          trailing_silence_ms:
+            type: number
+            format: double
+          audio_duration_ms:
+            type: number
+            format: double
+          inference_ms:
+            type: number
+            format: double
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - item_id
+        - utterance_index
+        - probability
+    UnifiedInputAudioBufferTurnSuggestionRevoked:
+      name: UnifiedInputAudioBufferTurnSuggestionRevoked
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - input_audio_buffer.turn_suggestion_revoked
+          event_id:
+            type: string
+          item_id:
+            type: string
+          utterance_index:
+            type: integer
+            format: int32
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - item_id
+        - utterance_index
+    UnifiedOutputAudioBufferStarted:
+      name: UnifiedOutputAudioBufferStarted
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - output_audio_buffer.started
+          event_id:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+    UnifiedOutputAudioBufferStopped:
+      name: UnifiedOutputAudioBufferStopped
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - output_audio_buffer.stopped
+          event_id:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+    UnifiedOutputAudioBufferCleared:
+      name: UnifiedOutputAudioBufferCleared
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - output_audio_buffer.cleared
+          event_id:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+    UnifiedResponseBackchannelAudioDelta:
+      name: UnifiedResponseBackchannelAudioDelta
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.backchannel.audio.delta
+          event_id:
+            type: string
+          backchannel_id:
+            type: string
+          delta:
+            type: string
+            format: byte
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - backchannel_id
+        - delta
+    UnifiedResponseBackchannelAudioDone:
+      name: UnifiedResponseBackchannelAudioDone
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.backchannel.audio.done
+          event_id:
+            type: string
+          backchannel_id:
+            type: string
+          phrase:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - backchannel_id
+    UnifiedResponseBackchannelSkipped:
+      name: UnifiedResponseBackchannelSkipped
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.backchannel.skipped
+          event_id:
+            type: string
+          reason:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - reason
+    UnifiedRateLimitsUpdated:
+      name: UnifiedRateLimitsUpdated
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - rate_limits.updated
+          event_id:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+    UnifiedResponseOutputAudioDelta:
+      name: UnifiedResponseOutputAudioDelta
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.output_audio.delta
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          delta:
+            type: string
+            format: byte
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+          timestamp_info:
+            $ref: '#/components/schemas/UnifiedTimestampInfo'
+        required:
+        - type
+        - event_id
+        - response_id
+        - delta
+    UnifiedResponseAudioDelta:
+      name: UnifiedResponseAudioDelta
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.audio.delta
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          delta:
+            type: string
+            format: byte
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+          timestamp_info:
+            $ref: '#/components/schemas/UnifiedTimestampInfo'
+        required:
+        - type
+        - event_id
+        - response_id
+        - delta
+    UnifiedResponseAudioDone:
+      name: UnifiedResponseAudioDone
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.audio.done
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+    UnifiedResponseTextDelta:
+      name: UnifiedResponseTextDelta
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.text.delta
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          delta:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - delta
+    UnifiedResponseTextDone:
+      name: UnifiedResponseTextDone
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.text.done
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          text:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - text
+    UnifiedResponseAudioTranscriptDelta:
+      name: UnifiedResponseAudioTranscriptDelta
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.audio_transcript.delta
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          delta:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - delta
+    UnifiedResponseAudioTranscriptDone:
+      name: UnifiedResponseAudioTranscriptDone
+      payload:
+        type: object
+        additionalProperties: true
+        properties:
+          type:
+            type: string
+            enum:
+            - response.audio_transcript.done
+          event_id:
+            type: string
+          response_id:
+            type: string
+          item_id:
+            type: string
+          output_index:
+            type: integer
+            format: int32
+          content_index:
+            type: integer
+            format: int32
+          transcript:
+            type: string
+          providerData:
+            $ref: '#/components/schemas/UnifiedProviderData'
+        required:
+        - type
+        - event_id
+        - response_id
+        - transcript

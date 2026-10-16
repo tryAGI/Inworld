@@ -1,0 +1,45 @@
+
+#nullable enable
+
+namespace Inworld.Realtime
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public enum UnifiedSessionUpdatedType
+    {
+        /// <summary>
+        ///
+        /// </summary>
+        SessionUpdated,
+    }
+
+    /// <summary>
+    /// Enum extensions to do fast conversions without the reflection.
+    /// </summary>
+    public static class UnifiedSessionUpdatedTypeExtensions
+    {
+        /// <summary>
+        /// Converts an enum to a string.
+        /// </summary>
+        public static string ToValueString(this UnifiedSessionUpdatedType value)
+        {
+            return value switch
+            {
+                UnifiedSessionUpdatedType.SessionUpdated => "session.updated",
+                _ => throw new global::System.ArgumentOutOfRangeException(nameof(value), value, null),
+            };
+        }
+        /// <summary>
+        /// Converts an string to a enum.
+        /// </summary>
+        public static UnifiedSessionUpdatedType? ToEnum(string value)
+        {
+            return value switch
+            {
+                "session.updated" => UnifiedSessionUpdatedType.SessionUpdated,
+                _ => null,
+            };
+        }
+    }
+}

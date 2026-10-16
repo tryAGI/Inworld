@@ -40,8 +40,9 @@ autosdk generate openapi.yaml \
 # -----------------------------------------------------------------------------
 # Realtime API (AsyncAPI) → `Inworld.Realtime` namespace.
 # Cross-namespace schema referencing is not used here because the AsyncAPI
-# messages use a top-level-key discriminator instead of the shared REST
-# model shapes.
+# legacy TTS/STT messages use top-level-key envelopes, while the unified
+# speech-to-speech channel uses the `type` discriminator. All three channels
+# are generated here; providerData and unknown fields remain extensible.
 # -----------------------------------------------------------------------------
 autosdk generate asyncapi.yaml \
   --namespace Inworld.Realtime \

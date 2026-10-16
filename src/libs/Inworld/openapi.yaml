@@ -11,7 +11,7 @@ info:
     discovery.
 
     **Defined separately:** WebSocket TTS/STT are in asyncapi.yaml; the unified
-    Realtime API is exposed by the hand-written InworldConversationClient.
+    Realtime API is also generated from asyncapi.yaml (InworldUnifiedRealtimeClient).
 
     **Excluded from this REST spec:**
       - OpenAI-compatible Chat Completions (`/v1/chat/completions` — use

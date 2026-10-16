@@ -1,0 +1,64 @@
+
+#nullable enable
+
+namespace Inworld.Realtime
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public sealed partial class UnifiedConversationItemRetrieve
+    {
+        /// <summary>
+        ///
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("type")]
+        [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Inworld.Realtime.JsonConverters.UnifiedConversationItemRetrieveTypeJsonConverter))]
+        public global::Inworld.Realtime.UnifiedConversationItemRetrieveType Type { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("event_id")]
+        public string? EventId { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("item_id")]
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required string ItemId { get; set; }
+
+        /// <summary>
+        /// Additional properties that are not explicitly defined in the schema
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonExtensionData]
+        public global::System.Collections.Generic.IDictionary<string, object> AdditionalProperties { get; set; } = new global::System.Collections.Generic.Dictionary<string, object>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnifiedConversationItemRetrieve" /> class.
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="type"></param>
+        /// <param name="eventId"></param>
+#if NET7_0_OR_GREATER
+        [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
+#endif
+        public UnifiedConversationItemRetrieve(
+            string itemId,
+            global::Inworld.Realtime.UnifiedConversationItemRetrieveType type,
+            string? eventId)
+        {
+            this.Type = type;
+            this.EventId = eventId;
+            this.ItemId = itemId ?? throw new global::System.ArgumentNullException(nameof(itemId));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnifiedConversationItemRetrieve" /> class.
+        /// </summary>
+        public UnifiedConversationItemRetrieve()
+        {
+        }
+
+    }
+}

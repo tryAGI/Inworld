@@ -11,7 +11,7 @@ namespace Inworld
     /// management (list, get, clone, design, publish, update, delete), and model<br/>
     /// discovery.<br/>
     /// **Defined separately:** WebSocket TTS/STT are in asyncapi.yaml; the unified<br/>
-    /// Realtime API is exposed by the hand-written InworldConversationClient.<br/>
+    /// Realtime API is also generated from asyncapi.yaml (InworldUnifiedRealtimeClient).<br/>
     /// **Excluded from this REST spec:**<br/>
     ///   - OpenAI-compatible Chat Completions (`/v1/chat/completions` — use<br/>
     ///     `tryAGI.OpenAI` with Inworld as a CustomProvider)<br/>

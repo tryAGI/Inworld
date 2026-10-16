@@ -17,7 +17,7 @@ Wire fields below follow the current API reference, which differs from some laun
 | One-shot audio | `TextToSpeech.SynthesizeSpeechAsync` |
 | HTTP audio streaming | `TextToSpeech.SynthesizeSpeechStreamAsync` |
 | Bidirectional TTS/STT | Existing `InworldTextToSpeechStreamRealtimeClient` / `InworldSpeechToTextStreamRealtimeClient` |
-| Unified speech-to-speech, voice profiles, tools, routing, memory, backchannels | `InworldConversationClient` with JSON protocol events and `providerData` |
+| Unified speech-to-speech, voice profiles, tools, routing, memory, backchannels | `InworldUnifiedRealtimeClient` with typed protocol events and extensible `providerData` |
 
 The [design reference](https://docs.inworld.ai/api-reference/voiceAPI/voiceservice/design-voice)
 exposes `designPrompt`, `designPromptMode`, `previewText`, language, and sample count.
@@ -69,86 +69,119 @@ playable file. See the [streaming reference](https://docs.inworld.ai/api-referen
 
 ## Unified Realtime conversation
 
-`InworldConversationClient` uses JSON objects so callers can use the complete protocol,
-including provider extensions and new event fields. It is a WebSocket transport;
-applications supply microphone capture, playback, and tool execution. It does not
-implement WebRTC or automatically execute tools.
+`InworldUnifiedRealtimeClient` is generated from the unified channel in `asyncapi.yaml`.
+It replaces the initial handwritten `InworldConversationClient`. Use typed `Unified*`
+messages, generated `SendUnified*Async` methods, and the `UnifiedServerEvent` receive union.
+The application supplies microphone capture, playback, and tool execution.
 
 ```csharp
-using System.Text.Json.Nodes;
 using Inworld.Realtime;
 
-using var conversation = new InworldConversationClient(apiKey);
-// For a backend-minted session JWT refreshed at connect time:
+using var conversation = new InworldUnifiedRealtimeClient(apiKey);
+// Optional: refresh a backend-minted session JWT before connecting.
 // conversation.TokenProvider = async ct => (await jwtCache.GetAsync(ct)).Token;
-await conversation.ConnectAsync(Guid.NewGuid().ToString("N"), cancellationToken: cancellationToken);
-
-await foreach (var update in conversation.ReceiveUpdatesAsync(cancellationToken: cancellationToken))
+conversation.UnknownMessage += (_, args) =>
 {
-    switch (update["type"]?.GetValue<string>())
+    // Unknown event types retain their complete raw text and parsed JSON.
+    // Inspect args.RawText or args.Json; receiving continues afterwards.
+};
+await conversation.ConnectSessionAsync(Guid.NewGuid().ToString("N"), cancellationToken: cancellationToken);
+
+await foreach (var update in conversation.ReceiveUpdatesAsync(cancellationToken))
+{
+    if (update.SessionCreated is not null)
     {
-        case "session.created":
-            await conversation.SendAsync(JsonNode.Parse("""
+        await conversation.SendUnifiedSessionUpdateAsync(new UnifiedSessionUpdate
+        {
+            Session = new UnifiedSession
+            {
+                Type = "realtime",
+                Model = "openai/gpt-4o-mini",
+                Instructions = "Be warm and concise. Use [speak softly] or [laugh] when appropriate.",
+                OutputModalities = ["audio", "text"],
+                Audio = new UnifiedSessionAudio
                 {
-                  "type": "session.update",
-                  "session": {
-                    "type": "realtime",
-                    "model": "openai/gpt-4o-mini",
-                    "instructions": "Be warm and concise. Use [speak softly] or [laugh] when appropriate.",
-                    "output_modalities": ["audio", "text"],
-                    "audio": {
-                      "input": {
-                        "transcription": { "model": "inworld/inworld-stt-1" },
-                        "turn_detection": { "type": "semantic_vad", "create_response": true }
-                      },
-                      "output": { "model": "inworld-tts-2", "voice": "Sarah" }
+                    Input = new UnifiedSessionAudioInput
+                    {
+                        Transcription = new UnifiedSessionAudioInputTranscription
+                        {
+                            Model = "inworld/inworld-stt-1",
+                        },
+                        TurnDetection = new UnifiedTurnDetection
+                        {
+                            Type = "semantic_vad", CreateResponse = true,
+                        },
                     },
-                    "providerData": {
-                      "stt": { "voice_profile": true },
-                      "tts": {
-                        "conversational": true,
-                        "user_turn_mode": "both",
-                        "delivery_mode": "CREATIVE",
-                        "segmenter_strategy": "full_turn",
-                        "steering_handling": "emit_once"
-                      },
-                      "backchannel": { "enabled": true },
-                      "responsiveness": { "enabled": true }
-                    }
-                  }
-                }
-                """)!.AsObject(), cancellationToken);
-            break;
-        case "session.updated":
-            // Begin sending microphone chunks from a separate producer task.
-            break;
-        case "response.audio.delta":
-        case "response.output_audio.delta":
-            var pcm = Convert.FromBase64String(update["delta"]!.GetValue<string>());
-            // Queue pcm for playback (default PCM16, 24 kHz mono).
-            break;
-        case "error":
-            // Inspect update["error"] and decide whether to stop or recover.
-            break;
+                    Output = new UnifiedSessionAudioOutput
+                    {
+                        Model = "inworld-tts-2", Voice = "Sarah",
+                    },
+                },
+                ProviderData = new UnifiedProviderData
+                {
+                    Stt = new UnifiedSttProviderData { VoiceProfile = true },
+                    Tts = new UnifiedTtsProviderData
+                    {
+                        Conversational = true,
+                        UserTurnMode = "both",
+                        DeliveryMode = "CREATIVE",
+                        SegmenterStrategy = "full_turn",
+                        SteeringHandling = "emit_once",
+                    },
+                },
+            },
+        }, cancellationToken);
+    }
+    else if (update.SessionUpdated is not null)
+    {
+        // Begin sending microphone chunks from a separate producer task.
+        // Serialize sends from your producer tasks: one active send and one receive
+        // are supported per WebSocket connection.
+        // await conversation.SendUnifiedInputAudioBufferAppendAsync(
+        //     new UnifiedInputAudioBufferAppend { Audio = pcmBytes }, cancellationToken);
+    }
+    else if (update.ResponseOutputAudioDelta is { } audio)
+    {
+        var pcm = audio.Delta; // Already Base64-decoded; default PCM16, 24 kHz mono.
+        // Queue pcm for playback and inspect audio.TimestampInfo if requested.
+    }
+    else if (update.ConversationItemInputAudioTranscriptionCompleted is { } transcript)
+    {
+        var emotion = transcript.ProviderData?.VoiceProfile?.Emotion;
+        // Optional speaker classifications contain labels and confidence scores.
+    }
+    else if (update.ResponseFunctionCallArgumentsDone is { } toolCall)
+    {
+        // Execute toolCall.Name with toolCall.Arguments and return a typed
+        // UnifiedConversationItemCreate with a function_call_output item.
+    }
+    else if (update.Error is { } error)
+    {
+        // Inspect error.Error and decide whether to stop or recover.
     }
 }
 ```
 
-Send microphone audio with `SendAsync(new JsonObject { ["type"] = "input_audio_buffer.append",
-["audio"] = Convert.ToBase64String(pcmBytes) }, cancellationToken)`.
-The same method accepts conversation text/history, `response.create`, interruption/cancellation,
-function outputs, and partial session updates. Receive events retain transcripts, voice profiles,
-tool arguments, routing metadata, and usage. Handle both audio delta spellings when integrating
-across protocol versions. Read [the protocol reference](https://docs.inworld.ai/api-reference/realtimeAPI/realtime/realtime-websocket)
-for event shapes and [providerData](https://docs.inworld.ai/realtime/provider-data) for extensions.
+Current `response.output_audio.*` and legacy `response.audio.*` event names have separate
+typed variants. Handle the variants used by your protocol version. Generated events also
+cover response creation/completion, text/transcripts, conversation items, interruption,
+tool arguments, speech detection, backchannels, turn suggestions, and rate limits.
+
+Every unified object exposes `AdditionalProperties` for unknown fields, including nested
+session/audio settings and `providerData` branches. When adding arbitrary values, use
+`JsonElement` values (for example `JsonSerializer.SerializeToElement(...)` with appropriate
+source-generated metadata, or `JsonDocument.Parse(...).RootElement.Clone()`) so the payload
+remains compatible with trimming. The `MessageReceived` event also exposes raw JSON for
+known events; `UnknownMessage` retains unrecognized event types without ending reception.
 
 Conversational mode is off by default. Set it on the first session update: changes to
 `conversational` and `user_turn_mode` later are ignored by the server. It keeps user and
 assistant turns in one audio context and forces full-turn segmentation, with a latency/cost
-trade-off. STT voice profiling emits separate structured speaker signals. Backchannels and
-responsiveness are optional.
+trade-off. STT voice profiling emits separate structured speaker signals.
 
-Use one receive loop per connection. Concurrent sends are serialized; events are never retried
-or replayed automatically. A normal WebSocket close ends enumeration; malformed/oversized messages
-and abnormal closes throw. Cancel and await producer/receiver tasks before disposing the client.
-API keys are sent as Basic credentials without re-encoding; session JWTs use Bearer.
+Read [the protocol reference](https://docs.inworld.ai/api-reference/realtimeAPI/realtime/realtime-websocket)
+for event shapes and [providerData](https://docs.inworld.ai/realtime/provider-data) for extensions.
+Call `ConnectSessionAsync` before sending or receiving; it adds the required session query
+and chooses Basic API-key or Bearer session-JWT authentication. Use one receive loop and
+serialize sends. Automatic reconnection is disabled by default; application code is
+responsible for restoring state if it chooses to reconnect.
