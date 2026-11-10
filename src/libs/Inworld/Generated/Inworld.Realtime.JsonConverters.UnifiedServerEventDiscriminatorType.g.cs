@@ -18,7 +18,7 @@ namespace Inworld.Realtime.JsonConverters
                     var stringValue = reader.GetString();
                     if (stringValue != null)
                     {
-                        return global::Inworld.Realtime.UnifiedServerEventDiscriminatorTypeExtensions.ToEnum(stringValue) ?? throw new global::System.Text.Json.JsonException($"Unknown discriminator value '{stringValue}' for global::Inworld.Realtime.UnifiedServerEventDiscriminatorType.");
+                        return global::Inworld.Realtime.UnifiedServerEventDiscriminatorTypeExtensions.ToEnum(stringValue) ?? throw new global::System.Text.Json.JsonException($"Unknown value '{stringValue}' for global::Inworld.Realtime.UnifiedServerEventDiscriminatorType.");
                     }
 
                     break;
