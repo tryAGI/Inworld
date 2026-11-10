@@ -18,7 +18,7 @@ namespace Inworld.Realtime.JsonConverters
                     var stringValue = reader.GetString();
                     if (stringValue != null)
                     {
-                        return global::Inworld.Realtime.UnifiedInputAudioBufferAppendTypeExtensions.ToEnum(stringValue) ?? throw new global::System.Text.Json.JsonException($"Unknown discriminator value '{stringValue}' for global::Inworld.Realtime.UnifiedInputAudioBufferAppendType.");
+                        return global::Inworld.Realtime.UnifiedInputAudioBufferAppendTypeExtensions.ToEnum(stringValue) ?? throw new global::System.Text.Json.JsonException($"Unknown value '{stringValue}' for global::Inworld.Realtime.UnifiedInputAudioBufferAppendType.");
                     }
 
                     break;
